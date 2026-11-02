@@ -130,8 +130,14 @@ final class IGWrappedUITests: XCTestCase {
             object: viewer
         )
         XCTAssertEqual(XCTWaiter().wait(for: [closed], timeout: 3), .completed)
-        app.buttons["year-play"].tap()
-        XCTAssertTrue(app.otherElements["year-montage"].waitForExistence(timeout: 3))
+        let play = app.buttons["year-play"]
+        if play.label == "Add month photos to play" {
+            play.tap()
+            XCTAssertFalse(app.otherElements["year-montage"].waitForExistence(timeout: 1))
+        } else {
+            play.tap()
+            XCTAssertTrue(app.otherElements["year-montage"].waitForExistence(timeout: 3))
+        }
     }
 
     func testAlgorithmFeedbackWritesARow() {

@@ -229,6 +229,8 @@ enum CardSpace {
     static let yearSupportSize: CGFloat = 15
     static let playLabel: CGFloat = 12
     static let playIcon: CGFloat = 18
+    /// Play tile while any month photo is missing.
+    static let playUnavailableOpacity: CGFloat = 0.4
     static let chipTracking: CGFloat = 0.6
     static let chipRadius: CGFloat = 4
     static let chipInset: CGFloat = 6

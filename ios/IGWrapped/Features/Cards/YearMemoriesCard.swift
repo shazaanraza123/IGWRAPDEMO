@@ -38,6 +38,7 @@ struct YearMemoriesCard: View {
 
     private var grid: some View {
         let columns = Array(repeating: GridItem(.flexible(), spacing: WrappedSpace.gridGap), count: 3)
+        let ready = MayaYear.montageReady
         return LazyVGrid(columns: columns, spacing: WrappedSpace.gridGap) {
             ForEach(MayaYear.months) { month in
                 Button {
@@ -49,12 +50,15 @@ struct YearMemoriesCard: View {
                 .accessibilityIdentifier("year-month-\(month.month)")
                 .accessibilityLabel(month.chip)
             }
-            Button(action: onPlay) {
-                playTile
+            Button {
+                guard ready else { return }
+                onPlay()
+            } label: {
+                playTile(ready: ready)
             }
             .buttonStyle(.plain)
             .accessibilityIdentifier("year-play")
-            .accessibilityLabel(MayaYear.playLabel)
+            .accessibilityLabel(ready ? MayaYear.playLabel : MayaYear.playUnavailable)
         }
         .padding(.horizontal, WrappedSpace.gutter)
         .padding(.top, CardSpace.yearGridTop)
@@ -95,7 +99,7 @@ struct YearMemoriesCard: View {
             .clipped()
     }
 
-    private var playTile: some View {
+    private func playTile(ready: Bool) -> some View {
         VStack(spacing: CardSpace.chipGap) {
             ZStack {
                 Circle().fill(WrappedColor.ink)
@@ -105,16 +109,20 @@ struct YearMemoriesCard: View {
             }
             .frame(width: WrappedSpace.minHit, height: WrappedSpace.minHit)
             CardText(
-                text: MayaYear.playLabel.replacingOccurrences(of: "PLAY YOUR ", with: "PLAY YOUR\n"),
+                text: ready
+                    ? MayaYear.playLabel.replacingOccurrences(of: "PLAY YOUR ", with: "PLAY YOUR\n")
+                    : MayaYear.playUnavailable,
                 size: CardSpace.playLabel,
                 width: CardSpace.regular,
                 color: WrappedColor.ink,
                 alignment: .center
             )
+            .frame(maxWidth: .infinity)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .aspectRatio(1, contentMode: .fit)
         .background(WrappedColor.igPink)
+        .opacity(ready ? 1 : CardSpace.playUnavailableOpacity)
     }
 
     private var support: some View {
@@ -129,6 +137,13 @@ struct YearMemoriesCard: View {
         .minimumScaleFactor(0.8)
         .padding(.horizontal, WrappedSpace.gutter)
         .padding(.top, CardSpace.yearSupportTop)
+    }
+}
+
+extension MayaYear {
+    /// True only when every month photo from m-01 through m-11 is in the bundle.
+    static var montageReady: Bool {
+        months.allSatisfy { BundlePhoto.image(named: $0.photo) != nil }
     }
 }
 

@@ -74,7 +74,7 @@ struct StoryPlayer: View {
                     self.openMonth = nil
                 }
             }
-            if showsMontage {
+            if showsMontage, MayaYear.montageReady {
                 YearMontage {
                     showsMontage = false
                 }
@@ -199,7 +199,10 @@ struct StoryPlayer: View {
         case 2:
             YearMemoriesCard(
                 onMonth: { openMonth = $0 },
-                onPlay: { showsMontage = true }
+                onPlay: {
+                    guard MayaYear.montageReady else { return }
+                    showsMontage = true
+                }
             )
         case 3:
             FeedColorCard(onShare: { showToast("Not part of this demo") })

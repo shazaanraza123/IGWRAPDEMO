@@ -22,6 +22,7 @@ enum MayaYear {
     static let headline = "YOU HAD QUITE\nA YEAR."
     static let support = "August was your busiest month: 9 posts, 61 Stories."
     static let playLabel = "PLAY YOUR YEAR · 0:15"
+    static let playUnavailable = "Add month photos to play"
     static let topMonth = 8
     static let montageSeconds = 15
     static let months: [MayaMonth] = [
