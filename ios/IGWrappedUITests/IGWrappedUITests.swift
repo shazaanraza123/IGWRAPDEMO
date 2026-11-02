@@ -234,6 +234,21 @@ final class IGWrappedUITests: XCTestCase {
         XCTAssertEqual(XCTWaiter().wait(for: [gone], timeout: 3), .completed)
     }
 
+    func testProgressBarsShareTheSameTopOnCardsOneTwelveAndThirteen() {
+        var tops: [CGFloat] = []
+        for card in [1, 12, 13] {
+            let app = XCUIApplication()
+            app.launchArguments = ["--player", "--player-card", "\(card)", "--player-paused"]
+            app.launch()
+            let bars = app.otherElements["player-progress"]
+            XCTAssertTrue(bars.waitForExistence(timeout: 5), "card \(card)")
+            tops.append(bars.frame.minY)
+            app.terminate()
+        }
+        XCTAssertEqual(tops[0], tops[1], accuracy: 0.5, "frames \(tops)")
+        XCTAssertEqual(tops[0], tops[2], accuracy: 0.5, "frames \(tops)")
+    }
+
     private func launchedPlayer() -> XCUIApplication {
         let app = XCUIApplication()
         app.launchArguments = ["--player"]

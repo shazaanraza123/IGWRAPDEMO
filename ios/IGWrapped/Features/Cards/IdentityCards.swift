@@ -268,7 +268,7 @@ struct PersonalityRevealCard: View {
 
     var body: some View {
         ZStack(alignment: .top) {
-            WrappedColor.igMagenta.ignoresSafeArea().allowsHitTesting(false)
+            WrappedColor.igMagenta.allowsHitTesting(false)
             VStack(spacing: CardSpace.chipGap) {
                 mark
                 CardText(
@@ -362,6 +362,7 @@ struct PersonalityRevealCard: View {
             .padding(.horizontal, WrappedSpace.gutter)
             .padding(.bottom, WrappedSpace.pillBottomInset)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .onAppear {
             guard !reduceMotion else {
                 revealed = true
@@ -412,7 +413,10 @@ struct ShareCardsCard: View {
     }
 
     var body: some View {
-        ZStack {
+        ZStack(alignment: .top) {
+            shareField
+                .ignoresSafeArea()
+                .allowsHitTesting(false)
             IdentityFace()
                 .opacity(face == 0 ? 1 : 0)
                 .accessibilityElement(children: .ignore)
@@ -444,7 +448,19 @@ struct ShareCardsCard: View {
             .padding(.horizontal, WrappedSpace.gutter)
             .padding(.bottom, CardSpace.chipGap)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .animation(crossfade, value: face)
+    }
+
+    private var shareField: some View {
+        ZStack(alignment: .top) {
+            WrappedColor.paper
+            WrappedColor.igMagenta.opacity(face == 0 ? 1 : 0)
+            WrappedColor.igPink
+                .frame(maxWidth: .infinity)
+                .frame(height: CardSpace.numbersHeader)
+                .opacity(face == 1 ? 1 : 0)
+        }
     }
 
     private var crossfade: Animation {
@@ -456,6 +472,10 @@ struct ShareCardsCard: View {
 
 private struct IdentityFace: View {
     var body: some View {
+        identityStack
+    }
+
+    private var identityStack: some View {
         VStack(spacing: CardSpace.chipGap) {
             HStack {
                 Text(MayaShare.handle)
@@ -525,13 +545,15 @@ private struct IdentityFace: View {
         }
         .padding(.horizontal, CardSpace.identityInset)
         .padding(.bottom, CardSpace.shareDock)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .background(WrappedColor.igMagenta.ignoresSafeArea())
     }
 }
 
 private struct NumbersFace: View {
     var body: some View {
+        numbersStack
+    }
+
+    private var numbersStack: some View {
         VStack(alignment: .leading, spacing: 0) {
             VStack(spacing: CardSpace.chipGap) {
                 HStack {
@@ -547,7 +569,6 @@ private struct NumbersFace: View {
             .padding(.horizontal, CardSpace.identityInset)
             .frame(maxWidth: .infinity)
             .frame(height: CardSpace.numbersHeader, alignment: .top)
-            .background(WrappedColor.igPink)
 
             DisplayHeadline(
                 copy: MayaShare.numbersTitle,
@@ -620,7 +641,6 @@ private struct NumbersFace: View {
                 .padding(.horizontal, CardSpace.identityInset)
                 .padding(.bottom, CardSpace.shareDock)
         }
-        .background(WrappedColor.paper.ignoresSafeArea())
     }
 
     private var photo: some View {

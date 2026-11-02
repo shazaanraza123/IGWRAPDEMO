@@ -88,6 +88,7 @@ struct InstagramShellView: View {
                 StoryPlayer {
                     showsPlayer = false
                 }
+                .frame(width: size.width, height: size.height, alignment: .top)
             }
             if showsEntry {
                 WrappedEntryFlow {

@@ -36,8 +36,9 @@ struct StoryProgressBars: View {
                 .frame(height: WrappedSpace.progressThickness)
             }
         }
+        .frame(height: WrappedSpace.progressThickness)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Card \(current + 1) of \(count)")
+        .accessibilityIdentifier("player-progress")
     }
 
     private func fillWidth(index: Int, total: CGFloat) -> CGFloat {

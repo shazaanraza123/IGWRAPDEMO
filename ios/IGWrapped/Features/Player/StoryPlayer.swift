@@ -182,6 +182,8 @@ struct StoryPlayer: View {
         case 6: WrappedColor.igYellow
         case 7: WrappedColor.closeGreen
         case 9: WrappedColor.nightNavy
+        case 12: WrappedColor.igMagenta
+        case 13: WrappedColor.paper
         default: Chapter.containing(card).field
         }
     }
@@ -304,7 +306,6 @@ struct StoryPlayer: View {
                 foreground: style.foreground,
                 trackOpacity: style.trackOpacity
             )
-            .accessibilityHidden(true)
             WrappedTopRow(
                 showsInfo: model.showsInfoButton,
                 isMuted: isMuted,
