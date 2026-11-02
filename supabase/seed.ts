@@ -72,7 +72,7 @@ export function renderSeedSql(personas: Persona[]) {
     );
     const avatar = persona.profile.avatar ? quote(persona.profile.avatar) : "null";
     profiles.push(
-      `  (${quote(id)}::uuid, ${quote(persona.profile.handle)}, ${quote(persona.profile.display_name)}, ${avatar}, ${quote(persona.profile.account_type)}, ${persona.profile.is_teen}, ${quote(persona.persona_key)}, ${jsonLiteral(persona.persona_key, persona)}::jsonb)`,
+      `  (${quote(id)}::uuid, ${quote(`catalog.${persona.persona_key}`)}, ${quote(persona.profile.display_name)}, ${avatar}, ${quote(persona.profile.account_type)}, ${persona.profile.is_teen}, ${quote(persona.persona_key)}, ${jsonLiteral(persona.persona_key, persona)}::jsonb)`,
     );
     privacy.push(`  (${quote(id)}::uuid)`);
     children.push(contentInserts(persona, id));

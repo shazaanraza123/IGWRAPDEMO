@@ -1,5 +1,6 @@
 // Copy this file to ios/Config.xcconfig. That copy is gitignored.
 // Leave the values empty until the step that needs them.
+// A URL's // starts an xcconfig comment. Write a local URL as http:/$()/127.0.0.1:54321.
 SUPABASE_URL =
 SUPABASE_ANON_KEY =
 FACEBOOK_APP_ID =

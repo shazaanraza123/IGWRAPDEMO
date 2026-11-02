@@ -16,9 +16,10 @@ Deno.test("seed sql matches the persona files and the committed seed", async () 
   if (!ghost || ghost.includes('"totals"')) throw new Error("ghost seed invented totals");
   const maya = sql.split("$persona_maya$")[1];
   if (!maya.includes('"posts":38')) throw new Error("maya posts are not 38");
-  if (!sql.includes("'maya.lens'") || !sql.includes("'maya.teen'")) {
+  if (!sql.includes('"maya.lens"') || !sql.includes('"maya.teen"')) {
     throw new Error("maya and teen handles missing");
   }
+  if (!sql.includes("'catalog.maya'")) throw new Error("catalog handle missing");
   if (!sql.includes("'post_0719'") || !sql.includes("'story_0314'")) {
     throw new Error("maya's real post and story were not seeded");
   }

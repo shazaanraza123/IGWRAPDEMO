@@ -9,9 +9,13 @@ struct IGWrappedApp: App {
     var body: some Scene {
         WindowGroup {
             #if DEBUG
-            StyleguideView()
+            if ProcessInfo.processInfo.arguments.contains("--styleguide") {
+                StyleguideView()
+            } else {
+                PersonaLoginView()
+            }
             #else
-            WrappedColor.ink.ignoresSafeArea()
+            PersonaLoginView()
             #endif
         }
     }

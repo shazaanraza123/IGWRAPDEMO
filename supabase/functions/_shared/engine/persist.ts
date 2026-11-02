@@ -66,7 +66,7 @@ export function planInserts(userId: string, personal: PersonalRun): PlannedRun {
   };
 }
 
-function headers(serviceRoleKey: string, prefer: string) {
+export function serviceHeaders(serviceRoleKey: string, prefer: string) {
   return {
     apikey: serviceRoleKey,
     Authorization: `Bearer ${serviceRoleKey}`,
@@ -75,7 +75,7 @@ function headers(serviceRoleKey: string, prefer: string) {
   };
 }
 
-async function rest(url: string, serviceRoleKey: string, path: string, init: RequestInit) {
+export async function serviceRest(url: string, serviceRoleKey: string, path: string, init: RequestInit) {
   const response = await fetch(`${url}${path}`, init);
   if (!response.ok) {
     throw new Error(`${init.method ?? "GET"} ${path} failed (${response.status}): ${await response.text()}`);
@@ -88,33 +88,33 @@ export async function persistRun(url: string, serviceRoleKey: string, userId: st
   const base = url.replace(/\/$/, "");
   const planned = planInserts(userId, personal);
   const year = personal.year;
-  await rest(base, serviceRoleKey, `/rest/v1/wrapped_runs?user_id=eq.${userId}&year=eq.${year}&edition=eq.personal`, {
+  await serviceRest(base, serviceRoleKey, `/rest/v1/wrapped_runs?user_id=eq.${userId}&year=eq.${year}&edition=eq.personal`, {
     method: "DELETE",
-    headers: headers(serviceRoleKey, "return=minimal"),
+    headers: serviceHeaders(serviceRoleKey, "return=minimal"),
   });
-  await rest(base, serviceRoleKey, "/rest/v1/wrapped_runs", {
+  await serviceRest(base, serviceRoleKey, "/rest/v1/wrapped_runs", {
     method: "POST",
-    headers: headers(serviceRoleKey, "return=minimal"),
+    headers: serviceHeaders(serviceRoleKey, "return=minimal"),
     body: JSON.stringify(planned.run),
   });
   if (planned.metrics.length > 0) {
-    await rest(base, serviceRoleKey, "/rest/v1/metrics", {
+    await serviceRest(base, serviceRoleKey, "/rest/v1/metrics", {
       method: "POST",
-      headers: headers(serviceRoleKey, "return=minimal"),
+      headers: serviceHeaders(serviceRoleKey, "return=minimal"),
       body: JSON.stringify(planned.metrics),
     });
   }
   if (planned.scores.length > 0) {
-    await rest(base, serviceRoleKey, "/rest/v1/archetype_scores", {
+    await serviceRest(base, serviceRoleKey, "/rest/v1/archetype_scores", {
       method: "POST",
-      headers: headers(serviceRoleKey, "return=minimal"),
+      headers: serviceHeaders(serviceRoleKey, "return=minimal"),
       body: JSON.stringify(planned.scores),
     });
   }
   if (planned.cards.length > 0) {
-    await rest(base, serviceRoleKey, "/rest/v1/cards", {
+    await serviceRest(base, serviceRoleKey, "/rest/v1/cards", {
       method: "POST",
-      headers: headers(serviceRoleKey, "return=minimal"),
+      headers: serviceHeaders(serviceRoleKey, "return=minimal"),
       body: JSON.stringify(planned.cards),
     });
   }
@@ -123,8 +123,8 @@ export async function persistRun(url: string, serviceRoleKey: string, userId: st
 
 export async function deleteRun(url: string, serviceRoleKey: string, userId: string, year: number) {
   const base = url.replace(/\/$/, "");
-  await rest(base, serviceRoleKey, `/rest/v1/wrapped_runs?user_id=eq.${userId}&year=eq.${year}&edition=eq.personal`, {
+  await serviceRest(base, serviceRoleKey, `/rest/v1/wrapped_runs?user_id=eq.${userId}&year=eq.${year}&edition=eq.personal`, {
     method: "DELETE",
-    headers: headers(serviceRoleKey, "return=minimal"),
+    headers: serviceHeaders(serviceRoleKey, "return=minimal"),
   });
 }

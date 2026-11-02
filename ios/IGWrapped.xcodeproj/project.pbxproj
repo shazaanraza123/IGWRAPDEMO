@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		0AB7355D422402D306783C84 /* StyleguideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB01A22A9BDAD229B50A217 /* StyleguideView.swift */; };
 		17E290638A162AE1F4411EDA /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = F9702545FEEDCC1E6AEA35E8 /* Supabase */; };
+		2A2821886746F46D6537634A /* PersonaLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668D250A3653DD5899DC59A0 /* PersonaLoginView.swift */; };
+		58FB8419CF70808DFAAF24A5 /* SupabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E7E4A8D019DB5AF8DCAFBF /* SupabaseService.swift */; };
 		72E026A92BDF60B721A3BFB3 /* IGWrappedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E233E673EE36B9EA7184B7E /* IGWrappedTests.swift */; };
 		79FDD4B50A311E98E6EC16FB /* Archivo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6C79F874D722B702FB11D909 /* Archivo.ttf */; };
 		85D828341254F2BF8C5DE5CB /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059B36E2FE8F4EB9306B0786 /* Typography.swift */; };
@@ -46,7 +48,9 @@
 		2BCFAC903645148F0B5D09FB /* IGWrappedUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = IGWrappedUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DB6240D1AA1F5759AD0A4DD /* DesignCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignCanvas.swift; sourceTree = "<group>"; };
 		4C1C6B9A0F43B756919593F3 /* IGWrappedTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = IGWrappedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		668D250A3653DD5899DC59A0 /* PersonaLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonaLoginView.swift; sourceTree = "<group>"; };
 		6C79F874D722B702FB11D909 /* Archivo.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Archivo.ttf; sourceTree = "<group>"; };
+		73E7E4A8D019DB5AF8DCAFBF /* SupabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseService.swift; sourceTree = "<group>"; };
 		76E40B39EC8622A447807BB7 /* ARCHIVO-LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "ARCHIVO-LICENSE.txt"; sourceTree = "<group>"; };
 		8C1681F1F0ADE34C9A78FBCB /* WrappedComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrappedComponents.swift; sourceTree = "<group>"; };
 		8E233E673EE36B9EA7184B7E /* IGWrappedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGWrappedTests.swift; sourceTree = "<group>"; };
@@ -54,8 +58,9 @@
 		9EBBC9ACF6086ECB490A8A63 /* IGWrapped.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = IGWrapped.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9EED43EE6FD952D381A7946 /* PersonalityMark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalityMark.swift; sourceTree = "<group>"; };
 		BA1A0AC45FCF014B523E7AFC /* Tokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tokens.swift; sourceTree = "<group>"; };
+		CC8633F80B98E06EA7A9C0C7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		DBB01A22A9BDAD229B50A217 /* StyleguideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleguideView.swift; sourceTree = "<group>"; };
-		"TEMP_E7F2992A-C94D-41F0-BA1C-121B3B8DDC6C" /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		"TEMP_1428CF47-0D5B-4519-8BD5-6719760938C1" /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,10 +110,12 @@
 		3DD6D06A7BBDB669BEE4219B /* IGWrapped */ = {
 			isa = PBXGroup;
 			children = (
+				CC8633F80B98E06EA7A9C0C7 /* Info.plist */,
 				33F400DB1ED73EDD3F7B32FB /* App */,
 				89CA44DC81AAB74F74FB5802 /* DesignSystem */,
 				739685F9677F187F8E6FAF6F /* Features */,
 				0DE0F21071589DD274663BFC /* Resources */,
+				EE6E9B2D2F5FAE295EAA0706 /* Services */,
 			);
 			path = IGWrapped;
 			sourceTree = "<group>";
@@ -124,6 +131,7 @@
 			isa = PBXGroup;
 			children = (
 				5A1F278B40CFDF993F87A76F /* Cards */,
+				87EDC58ECEC6ECB65AE42186 /* Login */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -135,6 +143,14 @@
 				6C79F874D722B702FB11D909 /* Archivo.ttf */,
 			);
 			path = Fonts;
+			sourceTree = "<group>";
+		};
+		87EDC58ECEC6ECB65AE42186 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				668D250A3653DD5899DC59A0 /* PersonaLoginView.swift */,
+			);
+			path = Login;
 			sourceTree = "<group>";
 		};
 		89CA44DC81AAB74F74FB5802 /* DesignSystem */ = {
@@ -187,10 +203,18 @@
 			);
 			sourceTree = "<group>";
 		};
-		"TEMP_5173C3A8-2D48-4F86-9EE1-346D3392186D" /* ios */ = {
+		EE6E9B2D2F5FAE295EAA0706 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				"TEMP_E7F2992A-C94D-41F0-BA1C-121B3B8DDC6C" /* Config.xcconfig */,
+				73E7E4A8D019DB5AF8DCAFBF /* SupabaseService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		"TEMP_73807728-28E1-4C34-A461-36620D0B5505" /* ios */ = {
+			isa = PBXGroup;
+			children = (
+				"TEMP_1428CF47-0D5B-4519-8BD5-6719760938C1" /* Config.xcconfig */,
 			);
 			path = ios;
 			sourceTree = "<group>";
@@ -314,9 +338,11 @@
 			files = (
 				F6732CEB34C79D3347FC2D40 /* DesignCanvas.swift in Sources */,
 				8C8A606956401EF8B2A74FDA /* IGWrappedApp.swift in Sources */,
+				2A2821886746F46D6537634A /* PersonaLoginView.swift in Sources */,
 				CB96341AEA97E255EFD976F1 /* PersonalityMark.swift in Sources */,
 				90074C287C19C975A40E1340 /* ReferenceOverlay.swift in Sources */,
 				0AB7355D422402D306783C84 /* StyleguideView.swift in Sources */,
+				58FB8419CF70808DFAAF24A5 /* SupabaseService.swift in Sources */,
 				C7153039AE6A249EBC673067 /* Tokens.swift in Sources */,
 				85D828341254F2BF8C5DE5CB /* Typography.swift in Sources */,
 				D9C999A53A3FD80CD23B0958 /* WrappedComponents.swift in Sources */,
@@ -431,9 +457,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
+				INFOPLIST_FILE = IGWrapped/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -447,7 +471,7 @@
 		};
 		BB3E3DB93E2DD0015C6C8CC3 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_E7F2992A-C94D-41F0-BA1C-121B3B8DDC6C" /* Config.xcconfig */;
+			baseConfigurationReference = "TEMP_1428CF47-0D5B-4519-8BD5-6719760938C1" /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -519,9 +543,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
+				INFOPLIST_FILE = IGWrapped/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -535,7 +557,7 @@
 		};
 		FC7905F3AA32487055CCDDEB /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_E7F2992A-C94D-41F0-BA1C-121B3B8DDC6C" /* Config.xcconfig */;
+			baseConfigurationReference = "TEMP_1428CF47-0D5B-4519-8BD5-6719760938C1" /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
