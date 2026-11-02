@@ -46,6 +46,10 @@ export type MetricSource = {
   late_night?: { latest_local_time: string; weekday: string; month: number };
 };
 
+export function monthName(month: number): string | null {
+  return MONTH_NAMES[month - 1] ?? null;
+}
+
 const MONTH_NAMES = [
   "January",
   "February",
