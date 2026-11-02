@@ -1,0 +1,10 @@
+{
+  "persona_key": "established",
+  "profile": {
+    "handle": "established",
+    "display_name": "established",
+    "account_type": "creator",
+    "is_teen": false
+  },
+  "window": { "start": "2026-01-01", "end": "2026-11-15", "label": "Jan 1 to Nov 15" }
+}

@@ -1,0 +1,10 @@
+{
+  "persona_key": "ghost",
+  "profile": {
+    "handle": "ghost",
+    "display_name": "ghost",
+    "account_type": "personal",
+    "is_teen": false
+  },
+  "window": { "start": "2026-01-01", "end": "2026-11-15", "label": "Jan 1 to Nov 15" }
+}

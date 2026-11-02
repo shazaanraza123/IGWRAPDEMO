@@ -1,0 +1,252 @@
+{
+  "persona_key": "teen",
+  "profile": {
+    "handle": "maya.teen",
+    "display_name": "Maya",
+    "account_type": "personal",
+    "is_teen": true,
+    "city": "Chicago",
+    "avatar": "maya-profile"
+  },
+  "window": {
+    "start": "2026-01-01",
+    "end": "2026-11-15",
+    "label": "Jan 1 to Nov 15"
+  },
+  "totals": {
+    "posts": 38,
+    "stories": 412,
+    "reels_sent": 1206,
+    "saves": 1214,
+    "days_active": 301,
+    "liked_posts": 1840,
+    "friends_stories_watched_pct": 96
+  },
+  "monthly": [
+    {
+      "month": 1,
+      "posts": 2,
+      "stories": 30,
+      "photo": "m-01"
+    },
+    {
+      "month": 2,
+      "posts": 2,
+      "stories": 28,
+      "photo": "m-02"
+    },
+    {
+      "month": 3,
+      "posts": 3,
+      "stories": 36,
+      "photo": "m-03"
+    },
+    {
+      "month": 4,
+      "posts": 3,
+      "stories": 34,
+      "photo": "m-04"
+    },
+    {
+      "month": 5,
+      "posts": 3,
+      "stories": 38,
+      "photo": "m-05"
+    },
+    {
+      "month": 6,
+      "posts": 4,
+      "stories": 40,
+      "photo": "m-06"
+    },
+    {
+      "month": 7,
+      "posts": 4,
+      "stories": 44,
+      "photo": "m-07"
+    },
+    {
+      "month": 8,
+      "posts": 9,
+      "stories": 61,
+      "photo": "m-08"
+    },
+    {
+      "month": 9,
+      "posts": 3,
+      "stories": 36,
+      "photo": "m-09"
+    },
+    {
+      "month": 10,
+      "posts": 3,
+      "stories": 35,
+      "photo": "m-10"
+    },
+    {
+      "month": 11,
+      "posts": 2,
+      "stories": 30,
+      "photo": "m-11"
+    }
+  ],
+  "opening_photos": [
+    "tile-1",
+    "tile-2",
+    "tile-3",
+    "tile-4",
+    "tile-5"
+  ],
+  "feed_color": {
+    "palette_name": "Midnight Camel",
+    "swatches": [
+      {
+        "hex": "#1F2A44",
+        "pct": 31
+      },
+      {
+        "hex": "#C8A27C",
+        "pct": 24
+      },
+      {
+        "hex": "#8B3A3A",
+        "pct": 19
+      },
+      {
+        "hex": "#E9E1D3",
+        "pct": 15
+      },
+      {
+        "hex": "#4E6B4A",
+        "pct": 11
+      }
+    ]
+  },
+  "explore_topics": [
+    {
+      "name": "Streetwear drops",
+      "score": 0.91,
+      "cluster": "fashion"
+    },
+    {
+      "name": "Film cameras",
+      "score": 0.84,
+      "cluster": "photography"
+    },
+    {
+      "name": "Ceramic frogs",
+      "score": 0.41,
+      "cluster": "crafts",
+      "watched": 63
+    }
+  ],
+  "reels_categories": [
+    {
+      "name": "Streetwear",
+      "pct": 31
+    },
+    {
+      "name": "Food in Chicago",
+      "pct": 22
+    },
+    {
+      "name": "Film photography",
+      "pct": 18
+    },
+    {
+      "name": "Interior design",
+      "pct": 12
+    },
+    {
+      "name": "Ceramics",
+      "pct": 9
+    }
+  ],
+  "fastest_rising": {
+    "name": "Ceramics",
+    "multiple": 4,
+    "since_month": 6
+  },
+  "ceramics_monthly": [
+    3,
+    2,
+    4,
+    3,
+    5,
+    22,
+    41,
+    58,
+    64,
+    71,
+    80
+  ],
+  "main_character_post": {
+    "id": "post_0719",
+    "photo": "main-character",
+    "posted_at": "2026-07-19",
+    "likes": 2184,
+    "comments": 418,
+    "avg_likes": 728
+  },
+  "most_replied_story": {
+    "id": "story_0314",
+    "photo": "story-0314",
+    "posted_at": "2026-03-14",
+    "replies_24h": 47
+  },
+  "circle": [
+    {
+      "handle": "dee.films",
+      "avatar": "friend-dee"
+    },
+    {
+      "handle": "jules.mp",
+      "avatar": "friend-jules"
+    },
+    {
+      "handle": "nico_k",
+      "avatar": "friend-nico"
+    },
+    {
+      "handle": "sam.wav",
+      "avatar": "friend-sam"
+    },
+    {
+      "handle": "tori.eats",
+      "avatar": "friend-tori"
+    }
+  ],
+  "late_night": {
+    "latest_local_time": "03:42",
+    "weekday": "Tuesday",
+    "month": 5
+  },
+  "archetypes": {
+    "primary": {
+      "key": "curator",
+      "score": 70
+    },
+    "secondary": {
+      "key": "ghost",
+      "score": 30
+    },
+    "clues": [
+      "You saved 1,214 posts",
+      "You posted 38 times all year",
+      "You watched 96% of friends’ Stories"
+    ]
+  },
+  "share_cards": {
+    "identity_stat": [
+      "1,214",
+      "posts saved"
+    ],
+    "numbers_photo": "year-card",
+    "top_interest": "Streetwear"
+  },
+  "home_feed_post": {
+    "author": "jules.mp",
+    "location": "Chicago, Illinois",
+    "photo": "feed-chicago"
+  }
+}
