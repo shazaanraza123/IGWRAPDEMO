@@ -108,6 +108,8 @@ enum IGSpace {
     static let tabChipRadius: CGFloat = 12
     static let tabCount: CGFloat = 5
     static let profileDot: CGFloat = 26
+    /// Initial letter, as a fraction of the avatar diameter.
+    static let avatarInitialRatio: CGFloat = 0.42
     static let tabClearance: CGFloat = 96
     /// Story viewer chrome from `05-story-viewer.png` (472×1024, scaled onto 390×844).
     /// Open and close durations from `video-story-open-close.mp4`: the card is full by ~0.30s after the tap, and the swipe release is gone within ~0.18s.

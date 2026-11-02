@@ -50,3 +50,17 @@ import Testing
     #expect(restored.selection(for: "Streetwear drops") == FeedbackKind.moreOfThis)
     #expect(restored.selection(for: "Film cameras") == nil)
 }
+
+@Test func personAvatarUsesTheHandleUntilAHeadshotExists() {
+    #expect(PersonAvatar.initial("dee.films") == "D")
+    #expect(PersonAvatar.initial("@maya.lens") == "M")
+    #expect(PersonAvatar.photoName(for: "jules.mp") == "friend-jules")
+    #expect(PersonAvatar.photoName(for: "maya.lens") == "maya-profile")
+    for handle in MayaCircle.handles + [MayaOpening.handle] {
+        #expect(!PersonAvatar.photoName(for: handle).hasPrefix("tile"))
+        let swatch = PersonSwatch.forHandle(handle)
+        #expect(swatch == PersonSwatch.forHandle(handle))
+        #expect(swatch.usesInk == (swatch == .green || swatch == .yellow))
+    }
+    #expect(PersonSwatch.forHandle("dee.films") != PersonSwatch.forHandle("jules.mp"))
+}

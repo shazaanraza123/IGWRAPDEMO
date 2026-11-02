@@ -704,3 +704,81 @@ struct ShareActionButton: View {
         .accessibilityLabel(title)
     }
 }
+
+enum PersonSwatch: Int, CaseIterable {
+    case pink, orange, violet, green, yellow
+
+    var fill: Color {
+        switch self {
+        case .pink: WrappedColor.igPink
+        case .orange: WrappedColor.igOrange
+        case .violet: WrappedColor.igViolet
+        case .green: WrappedColor.closeGreen
+        case .yellow: WrappedColor.igYellow
+        }
+    }
+
+    var usesInk: Bool { self == .green || self == .yellow }
+
+    static func forHandle(_ handle: String) -> PersonSwatch {
+        let sum = PersonAvatar.bare(handle).unicodeScalars.reduce(0) { $0 + Int($1.value) }
+        let all = Self.allCases
+        return all[sum % all.count]
+    }
+}
+
+struct PersonAvatar: View {
+    var handle: String
+    var photo: String?
+
+    var body: some View {
+        GeometryReader { geo in
+            let side = min(geo.size.width, geo.size.height)
+            face(side: side)
+                .frame(width: side, height: side)
+                .clipShape(Circle())
+                .position(x: geo.size.width / 2, y: geo.size.height / 2)
+        }
+        .accessibilityHidden(true)
+    }
+
+    @ViewBuilder
+    private func face(side: CGFloat) -> some View {
+        if let photo, let image = BundlePhoto.image(named: photo) {
+            Image(uiImage: image)
+                .resizable()
+                .scaledToFill()
+        } else {
+            let swatch = PersonSwatch.forHandle(handle)
+            ZStack {
+                Circle().fill(swatch.fill)
+                Text(Self.initial(handle))
+                    .font(.system(size: side * IGSpace.avatarInitialRatio, weight: .semibold))
+                    .foregroundStyle(swatch.usesInk ? WrappedColor.ink : WrappedColor.igWhite)
+            }
+        }
+    }
+
+    static func bare(_ handle: String) -> String {
+        handle.replacingOccurrences(of: "@", with: "")
+    }
+
+    static func initial(_ handle: String) -> String {
+        let name = bare(handle)
+        guard let first = name.first else { return "" }
+        return String(first).uppercased()
+    }
+
+    /// Canonical headshot name. A missing file falls back to the initial.
+    static func photoName(for handle: String) -> String {
+        switch bare(handle) {
+        case "maya.lens": "maya-profile"
+        case "dee.films": "friend-dee"
+        case "jules.mp": "friend-jules"
+        case "nico_k": "friend-nico"
+        case "sam.wav": "friend-sam"
+        case "tori.eats": "friend-tori"
+        default: "friend-\(bare(handle))"
+        }
+    }
+}

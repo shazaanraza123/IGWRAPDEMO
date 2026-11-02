@@ -26,7 +26,7 @@ struct IGStoryTray: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(alignment: .top, spacing: IGSpace.storyGap) {
                 storyBubble(title: "Your story", ring: .seen) {
-                    Circle().fill(WrappedColor.surfaceRaised)
+                    PersonAvatar(handle: MayaOpening.handle, photo: PersonAvatar.photoName(for: MayaOpening.handle))
                 } badge: {
                     Circle()
                         .fill(WrappedColor.igWhite)
@@ -56,7 +56,7 @@ struct IGStoryTray: View {
                         onFriend(story)
                     } label: {
                         storyBubble(title: story.handle, ring: .unseen) {
-                            Circle().fill(WrappedColor.surfaceRaised)
+                            PersonAvatar(handle: story.handle, photo: PersonAvatar.photoName(for: story.handle))
                         } badge: {
                             EmptyView()
                         }

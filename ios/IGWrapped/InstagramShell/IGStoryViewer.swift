@@ -88,9 +88,11 @@ struct IGStoryViewer: View {
                     }
                 }
                 .offset(x: nameShift)
-            Circle()
-                .stroke(WrappedColor.igWhite, lineWidth: IGSpace.viewerReplyStroke)
+            PersonAvatar(handle: story.handle, photo: PersonAvatar.photoName(for: story.handle))
                 .frame(width: IGSpace.postAvatar, height: IGSpace.postAvatar)
+                .overlay {
+                    Circle().stroke(WrappedColor.igWhite, lineWidth: IGSpace.viewerReplyStroke)
+                }
                 .offset(x: -(WrappedSpace.frameWidth / 2) + IGSpace.postInset + IGSpace.postAvatar / 2)
             chromeButton("ellipsis", label: "More", action: onUnavailable)
                 .offset(x: WrappedSpace.frameWidth / 2 - IGSpace.postInset - IGSpace.iconHit * 1.5)

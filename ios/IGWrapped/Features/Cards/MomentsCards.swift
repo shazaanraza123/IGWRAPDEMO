@@ -37,15 +37,6 @@ enum MayaCircle {
     static let note = "The five accounts you showed up for most. No ranking, no scores."
     static let privacy = "Want the ranked version? It lives in Privacy, off by default."
     static let handles = ["dee.films", "jules.mp", "nico_k", "sam.wav", "tori.eats"]
-    static func photo(for handle: String) -> String {
-        switch handle {
-        case "dee.films": "tile-1"
-        case "jules.mp": "tile-2"
-        case "nico_k": "tile-3"
-        case "sam.wav": "tile-4"
-        default: "tile-5"
-        }
-    }
 }
 
 enum MayaNight {
@@ -520,10 +511,8 @@ struct CircleCard: View {
     private func avatar(_ handle: String) -> some View {
         ZStack {
             Circle().stroke(WrappedColor.storyRing, lineWidth: 4)
-            Circle().fill(WrappedColor.igOrange).padding(4)
-            if let image = BundlePhoto.image(named: MayaCircle.photo(for: handle)) {
-                Image(uiImage: image).resizable().scaledToFill().clipShape(Circle()).padding(8)
-            }
+            PersonAvatar(handle: handle, photo: PersonAvatar.photoName(for: handle))
+                .padding(4)
         }
     }
 

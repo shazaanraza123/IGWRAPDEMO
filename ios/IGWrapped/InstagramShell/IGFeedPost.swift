@@ -8,9 +8,12 @@ struct IGFeedPost: View {
     var body: some View {
         VStack(alignment: .leading, spacing: IGSpace.storyLabelGap) {
             HStack(spacing: IGSpace.postInset) {
-                Circle()
-                    .fill(WrappedColor.storyRing)
-                    .frame(width: IGSpace.postAvatar, height: IGSpace.postAvatar)
+                ZStack {
+                    PersonAvatar(handle: "jules.mp", photo: PersonAvatar.photoName(for: "jules.mp"))
+                        .padding(IGSpace.ringStroke)
+                    Circle().stroke(WrappedColor.storyRing, lineWidth: IGSpace.ringStroke)
+                }
+                .frame(width: IGSpace.postAvatar, height: IGSpace.postAvatar)
                 VStack(alignment: .leading, spacing: WrappedSpace.gridGap) {
                     Text("jules.mp")
                         .wrappedType(.igUsername)
