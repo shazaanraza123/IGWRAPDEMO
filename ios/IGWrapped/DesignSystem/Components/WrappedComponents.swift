@@ -103,7 +103,7 @@ struct WrappedTopRow: View {
             ZStack {
                 Circle().fill(WrappedColor.igWhite)
                 Circle().fill(WrappedColor.ink).padding(CardSpace.ringWidth)
-                Circle().stroke(WrappedColor.igViolet, lineWidth: CardSpace.ringWidth).padding(CardSpace.ringWidth)
+                Circle().stroke(innerBorder, lineWidth: CardSpace.ringWidth).padding(CardSpace.ringWidth)
                 Text("26")
                     .font(ArchivoFont.font(size: CardSpace.markDigits, weight: CardSpace.heavy, width: CardSpace.regular))
                     .foregroundStyle(WrappedColor.igWhite)
@@ -441,6 +441,7 @@ struct MatchBar: View {
 struct SharePill: View {
     var title: String = "Share"
     var inverted: Bool = false
+    var expands: Bool = false
     var identifier: String = "card-share"
     var action: () -> Void = {}
 
@@ -457,6 +458,7 @@ struct SharePill: View {
             .foregroundStyle(ink)
             .padding(.leading, CardSpace.chipTextPad + CardSpace.chipPadV)
             .padding(.trailing, WrappedSpace.gutter)
+            .frame(maxWidth: expands ? .infinity : nil)
             .frame(height: WrappedSpace.pillHeight)
             .background(Capsule().fill(fill))
             .contentShape(Capsule())

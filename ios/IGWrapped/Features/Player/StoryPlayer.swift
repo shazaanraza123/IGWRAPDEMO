@@ -15,6 +15,8 @@ struct StoryPlayer: View {
     @State private var showsPost = false
     @State private var showsStory = false
     @State private var toast: String?
+    @State private var revealPulse = 0
+    private let startsOnNumbers: Bool
     private let audio = AudioService.shared
 
     init(onExit: @escaping () -> Void) {
@@ -33,6 +35,7 @@ struct StoryPlayer: View {
         if arguments.contains("--teen") {
             model.omitted = [8, 9]
         }
+        startsOnNumbers = arguments.contains("--numbers")
         _model = State(initialValue: model)
     }
 
@@ -126,6 +129,7 @@ struct StoryPlayer: View {
         }
         .onChange(of: showsPost) { _, _ in syncCover() }
         .onChange(of: showsStory) { _, _ in syncCover() }
+        .sensoryFeedback(.success, trigger: revealPulse)
         .task { await runClock() }
         .sheet(isPresented: $showsInfo) {
             CardInfoSheet()
@@ -215,6 +219,23 @@ struct StoryPlayer: View {
             CircleCard()
         case 9:
             ThreeAMCard(onShare: { showToast("Not part of this demo") })
+        case 10:
+            PlotTwistCard(onShare: { showToast("Not part of this demo") })
+        case 11:
+            PersonalityTeaserCard(onReveal: revealPersonality)
+        case 12:
+            PersonalityRevealCard(
+                onShare: { showToast("Not part of this demo") },
+                onShareCards: {
+                    withAnimation(cardAnimation) { step(model.goForward()) }
+                }
+            )
+        case 13:
+            ShareCardsCard(
+                onShare: { showToast("Not part of this demo") },
+                onHub: { showToast("Not part of this demo") },
+                startsOnNumbers: startsOnNumbers
+            )
         default:
             EmptyView()
         }
@@ -247,7 +268,21 @@ struct StoryPlayer: View {
         case 7: return "07-broke-the-group-chat"
         case 8: return "08-your-circle"
         case 9: return "09-3am-club"
+        case 10: return "10-plot-twist"
+        case 11: return "11-personality-teaser"
+        case 12: return "12-personality-reveal"
+        case 13:
+            return ProcessInfo.processInfo.arguments.contains("--numbers")
+                ? "13b-numbers-card"
+                : "13a-identity-card"
         default: return nil
+        }
+    }
+
+    private func revealPersonality() {
+        revealPulse += 1
+        withAnimation(cardAnimation) {
+            step(model.reveal())
         }
     }
 

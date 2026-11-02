@@ -59,6 +59,13 @@ import Testing
     model.card = 11
     #expect(model.duration == 6)
     #expect(model.showsInfoButton == false)
+    #expect(model.tick(delta: 8) == .same)
+    #expect(model.card == 11)
+    #expect(model.reveal() == .moved)
+    #expect(model.card == 12)
+    #expect(model.autoplay == false)
+    #expect(model.tick(delta: 20) == .same)
+    #expect(model.card == 12)
     model.card = 3
     #expect(model.showsInfoButton)
 }

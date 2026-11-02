@@ -122,8 +122,15 @@ struct StoryPlayerModel {
         }
     }
 
+    /// The teaser waits for Reveal. Reveal itself turns autoplay off.
+    mutating func reveal() -> PlayerAdvance {
+        autoplay = false
+        return goForward()
+    }
+
     mutating func tick(delta: TimeInterval) -> PlayerAdvance {
         guard autoplay, !isHolding, !infoOpen, !coverOpen, delta > 0 else { return .same }
+        guard card != 11 else { return .same }
         elapsed += delta
         guard elapsed >= duration else { return .same }
         return goForward()

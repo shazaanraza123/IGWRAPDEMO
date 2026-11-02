@@ -166,6 +166,31 @@ final class IGWrappedUITests: XCTestCase {
         XCTAssertTrue(app.descendants(matching: .any)["swatch-detail"].waitForExistence(timeout: 3))
     }
 
+    func testRevealLandsOnThePersonality() {
+        let app = XCUIApplication()
+        app.launchArguments = ["--player", "--player-card", "11", "--player-paused"]
+        app.launch()
+        let player = app.otherElements["story-player"]
+        XCTAssertTrue(player.waitForExistence(timeout: 5))
+        XCTAssertTrue(waitForLabel(player, "Card 11 of 13"))
+        app.buttons["reveal-personality"].tap()
+        XCTAssertTrue(waitForLabel(player, "Card 12 of 13"))
+    }
+
+    func testShareCardToggleCrossfades() {
+        let app = XCUIApplication()
+        app.launchArguments = ["--player", "--player-card", "13", "--player-paused"]
+        app.launch()
+        XCTAssertTrue(app.otherElements["story-player"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.otherElements["share-identity"].waitForExistence(timeout: 3))
+        let numbers = app.buttons["Numbers card"]
+        XCTAssertTrue(numbers.waitForExistence(timeout: 3))
+        XCTAssertFalse(numbers.isSelected)
+        numbers.tap()
+        XCTAssertTrue(numbers.isSelected)
+        XCTAssertTrue(app.otherElements["share-numbers"].waitForExistence(timeout: 3))
+    }
+
     func testPlayerCloseExits() {
         let app = launchedPlayer()
         let player = app.otherElements["story-player"]

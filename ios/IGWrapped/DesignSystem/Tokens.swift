@@ -156,6 +156,10 @@ enum WrappedMotion {
     static let clockTick: TimeInterval = 1.0 / 30.0
     /// Music level while a year montage is playing.
     static let duckedVolume: Float = 0.25
+    static let revealSpin: Double = 0.9
+    static let revealStart: CGFloat = 0.8
+    static let chartGrow: Double = 0.8
+    static let shareCrossfade: Double = 0.35
 }
 
 /// Positions from the card HTML. 1 CSS px = 1 pt.
@@ -279,6 +283,96 @@ enum CardSpace {
     static let clockHour: Double = 111
     static let clockMinute: Double = 252
     static let barTrack: Double = 0.14
+    static let plotGap: CGFloat = 14
+    static let plotHeadline: CGFloat = 96
+    static let plotHeadlineLine: CGFloat = 0.82
+    static let plotHeadlineTracking: CGFloat = -2
+    static let plotSentence: CGFloat = 26
+    static let plotSentenceLine: CGFloat = 1.12
+    static let plotChartTop: CGFloat = 470
+    static let plotChartHeight: CGFloat = 188
+    static let plotChartTitle: CGFloat = 13
+    static let plotBarGap: CGFloat = 5
+    static let plotBarRadius: CGFloat = 3
+    static let plotLabel: CGFloat = 10
+    static let plotMinBar: CGFloat = 4
+    static let barDim: Double = 0.25
+    static let teaserHeadline: CGFloat = 46
+    static let teaserHeadlineLine: CGFloat = 0.86
+    static let teaserHeadlineTracking: CGFloat = -1
+    static let teaserOrbitTop: CGFloat = 284
+    static let teaserOrbit: CGFloat = 250
+    static let orbitRadius: CGFloat = 100
+    static let orbitMark: CGFloat = 38
+    static let orbitOpacity: Double = 0.35
+    static let clueTop: CGFloat = 548
+    static let clueGap: CGFloat = 8
+    static let questionSize: CGFloat = 78
+    static let questionRing: CGFloat = 124
+    static let questionStroke: CGFloat = 5
+    static let questionDash: CGFloat = 14
+    static let questionGap: CGFloat = 9
+    static let revealButton: CGFloat = 54
+    static let revealLabel: CGFloat = 17
+    static let revealMark: CGFloat = 184
+    static let revealMarkTop: CGFloat = 112
+    static let revealInner: CGFloat = 140
+    static let revealRing: CGFloat = 14
+    static let revealDash: CGFloat = 44
+    static let revealDashGap: CGFloat = 10.5
+    static let revealCopyTop: CGFloat = 312
+    static let revealName: CGFloat = 100
+    static let revealNameLine: CGFloat = 0.82
+    static let revealNameTracking: CGFloat = -2
+    static let revealSide: CGFloat = 17
+    static let revealMatchTop: CGFloat = 560
+    static let revealReasonsTop: CGFloat = 616
+    static let reasonValue: CGFloat = 26
+    static let reasonLabel: CGFloat = 12
+    static let reasonLine: CGFloat = 1.25
+    static let reasonRule: CGFloat = 2
+    static let identityInset: CGFloat = 24
+    static let identityTop: CGFloat = 112
+    static let identityMark: CGFloat = 220
+    static let identityMarkTop: CGFloat = 150
+    static let identityCopyTop: CGFloat = 390
+    static let identityName: CGFloat = 106
+    static let identityNameLine: CGFloat = 0.8
+    static let identityNameTracking: CGFloat = -2.5
+    static let identityKicker: CGFloat = 14
+    static let identityKickerTracking: CGFloat = 1.6
+    static let identityStat: CGFloat = 60
+    static let identityStatLine: CGFloat = 0.9
+    static let identityCaption: CGFloat = 20
+    static let identityRule: CGFloat = 3
+    static let shareDock: CGFloat = 172
+    static let numbersHeader: CGFloat = 330
+    static let numbersTitle: CGFloat = 54
+    static let numbersTitleLine: CGFloat = 0.86
+    static let numbersValue: CGFloat = 54
+    static let numbersValueLine: CGFloat = 0.9
+    static let numbersLabel: CGFloat = 17
+    static let numbersInterest: CGFloat = 30
+    static let numbersPhoto: CGFloat = 148
+    static let numbersRing: CGFloat = 16
+    static let numbersDash: CGFloat = 63
+    static let numbersGap: CGFloat = 9
+    static let footerMark: CGFloat = 34
+    static let footerWord: CGFloat = 16
+    static let footerLink: CGFloat = 14
+    static let footerLinkTracking: CGFloat = 0.6
+    static let matchTrack: Double = 0.55
+    static let eyebrowSize: CGFloat = 12
+    static let eyebrowTracking: CGFloat = 1.4
+    static let primaryWidth: CGFloat = 0.7
+    static let plotSentenceWidth: CGFloat = 330
+    static let reasonGap: CGFloat = 2
+    static let dockGap: CGFloat = 2
+    static let dockBottom: CGFloat = 8
+    static let numbersColumn: CGFloat = 18
+    static let numbersRingBox: CGFloat = 176
+    static let numbersPhotoTop: CGFloat = 76
+    static let footerRingPad: CGFloat = 2.5
 }
 
 enum PaletteInk {
@@ -355,6 +449,20 @@ struct CardChrome {
                 mark: .ink,
                 innerBorder: WrappedColor.nightNavy,
                 outerFill: WrappedColor.igYellow
+            )
+        case 10:
+            return CardChrome(
+                foreground: WrappedColor.ink,
+                trackOpacity: 0.25,
+                mark: .ink,
+                innerBorder: WrappedColor.igYellow
+            )
+        case 12, 13:
+            return CardChrome(
+                foreground: WrappedColor.igWhite,
+                trackOpacity: 0.35,
+                mark: .white,
+                innerBorder: WrappedColor.igMagenta
             )
         default:
             return CardChrome(

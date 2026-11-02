@@ -62,7 +62,21 @@ targets:
         buildPhase: resources
       - path: ../design/screens/09-3am-club.png
         buildPhase: resources
+      - path: ../design/screens/10-plot-twist.png
+        buildPhase: resources
+      - path: ../design/screens/11-personality-teaser.png
+        buildPhase: resources
+      - path: ../design/screens/12-personality-reveal.png
+        buildPhase: resources
+      - path: ../design/screens/13a-identity-card.png
+        buildPhase: resources
+      - path: ../design/screens/13b-numbers-card.png
+        buildPhase: resources
+      - path: ../design/screens/personality-marks.png
+        buildPhase: resources
       - path: ../design/photos/main-character.jpg
+        buildPhase: resources
+      - path: ../design/photos/year-card.jpg
         buildPhase: resources
     dependencies:
       - package: Supabase
