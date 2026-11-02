@@ -5,6 +5,7 @@
       "chapter": "memories",
       "code": "P01",
       "hidden": false,
+      "metric_keys": [],
       "payload": {
         "copy": {
           "headline": "2026 LOOKED\nGOOD ON\nYOU.",

@@ -3,6 +3,7 @@ import { bundleText } from "../../../../scripts/export-runs.ts";
 import { computeMetrics } from "./metrics.ts";
 import {
   buildPersonalRun,
+  buildRunBundle,
   DEFAULT_PRIVACY,
   paletteName,
   scoreArchetypes,
@@ -186,6 +187,21 @@ async function load(key: string) {
 function profileOf(persona: { profile: { handle: string; is_teen: boolean } }) {
   return { handle: persona.profile.handle, is_teen: persona.profile.is_teen };
 }
+
+Deno.test("info sheet window and reels method come from the engine", async () => {
+  const maya = await load("maya");
+  const bundle = buildRunBundle(maya, { handle: maya.profile.handle, is_teen: false });
+  const posts = bundle.metrics.find((metric) => metric.key === "posts");
+  if (posts?.window_label !== "Jan 1 to Nov 15, 2026") throw new Error(posts?.window_label ?? "missing window");
+  const reels = bundle.metrics.find((metric) => metric.key === "reels_category_share");
+  if (reels?.method !== "Top 5 categories by share of your Reels watch time. Other categories: 8%.") {
+    throw new Error(reels?.method ?? "missing reels method");
+  }
+  const card = bundle.cards.find((item) => item.type === "reelsRabbitHole");
+  if (!card?.metric_keys.includes("reels_category_share")) throw new Error("reels card is missing its metric key");
+  const opening = bundle.cards.find((item) => item.type === "opening");
+  if (opening?.metric_keys.length !== 0) throw new Error("opening has metrics");
+});
 
 Deno.test("exported bundles match buildRunBundle", async () => {
   const maya = await load("maya");

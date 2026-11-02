@@ -46,6 +46,7 @@ final class SessionStore {
 
     func signOut() async {
         LocalPersona.clear()
+        HiddenCards.clear()
         try? await client?.auth.signOut()
     }
 }

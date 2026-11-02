@@ -147,6 +147,11 @@ enum WrappedSpace {
     static let wrappedMark: CGFloat = 30
     static let buildingRing: CGFloat = 120
     static let buildingStroke: CGFloat = 10
+    /// Share-sheet and info-sheet top radius from S10.
+    static let sheetRadius: CGFloat = 26
+    static let badgeDot: CGFloat = 2
+    static let badgeDash: CGFloat = 6
+    static let badgeGap: CGFloat = 3
 }
 
 /// Motion from UIUX §6 and APPFLOW §2. The cube reuses the card-enter spring. Reduce Motion is the 150 ms crossfade.

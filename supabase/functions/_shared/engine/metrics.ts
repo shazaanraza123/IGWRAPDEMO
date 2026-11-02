@@ -72,6 +72,19 @@ export function reelsCategoryMethod(otherPercent: number) {
   return `${REELS_METHOD_PREFIX}${printed}%.`;
 }
 
+const SHORT_MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+/// The info-sheet window line. Same year collapses to "Jan 1 to Nov 15, 2026". A one-day window is "Jul 19, 2026".
+export function windowLabel(start: string, end: string): string {
+  const a = parts(start);
+  const b = parts(end);
+  const left = `${SHORT_MONTHS[a.month - 1]} ${a.day}`;
+  const right = `${SHORT_MONTHS[b.month - 1]} ${b.day}`;
+  if (start === end) return `${left}, ${a.year}`;
+  if (a.year === b.year) return `${left} to ${right}, ${a.year}`;
+  return `${left}, ${a.year} to ${right}, ${b.year}`;
+}
+
 function parts(iso: string) {
   const [year, month, day] = iso.split("-").map(Number);
   return { year, month, day };

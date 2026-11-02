@@ -44,6 +44,7 @@
       "chapter": "memories",
       "code": "P01",
       "hidden": false,
+      "metric_keys": [],
       "payload": {
         "copy": {
           "headline": "2026 LOOKED\nGOOD ON\nYOU.",
@@ -68,6 +69,14 @@
       "chapter": "memories",
       "code": "P02",
       "hidden": false,
+      "metric_keys": [
+        "monthly_posts",
+        "monthly_stories",
+        "top_month",
+        "top_month_posts",
+        "top_month_stories",
+        "months_covered"
+      ],
       "payload": {
         "copy": {
           "headline": "YOU HAD QUITE\nA YEAR.",
@@ -136,6 +145,10 @@
       "chapter": "interests",
       "code": "P03",
       "hidden": false,
+      "metric_keys": [
+        "liked_posts",
+        "feed_swatch"
+      ],
       "payload": {
         "copy": {
           "footnote": "% = main color in each of 1,840 liked posts",
@@ -175,6 +188,10 @@
       "chapter": "interests",
       "code": "P04",
       "hidden": false,
+      "metric_keys": [
+        "explore_topic",
+        "explore_topic_watched"
+      ],
       "payload": {
         "copy": {
           "headline": "YOUR ALGORITHM\nTHINKS YOU'RE\nINTO...",
@@ -203,6 +220,13 @@
       "chapter": "interests",
       "code": "P05",
       "hidden": false,
+      "metric_keys": [
+        "reels_category_share",
+        "fastest_rising_multiple",
+        "fastest_rising_since_month",
+        "reels_sent",
+        "top_reels_category"
+      ],
       "payload": {
         "categories": [
           [
@@ -248,6 +272,13 @@
       "chapter": "moments",
       "code": "P06",
       "hidden": false,
+      "metric_keys": [
+        "main_post_likes",
+        "main_post_comments",
+        "main_post_avg_likes",
+        "main_post_vs_average",
+        "main_post_posted_at"
+      ],
       "payload": {
         "comments": 418,
         "copy": {
@@ -274,6 +305,9 @@
       "chapter": "moments",
       "code": "P07",
       "hidden": false,
+      "metric_keys": [
+        "story_replies_24h"
+      ],
       "payload": {
         "copy": {
           "headline": "THE STORY THAT\nBROKE THE\nGROUP CHAT.",
@@ -294,6 +328,11 @@
       "chapter": "identity",
       "code": "P10",
       "hidden": false,
+      "metric_keys": [
+        "ceramics_monthly",
+        "plot_category",
+        "plot_turn_month"
+      ],
       "payload": {
         "category": "Ceramics",
         "copy": {
@@ -324,6 +363,11 @@
       "chapter": "identity",
       "code": "P11",
       "hidden": false,
+      "metric_keys": [
+        "saves",
+        "posts",
+        "friends_stories_watched_pct"
+      ],
       "payload": {
         "copy": {
           "clues": [
@@ -343,6 +387,11 @@
       "chapter": "identity",
       "code": "P12",
       "hidden": false,
+      "metric_keys": [
+        "saves",
+        "posts",
+        "friends_stories_watched_pct"
+      ],
       "payload": {
         "copy": {
           "name": "THE\nCURATOR",
@@ -378,6 +427,13 @@
       "chapter": "identity",
       "code": "P13",
       "hidden": false,
+      "metric_keys": [
+        "stories",
+        "posts",
+        "reels_sent",
+        "saves",
+        "top_reels_category"
+      ],
       "payload": {
         "copy": {
           "identityYear": "MY 2026",
@@ -428,6 +484,7 @@
       "value_num": 38,
       "value_text": null,
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -438,6 +495,7 @@
       "value_num": 412,
       "value_text": null,
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -448,6 +506,7 @@
       "value_num": 1206,
       "value_text": null,
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -458,6 +517,7 @@
       "value_num": 1214,
       "value_text": null,
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -468,6 +528,7 @@
       "value_num": 301,
       "value_text": null,
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -478,6 +539,7 @@
       "value_num": 1840,
       "value_text": null,
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -488,6 +550,7 @@
       "value_num": 96,
       "value_text": null,
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -498,6 +561,7 @@
       "value_num": 2,
       "value_text": "1",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -508,6 +572,7 @@
       "value_num": 30,
       "value_text": "1",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -518,6 +583,7 @@
       "value_num": 2,
       "value_text": "2",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -528,6 +594,7 @@
       "value_num": 28,
       "value_text": "2",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -538,6 +605,7 @@
       "value_num": 3,
       "value_text": "3",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -548,6 +616,7 @@
       "value_num": 36,
       "value_text": "3",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -558,6 +627,7 @@
       "value_num": 3,
       "value_text": "4",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -568,6 +638,7 @@
       "value_num": 34,
       "value_text": "4",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -578,6 +649,7 @@
       "value_num": 3,
       "value_text": "5",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -588,6 +660,7 @@
       "value_num": 38,
       "value_text": "5",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -598,6 +671,7 @@
       "value_num": 4,
       "value_text": "6",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -608,6 +682,7 @@
       "value_num": 40,
       "value_text": "6",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -618,6 +693,7 @@
       "value_num": 4,
       "value_text": "7",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -628,6 +704,7 @@
       "value_num": 44,
       "value_text": "7",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -638,6 +715,7 @@
       "value_num": 9,
       "value_text": "8",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -648,6 +726,7 @@
       "value_num": 61,
       "value_text": "8",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -658,6 +737,7 @@
       "value_num": 3,
       "value_text": "9",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -668,6 +748,7 @@
       "value_num": 36,
       "value_text": "9",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -678,6 +759,7 @@
       "value_num": 3,
       "value_text": "10",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -688,6 +770,7 @@
       "value_num": 35,
       "value_text": "10",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -698,6 +781,7 @@
       "value_num": 2,
       "value_text": "11",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -708,6 +792,7 @@
       "value_num": 30,
       "value_text": "11",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -718,6 +803,7 @@
       "value_num": 8,
       "value_text": "August",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -728,6 +814,7 @@
       "value_num": 9,
       "value_text": "8",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -738,6 +825,7 @@
       "value_num": 61,
       "value_text": "8",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -748,6 +836,7 @@
       "value_num": 11,
       "value_text": null,
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -758,6 +847,7 @@
       "value_num": 31,
       "value_text": "#1F2A44",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -768,6 +858,7 @@
       "value_num": 24,
       "value_text": "#C8A27C",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -778,6 +869,7 @@
       "value_num": 19,
       "value_text": "#8B3A3A",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -788,6 +880,7 @@
       "value_num": 15,
       "value_text": "#E9E1D3",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -798,6 +891,7 @@
       "value_num": 11,
       "value_text": "#4E6B4A",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -808,6 +902,7 @@
       "value_num": 0.91,
       "value_text": "Streetwear drops",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -818,6 +913,7 @@
       "value_num": 0.84,
       "value_text": "Film cameras",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -828,6 +924,7 @@
       "value_num": 0.41,
       "value_text": "Ceramic frogs",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -838,6 +935,7 @@
       "value_num": 63,
       "value_text": "Ceramic frogs",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -848,6 +946,7 @@
       "value_num": 31,
       "value_text": "Streetwear",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -858,6 +957,7 @@
       "value_num": 22,
       "value_text": "Food in Chicago",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -868,6 +968,7 @@
       "value_num": 18,
       "value_text": "Film photography",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -878,6 +979,7 @@
       "value_num": 12,
       "value_text": "Interior design",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -888,6 +990,7 @@
       "value_num": 9,
       "value_text": "Ceramics",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -898,6 +1001,7 @@
       "value_num": 31,
       "value_text": "Streetwear",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -908,6 +1012,7 @@
       "value_num": 4,
       "value_text": "Ceramics",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -918,6 +1023,7 @@
       "value_num": 6,
       "value_text": "Ceramics",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -928,6 +1034,7 @@
       "value_num": 6,
       "value_text": "June",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -938,6 +1045,7 @@
       "value_num": 3,
       "value_text": "1",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -948,6 +1056,7 @@
       "value_num": 2,
       "value_text": "2",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -958,6 +1067,7 @@
       "value_num": 4,
       "value_text": "3",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -968,6 +1078,7 @@
       "value_num": 3,
       "value_text": "4",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -978,6 +1089,7 @@
       "value_num": 5,
       "value_text": "5",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -988,6 +1100,7 @@
       "value_num": 22,
       "value_text": "6",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -998,6 +1111,7 @@
       "value_num": 41,
       "value_text": "7",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -1008,6 +1122,7 @@
       "value_num": 58,
       "value_text": "8",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -1018,6 +1133,7 @@
       "value_num": 64,
       "value_text": "9",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -1028,6 +1144,7 @@
       "value_num": 71,
       "value_text": "10",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -1038,6 +1155,7 @@
       "value_num": 80,
       "value_text": "11",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -1048,6 +1166,7 @@
       "value_num": null,
       "value_text": "Ceramics",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -1058,6 +1177,7 @@
       "value_num": 2184,
       "value_text": "post_0719",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -1068,6 +1188,7 @@
       "value_num": 418,
       "value_text": "post_0719",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -1078,6 +1199,7 @@
       "value_num": 728,
       "value_text": "post_0719",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -1088,6 +1210,7 @@
       "value_num": 3,
       "value_text": "post_0719",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -1098,6 +1221,7 @@
       "value_num": null,
       "value_text": "2026-07-19",
       "window_end": "2026-07-19",
+      "window_label": "Jul 19, 2026",
       "window_start": "2026-07-19"
     },
     {
@@ -1108,6 +1232,7 @@
       "value_num": 47,
       "value_text": "story_0314",
       "window_end": "2026-03-15",
+      "window_label": "Mar 14 to Mar 15, 2026",
       "window_start": "2026-03-14"
     },
     {
@@ -1118,6 +1243,7 @@
       "value_num": null,
       "value_text": "dee.films",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -1128,6 +1254,7 @@
       "value_num": null,
       "value_text": "jules.mp",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -1138,6 +1265,7 @@
       "value_num": null,
       "value_text": "nico_k",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -1148,6 +1276,7 @@
       "value_num": null,
       "value_text": "sam.wav",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -1158,6 +1287,7 @@
       "value_num": null,
       "value_text": "tori.eats",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -1168,6 +1298,7 @@
       "value_num": null,
       "value_text": "03:42",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -1178,6 +1309,7 @@
       "value_num": null,
       "value_text": "Tuesday",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     },
     {
@@ -1188,6 +1320,7 @@
       "value_num": 5,
       "value_text": "May",
       "window_end": "2026-11-15",
+      "window_label": "Jan 1 to Nov 15, 2026",
       "window_start": "2026-01-01"
     }
   ],

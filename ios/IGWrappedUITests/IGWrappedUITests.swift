@@ -333,6 +333,76 @@ final class IGWrappedUITests: XCTestCase {
         XCTAssertFalse(app.staticTexts[demo].waitForExistence(timeout: 1))
     }
 
+    func testInfoSheetOpensWithTheCardsMethod() {
+        let methods = [
+            2: "Posts you shared in this month.",
+            3: "Posts you liked in the window.",
+            4: "Your taps tune Explore. Undo in Settings.",
+            5: "Top 5 categories by share of your Reels watch time. Other categories: 8%.",
+            6: "Likes on your most-liked post in the window.",
+            7: "Replies in the 24 hours after you posted this Story.",
+            8: "Accounts you interacted with. Shown unranked.",
+            9: "The latest time you were active, in your local time.",
+            10: "Likes and saves in Ceramics, by month.",
+            11: "Posts you saved in the window.",
+            12: "Posts you saved in the window.",
+            13: "Stories you shared in the window.",
+        ]
+        for card in 2 ... 13 {
+            let app = XCUIApplication()
+            app.launchArguments = ["--reset-session", "--player", "--player-paused", "--player-card", "\(card)"]
+            app.launch()
+            XCTAssertTrue(app.otherElements["story-player"].waitForExistence(timeout: 8))
+            if card == 11 {
+                drag(app, from: CGVector(dx: 0.5, dy: 0.8), to: CGVector(dx: 0.5, dy: 0.2))
+            } else {
+                XCTAssertTrue(app.buttons["player-info"].waitForExistence(timeout: 3))
+                app.buttons["player-info"].tap()
+            }
+            XCTAssertTrue(app.otherElements["card-info"].waitForExistence(timeout: 3), "card \(card)")
+            let rows = app.otherElements.matching(identifier: "card-info-metric")
+            let method = methods[card] ?? ""
+            let match = rows.containing(NSPredicate(format: "label CONTAINS %@", method)).firstMatch
+            XCTAssertTrue(match.waitForExistence(timeout: 3), "card \(card) missing \(method)")
+            app.terminate()
+        }
+    }
+
+    func testHidingCardNineDropsItUntilReset() {
+        let app = XCUIApplication()
+        app.launchArguments = ["--reset-session", "--player", "--player-paused", "--player-card", "9"]
+        app.launch()
+        XCTAssertTrue(app.buttons["player-info"].waitForExistence(timeout: 8))
+        app.buttons["player-info"].tap()
+        XCTAssertTrue(app.buttons["hide-card"].waitForExistence(timeout: 3))
+        app.buttons["hide-card"].tap()
+        app.buttons["hide-card-confirm"].firstMatch.tap()
+        let player = app.otherElements["story-player"]
+        XCTAssertTrue(waitForLabel(player, "Card 9 of 12"))
+
+        app.terminate()
+        app.launchArguments = ["--player", "--player-paused"]
+        app.launch()
+        XCTAssertTrue(waitForLabel(app.otherElements["story-player"], "Card 1 of 12"))
+
+        app.terminate()
+        app.launchArguments = ["--reset-session", "--player", "--player-paused"]
+        app.launch()
+        XCTAssertTrue(waitForLabel(app.otherElements["story-player"], "Card 1 of 13"))
+    }
+
+    func testLooksWrongThanksTheViewer() {
+        let app = XCUIApplication()
+        app.launchArguments = ["--reset-session", "--player", "--player-paused", "--player-card", "5"]
+        app.launch()
+        XCTAssertTrue(app.buttons["player-info"].waitForExistence(timeout: 8))
+        app.buttons["player-info"].tap()
+        XCTAssertTrue(app.buttons["looks-wrong"].waitForExistence(timeout: 3))
+        app.buttons["looks-wrong"].tap()
+        app.buttons["looks-wrong-number_off"].tap()
+        XCTAssertTrue(app.staticTexts["Thanks. We'll check it."].waitForExistence(timeout: 3))
+    }
+
     private func launchedPlayer() -> XCUIApplication {
         let app = XCUIApplication()
         app.launchArguments = ["--player"]

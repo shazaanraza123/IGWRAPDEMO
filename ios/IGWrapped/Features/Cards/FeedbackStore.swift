@@ -32,11 +32,15 @@ final class FeedbackStore {
 
     func choose(target: String, kind: String) async -> Bool {
         remember(target: target, kind: kind)
-        let wrote = await write(target: target, kind: kind)
+        let wrote = await write(target: target, kind: kind, reason: nil)
         if wrote {
             didWrite = true
         }
         return wrote
+    }
+
+    func reportLooksWrong(card: String, reason: String, file: URL? = nil) async -> Bool {
+        await write(target: card, kind: FeedbackKind.looksWrong, reason: reason, file: file)
     }
 
     func loadRemote() async {
@@ -60,9 +64,9 @@ final class FeedbackStore {
         }
     }
 
-    private func write(target: String, kind: String) async -> Bool {
+    private func write(target: String, kind: String, reason: String?, file: URL? = nil) async -> Bool {
         guard Backend.active, let client = SessionStore.shared.client else {
-            return appendLocal(target: target, kind: kind)
+            return appendLocal(target: target, kind: kind, reason: reason, file: file)
         }
         do {
             let session = try await client.auth.session
@@ -74,7 +78,7 @@ final class FeedbackStore {
                 .execute()
                 .value
             guard let card = cards.first else { return false }
-            let row = FeedbackInsert(cardId: card.id, userId: session.user.id, kind: kind, target: target)
+            let row = FeedbackInsert(cardId: card.id, userId: session.user.id, kind: kind, target: target, reason: reason)
             try await client.from("card_feedback").insert(row).execute()
             return true
         } catch {
@@ -87,27 +91,53 @@ enum FeedbackKind {
     static let moreOfThis = "more_of_this"
     static let notMe = "not_me"
     static let guilty = "guilty"
+    static let looksWrong = "looks_wrong"
 }
 
-private struct LocalFeedback: Codable {
+struct LocalFeedback: Codable, Equatable {
     var target: String
     var kind: String
+    var reason: String?
     var createdAt: String
 }
 
+enum LooksWrongReason: String, CaseIterable, Identifiable {
+    case numberOff = "number_off"
+    case notMe = "not_me"
+    case dontRemember = "dont_remember"
+    case other = "other"
+
+    var id: String { rawValue }
+
+    var label: String {
+        switch self {
+        case .numberOff: "The number seems off"
+        case .notMe: "That's not me"
+        case .dontRemember: "I don't remember this"
+        case .other: "Something else"
+        }
+    }
+}
+
 extension FeedbackStore {
-    fileprivate func appendLocal(target: String, kind: String) -> Bool {
-        let base = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
-        guard let folder = base?.appendingPathComponent("IGWrapped", isDirectory: true) else { return false }
-        let file = folder.appendingPathComponent("card-feedback.json")
+    static var localFile: URL? {
+        FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first?
+            .appendingPathComponent("IGWrapped", isDirectory: true)
+            .appendingPathComponent("card-feedback.json")
+    }
+
+    static func localRows(file: URL) -> [LocalFeedback] {
+        guard let data = try? Data(contentsOf: file) else { return [] }
+        return (try? JSONDecoder().decode([LocalFeedback].self, from: data)) ?? []
+    }
+
+    fileprivate func appendLocal(target: String, kind: String, reason: String?, file: URL?) -> Bool {
+        guard let file = file ?? Self.localFile else { return false }
         do {
-            try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
-            var rows: [LocalFeedback] = []
-            if let data = try? Data(contentsOf: file) {
-                rows = (try? JSONDecoder().decode([LocalFeedback].self, from: data)) ?? []
-            }
+            try FileManager.default.createDirectory(at: file.deletingLastPathComponent(), withIntermediateDirectories: true)
+            var rows = Self.localRows(file: file)
             let stamp = ISO8601DateFormatter().string(from: Date())
-            rows.append(LocalFeedback(target: target, kind: kind, createdAt: stamp))
+            rows.append(LocalFeedback(target: target, kind: kind, reason: reason, createdAt: stamp))
             try JSONEncoder().encode(rows).write(to: file, options: .atomic)
             return true
         } catch {
@@ -137,11 +167,13 @@ private struct FeedbackInsert: Encodable {
     let userId: UUID
     let kind: String
     let target: String
+    let reason: String?
 
     enum CodingKeys: String, CodingKey {
         case cardId = "card_id"
         case userId = "user_id"
         case kind
         case target
+        case reason
     }
 }

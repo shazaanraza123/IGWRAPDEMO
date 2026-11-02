@@ -1,4 +1,4 @@
-import { computeMetrics, monthName, type Metric, type MetricSource, type MetricWindow } from "./metrics.ts";
+import { computeMetrics, monthName, windowLabel, type Metric, type MetricSource, type MetricWindow } from "./metrics.ts";
 
 export type ProvenanceScore = {
   archetype: string;
@@ -749,7 +749,7 @@ export type RunBundle = {
     engine_version: string;
     copy: { window: string; summary: string };
   };
-  metrics: Metric[];
+  metrics: (Metric & { window_label: string })[];
   archetypes: ArchetypeScore[];
   cards: {
     code: string;
@@ -757,6 +757,7 @@ export type RunBundle = {
     chapter: Chapter;
     sort_order: number;
     payload: Record<string, unknown>;
+    metric_keys: string[];
     shareable: boolean;
     teen_safe: boolean;
     hidden: boolean;
@@ -777,7 +778,10 @@ export function buildRunBundle(source: RunSource, profile: RunProfile, privacy: 
       engine_version: personal.engine_version,
       copy: personal.copy,
     },
-    metrics: personal.metrics,
+    metrics: personal.metrics.map((metric) => ({
+      ...metric,
+      window_label: windowLabel(metric.window_start, metric.window_end),
+    })),
     archetypes: personal.scores,
     cards: personal.cards.map((card) => ({
       code: card.code,
@@ -785,6 +789,7 @@ export function buildRunBundle(source: RunSource, profile: RunProfile, privacy: 
       chapter: card.chapter,
       sort_order: card.sort_order,
       payload: card.payload,
+      metric_keys: card.metric_keys,
       shareable: card.shareable,
       teen_safe: card.teen_safe,
       hidden: card.hidden,

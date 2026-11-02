@@ -68,15 +68,21 @@ struct RunCopy: Codable, Equatable {
     var summary: String
 }
 
-struct RunMetric: Codable, Equatable {
+struct RunMetric: Codable, Equatable, Identifiable {
     var key: String
     var valueNum: Double?
     var valueText: String?
+    var provenance: String
+    var method: String
+    var windowLabel: String
+
+    var id: String { "\(key)|\(valueText ?? "")|\(valueNum.map { String($0) } ?? "")" }
 
     enum CodingKeys: String, CodingKey {
-        case key
+        case key, provenance, method
         case valueNum = "value_num"
         case valueText = "value_text"
+        case windowLabel = "window_label"
     }
 }
 
@@ -92,6 +98,7 @@ struct RunCard: Codable, Equatable, Identifiable {
     var chapter: String
     var sortOrder: Int
     var payload: CardPayload
+    var metricKeys: [String]
     var shareable: Bool
     var teenSafe: Bool
     var hidden: Bool
@@ -101,6 +108,7 @@ struct RunCard: Codable, Equatable, Identifiable {
     enum CodingKeys: String, CodingKey {
         case code, type, chapter, payload, shareable, hidden
         case sortOrder = "sort_order"
+        case metricKeys = "metric_keys"
         case teenSafe = "teen_safe"
     }
 }
@@ -212,6 +220,10 @@ extension RunBundle {
     func card(number: Int) -> RunCard? {
         cards.first { CardCatalog.number[$0.type] == number }
     }
+
+    func metrics(for card: RunCard) -> [RunMetric] {
+        card.metricKeys.flatMap { key in metrics.filter { $0.key == key } }
+    }
 }
 
 extension RunCard {
@@ -222,6 +234,7 @@ extension RunCard {
             chapter: "",
             sortOrder: number,
             payload: CardPayload(),
+            metricKeys: [],
             shareable: false,
             teenSafe: true,
             hidden: false
@@ -354,6 +367,40 @@ enum LocalPersona {
 enum Backend {
     static var active: Bool {
         ProcessInfo.processInfo.arguments.contains("--backend")
+    }
+}
+
+enum HiddenCards {
+    private static let prefix = "igwrapped.hidden-cards"
+
+    static func load(defaults: UserDefaults = .standard) -> Set<Int> {
+        if ProcessInfo.processInfo.arguments.contains("--reset-session") {
+            clear(defaults: defaults)
+            return []
+        }
+        return stored(defaults: defaults)
+    }
+
+    static func hide(_ card: Int, defaults: UserDefaults = .standard) {
+        var cards = stored(defaults: defaults)
+        cards.insert(card)
+        defaults.set(Array(cards).sorted(), forKey: storageKey(defaults: defaults))
+    }
+
+    static func clear(defaults: UserDefaults = .standard) {
+        for key in defaults.dictionaryRepresentation().keys where key.hasPrefix(prefix) {
+            defaults.removeObject(forKey: key)
+        }
+    }
+
+    private static func stored(defaults: UserDefaults) -> Set<Int> {
+        let values = defaults.array(forKey: storageKey(defaults: defaults)) as? [Int] ?? []
+        return Set(values)
+    }
+
+    private static func storageKey(defaults: UserDefaults) -> String {
+        let persona = defaults.string(forKey: LocalPersona.storageKey) ?? "maya"
+        return "\(prefix).\(persona)"
     }
 }
 

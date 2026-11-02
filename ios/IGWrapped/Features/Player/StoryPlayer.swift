@@ -49,6 +49,10 @@ struct StoryPlayer: View {
         } else {
             model.omitted = omitted
         }
+        model.omitted.formUnion(HiddenCards.load())
+        if !model.sequence.contains(model.card), let fallback = model.sequence.first {
+            model.card = fallback
+        }
         startsOnNumbers = arguments.contains("--numbers")
         _model = State(initialValue: model)
     }
@@ -148,7 +152,21 @@ struct StoryPlayer: View {
         .sensoryFeedback(.success, trigger: revealPulse)
         .task { await runClock() }
         .sheet(isPresented: $showsInfo) {
-            CardInfoSheet()
+            CardInfoSheet(
+                metrics: deck.metrics(for: faceCard(model.card)),
+                onLooksWrong: { reason in
+                    let code = faceCard(model.card).code
+                    showsInfo = false
+                    Task {
+                        guard await FeedbackStore.shared.reportLooksWrong(card: code, reason: reason) else { return }
+                        showToast("Thanks. We'll check it.")
+                    }
+                },
+                onHide: {
+                    showsInfo = false
+                    hideCurrentCard()
+                }
+            )
         }
     }
 
@@ -459,6 +477,19 @@ struct StoryPlayer: View {
     private func showUnavailable(_ feature: Feature) {
         guard let message = Feature.toast(for: feature) else { return }
         showToast(message)
+    }
+
+    private func hideCurrentCard() {
+        let hidden = model.card
+        HiddenCards.hide(hidden)
+        model.omitted.insert(hidden)
+        model.elapsed = 0
+        if model.sequence.contains(hidden) { return }
+        if let next = model.sequence.first(where: { $0 > hidden }) {
+            model.card = next
+        } else if let previous = model.sequence.last {
+            model.card = previous
+        }
     }
 
     private func showToast(_ message: String) {

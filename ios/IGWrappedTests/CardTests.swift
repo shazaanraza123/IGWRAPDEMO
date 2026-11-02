@@ -29,6 +29,44 @@ private final class RunBundleProbe: NSObject {}
     #expect(months.count == 11)
 }
 
+@Test func infoSheetUsesEachCardsMetrics() throws {
+    let url = try #require(Bundle(for: RunBundleProbe.self).url(forResource: "maya", withExtension: "json"))
+    let bundle = try JSONDecoder().decode(RunBundle.self, from: Data(contentsOf: url))
+    #expect(bundle.card(number: 1)?.metricKeys.isEmpty == true)
+    let reels = "Top 5 categories by share of your Reels watch time. Other categories: 8%."
+    let methods = bundle.metrics(for: bundle.card(number: 5) ?? .placeholder(type: "reelsRabbitHole", number: 5)).map(\.method)
+    #expect(methods.contains(reels))
+    #expect(bundle.metrics(for: bundle.card(number: 2)!).contains { $0.windowLabel == "Jan 1 to Nov 15, 2026" })
+    #expect(bundle.metrics(for: bundle.card(number: 4)!).allSatisfy { $0.provenance == "inferred" })
+    for number in 2 ... 13 {
+        let card = try #require(bundle.card(number: number))
+        #expect(!bundle.metrics(for: card).isEmpty)
+    }
+}
+
+@Test func hidingACardLeavesTheSequenceAndSurvives() {
+    let name = "hidden-\(UUID().uuidString)"
+    let defaults = UserDefaults(suiteName: name)!
+    defaults.removePersistentDomain(forName: name)
+    defaults.set("maya", forKey: LocalPersona.storageKey)
+    HiddenCards.hide(9, defaults: defaults)
+    var model = StoryPlayerModel()
+    model.omitted = HiddenCards.load(defaults: defaults)
+    #expect(model.sequence == [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13])
+    #expect(model.sequence.count == 12)
+    HiddenCards.clear(defaults: defaults)
+    model.omitted = HiddenCards.load(defaults: defaults)
+    #expect(model.sequence.count == 13)
+}
+
+@Test @MainActor func looksWrongWritesALocalRow() async {
+    let file = FileManager.default.temporaryDirectory.appendingPathComponent("feedback-\(UUID().uuidString).json")
+    let wrote = await FeedbackStore().reportLooksWrong(card: "P09", reason: LooksWrongReason.numberOff.rawValue, file: file)
+    #expect(wrote)
+    let rows = FeedbackStore.localRows(file: file)
+    #expect(rows.contains { $0.kind == FeedbackKind.looksWrong && $0.reason == "number_off" && $0.target == "P09" })
+}
+
 @Test func cardChromeFollowsTheHtml() {
     #expect(CardChrome.forCard(1).mark == .ink)
     #expect(CardChrome.forCard(2).mark == .gradient)
