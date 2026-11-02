@@ -1,8 +1,8 @@
 # Decisions
 
-> This file wins. If it disagrees with `docs/UPDATE-01.md`, `docs/01-PRD.md` through `docs/06-IMPLEMENTATION-PLAN.md`, `data/personas/maya.json`, `design/source/*.dc.html`, or a PNG, follow this file.
-> `docs/UPDATE-01.md` is the next source after this file. Its section 3 is the work order.
-> Recorded 2026-10-17 from the review of the kit. D12–D19 were appended from `docs/UPDATE-01.md` on 2026-11-02. Where D12–D19 disagree with an earlier section, D12–D19 win.
+> This file wins. If it disagrees with `docs/UPDATE-02-DESIGN.md`, `docs/UPDATE-01.md`, `docs/01-PRD.md` through `docs/06-IMPLEMENTATION-PLAN.md`, `data/personas/maya.json`, `design/source/*.dc.html`, or a PNG, follow this file.
+> `docs/UPDATE-01.md` section 3 is the work order until Batch A is done. Then `docs/UPDATE-02-DESIGN.md` section 3.
+> Recorded 2026-10-17 from the review of the kit. D12–D19 were appended from `docs/UPDATE-01.md` on 2026-11-02. D20–D23 were appended from `docs/UPDATE-02-DESIGN.md` on 2026-11-02. Where a later decision disagrees with an earlier section, the later decision wins.
 
 ## 1. Chapters
 
@@ -140,3 +140,22 @@ Only the Bold remix skin (the current designs) is required until Step 20.
 **D18. Pitch mode.** Launch argument `--pitch` hides every action that isn't built (no "Not part of this demo" toasts; the control is omitted or inert with no visual change), hides `ReferenceOverlay` and debug UI, and turns off progress save/resume so every take starts at card 1. Default (no flag) keeps today's behavior for development.
 
 **D19. Order of work** is section 3 of `docs/UPDATE-01.md`. It replaces "Fixes worth doing" in `HANDOFF.md`. The P1 fix (offline bundles, Step 13.5) moves ahead of Step 14 because it blocks the physical-device test.
+
+## 14. Update 02
+
+**D20. Instagram chrome matches the current app.**
+- Top bar, tab bar, Story viewer and composer match the Instagram build installed today, verified against screenshots dated after Aug 13, 2026.
+- Any reference shot older than that doesn't count.
+
+**D21. Restraint for the cards, with loud moments.**
+- Photos and the user's own content carry the energy. Full-bleed brand color is reserved for three moments: **card 1 (opening), card 12 (personality reveal) and the card 13 share cards**.
+- Every other card uses `ink` or `paper` (or the user's photos) as the field, with brand color only as an accent: a word, a sticker, a ring, a progress segment.
+- Why: the team we're pitching just chose restraint. A Wrapped that's pink and magenta wall to wall reads as a 2016 Instagram knockoff. The tradeoff is that Wrapped is supposed to feel like a celebration, which is why the three peak moments keep full color.
+
+**D22. Brand fonts only from licensed files.**
+- Instagram Sans, Pen and Mono are used only if a licensed copy is in `design/fonts/`.
+- Never pull them from font-mirror sites, and never fake them with a lookalike, especially a handwriting font standing in for Pen. A fake brand font is the fastest way for a brand designer to stop taking the demo seriously.
+
+**D23. The wordmark is an asset, never drawn.**
+- One file, `Resources/Brand/instagram-wordmark.pdf`, with template rendering: black on light, white on dark.
+- No gradient fill, no tracing, no SwiftUI paths. If the file is missing, the frame stays empty.
