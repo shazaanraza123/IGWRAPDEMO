@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		00CAFBC1F94E57FF100F07A6 /* 08-your-circle.png in Resources */ = {isa = PBXBuildFile; fileRef = FDFC38B7A529CC45665B968B /* 08-your-circle.png */; };
 		02895DB4F65B601B26496AFB /* 12-personality-reveal.png in Resources */ = {isa = PBXBuildFile; fileRef = 4939CE9035BA6490C168C887 /* 12-personality-reveal.png */; };
+		084AF281B98DA7239D406FFA /* 01-home-2026.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C19BF9FD65D5474A25827EF /* 01-home-2026.png */; };
 		0AB7355D422402D306783C84 /* StyleguideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB01A22A9BDAD229B50A217 /* StyleguideView.swift */; };
 		153A3E48C1D3B5B952C8DCFD /* StoryPlayerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E27FB620580C423E3E7581 /* StoryPlayerModel.swift */; };
 		17E290638A162AE1F4411EDA /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = F9702545FEEDCC1E6AEA35E8 /* Supabase */; };
@@ -108,6 +109,7 @@
 		2A9BDBBBEF0EF337CFF244AF /* tile-2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "tile-2.jpg"; sourceTree = "<group>"; };
 		2BCFAC903645148F0B5D09FB /* IGWrappedUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = IGWrappedUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DB6240D1AA1F5759AD0A4DD /* DesignCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignCanvas.swift; sourceTree = "<group>"; };
+		3C19BF9FD65D5474A25827EF /* 01-home-2026.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "01-home-2026.png"; sourceTree = "<group>"; };
 		3CCA2D97285247A45D89C1C6 /* WrappedEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrappedEntry.swift; sourceTree = "<group>"; };
 		3DDCAC69B9034788FD4E39FA /* FeedbackStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackStore.swift; sourceTree = "<group>"; };
 		3F43AF92DD2FA38087A8994F /* OpeningCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpeningCard.swift; sourceTree = "<group>"; };
@@ -355,6 +357,7 @@
 		C2E6D2C88FE284C862A83BBC /* instagram */ = {
 			isa = PBXGroup;
 			children = (
+				3C19BF9FD65D5474A25827EF /* 01-home-2026.png */,
 				951A649D32C747B2A6914F15 /* 01-home.png */,
 				417E848B1799E0BC0EE891E3 /* 05-story-viewer.png */,
 			);
@@ -472,6 +475,7 @@
 				0D94438C5E28E60D582C79D0 /* Sources */,
 				3685A0E4CE21F92160348D24 /* Resources */,
 				139A1695066EA77C2DD3DB0E /* Frameworks */,
+				3E8E9EEA16E03DE1E6B672C0 /* Copy brand assets */,
 			);
 			buildRules = (
 			);
@@ -549,6 +553,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				084AF281B98DA7239D406FFA /* 01-home-2026.png in Resources */,
 				4FA2E069594720A90A52EDF3 /* 01-home.png in Resources */,
 				D035684C33C5674A99CDC9BE /* 01-opening.png in Resources */,
 				DCF3AFC9A09485A8B2849A04 /* 02-year-in-memories.png in Resources */,
@@ -580,6 +585,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3E8E9EEA16E03DE1E6B672C0 /* Copy brand assets */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Copy brand assets";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "brand=\"${SRCROOT}/IGWrapped/Resources/Brand\"\ndest=\"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}\"\nmkdir -p \"$dest\"\nif [ -d \"$brand\" ]; then\n  find \"$brand\" -type f \\( -name '*.pdf' -o -name '*.png' \\) -exec cp {} \"$dest/\" \\;\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		0D94438C5E28E60D582C79D0 /* Sources */ = {

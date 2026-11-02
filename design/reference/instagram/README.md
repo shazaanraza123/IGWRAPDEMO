@@ -4,6 +4,7 @@ The Instagram shell in the app must match the **current** Instagram iOS app, and
 
 | File | What to capture |
 | --- | --- |
+| `01-home-2026.png` | Current home feed. Same pixels as `01-home.png`, confirmed 2026-11-02. App version was not recorded. |
 | `01-home.png` | Home feed at the top: top bar (+, wordmark, heart), story tray, first post header and image, tab bar |
 | `02-home-post-full.png` | One full feed post: header, image, action row, likes line, caption, timestamp |
 | `03-story-tray-closeup.png` | Zoomed story tray: your story with +, unseen ring, seen ring, Close Friends ring if you have one |

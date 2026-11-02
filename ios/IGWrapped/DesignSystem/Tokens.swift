@@ -72,17 +72,19 @@ enum WrappedColor {
     ]
 }
 
-/// Chrome positions from `01-home.png`, mapped onto the 390×844 frame.
+/// Chrome positions from `01-home-2026.png` (472×1024), mapped onto the 390×844 frame.
 enum IGSpace {
     static let topBarHeight: CGFloat = 108
-    static let iconCenterY: CGFloat = 80
+    static let iconCenterY: CGFloat = 82.5
     static let iconHit: CGFloat = 44
-    static let chromeIcon: CGFloat = 24
+    static let chromeIcon: CGFloat = 22
+    /// The plus glyph sits smaller in the SF Symbol box than the heart, so it gets its own size.
+    static let plusIcon: CGFloat = 24
     static let plusCenterX: CGFloat = 37
-    static let heartCenterX: CGFloat = 351
-    static let wordmarkWidth: CGFloat = 132
-    static let wordmarkHeight: CGFloat = 28
-    static let unreadDot: CGFloat = 8
+    static let heartCenterX: CGFloat = 352
+    static let wordmarkHeight: CGFloat = 25.5
+    static let wordmarkTop: CGFloat = 74.2
+    static let unreadDot: CGFloat = 5
     static let storyDiameter: CGFloat = 74
     static let storyGap: CGFloat = 19
     static let storyLeading: CGFloat = 7

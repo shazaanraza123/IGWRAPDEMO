@@ -67,12 +67,14 @@ struct IGTabBar: View {
                     Image(systemName: tab.symbol(selected: selected))
                         .font(selected ? IGFont.iconSelected : IGFont.icon)
                         .foregroundStyle(selected ? WrappedColor.igWhite : WrappedColor.igIcon)
-                }
-                if tab == .dms {
-                    Circle()
-                        .fill(WrappedColor.likeRed)
-                        .frame(width: IGSpace.unreadDot, height: IGSpace.unreadDot)
-                        .offset(x: IGSpace.unreadDot, y: -IGSpace.unreadDot)
+                        .overlay(alignment: .bottomTrailing) {
+                            if tab == .dms {
+                                Circle()
+                                    .fill(WrappedColor.likeRed)
+                                    .frame(width: IGSpace.unreadDot, height: IGSpace.unreadDot)
+                                    .offset(x: 0, y: -6)
+                            }
+                        }
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)

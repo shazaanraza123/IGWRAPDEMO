@@ -130,7 +130,7 @@ struct InstagramShellView: View {
 
     private var referenceImage: Image? {
         guard ProcessInfo.processInfo.arguments.contains("--reference"), !showsPlayer else { return nil }
-        let name = openStory == nil ? "01-home" : "05-story-viewer"
+        let name = openStory == nil ? "01-home-2026" : "05-story-viewer"
         guard let image = UIImage(named: name) else { return nil }
         return Image(uiImage: image)
     }

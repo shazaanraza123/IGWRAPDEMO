@@ -28,7 +28,10 @@ targets:
       - path: IGWrapped
         excludes:
           - "**/.gitkeep"
+          - "Resources/Brand/**"
       - path: ../design/reference/instagram/01-home.png
+        buildPhase: resources
+      - path: ../design/reference/instagram/01-home-2026.png
         buildPhase: resources
       - path: ../design/reference/instagram/05-story-viewer.png
         buildPhase: resources
@@ -94,6 +97,16 @@ targets:
       testTargets:
         - IGWrappedTests
         - IGWrappedUITests
+    postBuildScripts:
+      - name: Copy brand assets
+        basedOnDependencyAnalysis: false
+        script: |
+          brand="${SRCROOT}/IGWrapped/Resources/Brand"
+          dest="${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
+          mkdir -p "$dest"
+          if [ -d "$brand" ]; then
+            find "$brand" -type f \( -name '*.pdf' -o -name '*.png' \) -exec cp {} "$dest/" \;
+          fi
   IGWrappedTests:
     type: bundle.unit-test
     platform: iOS
