@@ -19,7 +19,7 @@ struct StoryPlayer: View {
     private let startsOnNumbers: Bool
     private let audio = AudioService.shared
 
-    init(onExit: @escaping () -> Void) {
+    init(onExit: @escaping () -> Void, omitted: Set<Int> = []) {
         self.onExit = onExit
         var model = StoryPlayerModel()
         let arguments = ProcessInfo.processInfo.arguments
@@ -34,6 +34,8 @@ struct StoryPlayer: View {
         }
         if arguments.contains("--teen") {
             model.omitted = [8, 9]
+        } else {
+            model.omitted = omitted
         }
         startsOnNumbers = arguments.contains("--numbers")
         _model = State(initialValue: model)

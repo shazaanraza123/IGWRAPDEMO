@@ -18,6 +18,18 @@ import UIKit
     #expect(StyleguideCatalog.componentNames.contains("ReferenceOverlay"))
 }
 
+@Test func entryRoutesFollowTheAppFlow() {
+    #expect(WrappedEntryPlan.afterOpen(hasSession: false) == .login)
+    #expect(WrappedEntryPlan.afterOpen(hasSession: true) == .building)
+    #expect(WrappedEntryPlan.afterBuilding(introSeen: false) == .beforeWeStart)
+    #expect(WrappedEntryPlan.afterBuilding(introSeen: true) == .player)
+    #expect(WrappedEntryPlan.afterStart(isProfessional: false) == .player)
+    #expect(WrappedEntryPlan.afterStart(isProfessional: true) == .edition)
+    #expect(WrappedEntryPlan.isProfessional("creator"))
+    #expect(WrappedEntryPlan.isProfessional("business"))
+    #expect(WrappedEntryPlan.isProfessional("personal") == false)
+}
+
 @Test func eightPersonalityMarks() {
     #expect(PersonalityArchetype.allCases.count == 8)
 }

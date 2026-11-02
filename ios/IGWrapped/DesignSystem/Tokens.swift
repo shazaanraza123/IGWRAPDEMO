@@ -141,6 +141,8 @@ enum WrappedSpace {
     static let progressThickness: CGFloat = 3
     static let progressGap: CGFloat = 3
     static let wrappedMark: CGFloat = 30
+    static let buildingRing: CGFloat = 120
+    static let buildingStroke: CGFloat = 10
 }
 
 /// Motion from UIUX §6 and APPFLOW §2. The cube reuses the card-enter spring. Reduce Motion is the 150 ms crossfade.
@@ -160,6 +162,8 @@ enum WrappedMotion {
     static let revealStart: CGFloat = 0.8
     static let chartGrow: Double = 0.8
     static let shareCrossfade: Double = 0.35
+    /// S03 holds at least this long before the next screen.
+    static let buildingMinimum: TimeInterval = 1.5
 }
 
 /// Positions from the card HTML. 1 CSS px = 1 pt.

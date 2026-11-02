@@ -25,8 +25,7 @@ final class IGWrappedUITests: XCTestCase {
         let maya = app.buttons["persona-maya"]
         XCTAssertTrue(maya.waitForExistence(timeout: 10))
         maya.tap()
-        let ready = app.staticTexts["wrapped-ready"]
-        XCTAssertTrue(ready.waitForExistence(timeout: 40))
+        XCTAssertTrue(app.staticTexts["before-we-start"].waitForExistence(timeout: 45))
 
         app.terminate()
         app.launchArguments = []
@@ -34,7 +33,7 @@ final class IGWrappedUITests: XCTestCase {
         XCTAssertTrue(app.buttons["tab-home"].waitForExistence(timeout: 10))
         XCTAssertFalse(app.buttons["persona-maya"].exists)
         app.buttons["wrapped-bubble"].tap()
-        XCTAssertTrue(ready.waitForExistence(timeout: 15))
+        XCTAssertTrue(app.staticTexts["before-we-start"].waitForExistence(timeout: 8))
         XCTAssertFalse(app.buttons["persona-maya"].exists)
     }
 
@@ -145,7 +144,7 @@ final class IGWrappedUITests: XCTestCase {
         let maya = app.buttons["persona-maya"]
         XCTAssertTrue(maya.waitForExistence(timeout: 10))
         maya.tap()
-        XCTAssertTrue(app.staticTexts["wrapped-ready"].waitForExistence(timeout: 40))
+        XCTAssertTrue(app.staticTexts["before-we-start"].waitForExistence(timeout: 45))
 
         app.terminate()
         app.launchArguments = ["--player", "--player-card", "4", "--player-paused"]
@@ -189,6 +188,42 @@ final class IGWrappedUITests: XCTestCase {
         numbers.tap()
         XCTAssertTrue(numbers.isSelected)
         XCTAssertTrue(app.otherElements["share-numbers"].waitForExistence(timeout: 3))
+    }
+
+    func testBannerReachesCardOneWithinTwoSeconds() {
+        let app = XCUIApplication()
+        app.launchArguments = ["--reset-session"]
+        app.launch()
+        app.buttons["wrapped-banner"].tap()
+        XCTAssertTrue(app.buttons["persona-maya"].waitForExistence(timeout: 10))
+        app.buttons["persona-maya"].tap()
+        XCTAssertTrue(app.buttons["start-wrapped"].waitForExistence(timeout: 45))
+        app.buttons["start-wrapped"].tap()
+        let player = app.otherElements["story-player"]
+        XCTAssertTrue(player.waitForExistence(timeout: 5))
+        app.buttons["player-close"].tap()
+        XCTAssertTrue(app.buttons["wrapped-banner"].waitForExistence(timeout: 5))
+        app.buttons["wrapped-banner"].tap()
+        let timing = app.otherElements["entry-open-seconds"]
+        XCTAssertTrue(timing.waitForExistence(timeout: 3))
+        let seconds = Double(timing.label) ?? 9
+        XCTAssertLessThan(seconds, 2)
+        XCTAssertTrue(player.waitForExistence(timeout: 1))
+        XCTAssertEqual(player.label, "Card 1 of 13")
+    }
+
+    func testCreatorSeesTheEditionPicker() {
+        let app = XCUIApplication()
+        app.launchArguments = ["--reset-session"]
+        app.launch()
+        app.buttons["wrapped-bubble"].tap()
+        XCTAssertTrue(app.buttons["persona-emerging"].waitForExistence(timeout: 10))
+        app.buttons["persona-emerging"].tap()
+        XCTAssertTrue(app.buttons["start-wrapped"].waitForExistence(timeout: 45))
+        app.buttons["start-wrapped"].tap()
+        XCTAssertTrue(app.staticTexts["edition-picker"].waitForExistence(timeout: 3))
+        app.buttons["edition-personal"].tap()
+        XCTAssertTrue(app.otherElements["story-player"].waitForExistence(timeout: 5))
     }
 
     func testPlayerCloseExits() {

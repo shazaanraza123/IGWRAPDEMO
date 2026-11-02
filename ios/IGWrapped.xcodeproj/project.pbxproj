@@ -54,6 +54,7 @@
 		926D781229DA19488F428DF1 /* Chapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC24C8009FFC4D14100617A3 /* Chapter.swift */; };
 		9B3837AD002F2240D300513F /* IGTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ADBC1D2C794A5D8DA2DCAD /* IGTabBar.swift */; };
 		9BAFD277C0638C808530ED30 /* CardText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C3AD1E8AD215A6396364E48 /* CardText.swift */; };
+		9E190CAA70FDA443759B7F64 /* WrappedEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CCA2D97285247A45D89C1C6 /* WrappedEntry.swift */; };
 		B66F37D67EC1C7C57AE761E5 /* StoryPlayerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C9FA248A81126EF45943F5 /* StoryPlayerTests.swift */; };
 		BB2F0C0465F8EBC7648361D0 /* IGWrappedUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A80BF457CA1AB35CA46A981 /* IGWrappedUITests.swift */; };
 		BE6C557923F31CF096AC5D45 /* MomentsCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9642D40E49AEBE8D9E3C8FFF /* MomentsCards.swift */; };
@@ -107,6 +108,7 @@
 		2A9BDBBBEF0EF337CFF244AF /* tile-2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "tile-2.jpg"; sourceTree = "<group>"; };
 		2BCFAC903645148F0B5D09FB /* IGWrappedUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = IGWrappedUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DB6240D1AA1F5759AD0A4DD /* DesignCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignCanvas.swift; sourceTree = "<group>"; };
+		3CCA2D97285247A45D89C1C6 /* WrappedEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrappedEntry.swift; sourceTree = "<group>"; };
 		3DDCAC69B9034788FD4E39FA /* FeedbackStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackStore.swift; sourceTree = "<group>"; };
 		3F43AF92DD2FA38087A8994F /* OpeningCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpeningCard.swift; sourceTree = "<group>"; };
 		417E848B1799E0BC0EE891E3 /* 05-story-viewer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "05-story-viewer.png"; sourceTree = "<group>"; };
@@ -154,7 +156,7 @@
 		EDA977D6DA92307A10A856E6 /* CardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTests.swift; sourceTree = "<group>"; };
 		F9C9FA248A81126EF45943F5 /* StoryPlayerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryPlayerTests.swift; sourceTree = "<group>"; };
 		FDFC38B7A529CC45665B968B /* 08-your-circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "08-your-circle.png"; sourceTree = "<group>"; };
-		"TEMP_013DB93C-CE36-4EC0-B90E-8082E08FE9A8" /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		"TEMP_FE0CFAFD-9B11-4DC9-9D02-095B7C6189C8" /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -270,6 +272,7 @@
 			isa = PBXGroup;
 			children = (
 				5A1F278B40CFDF993F87A76F /* Cards */,
+				BB6A964BB216E830A2652CD4 /* Entry */,
 				87EDC58ECEC6ECB65AE42186 /* Login */,
 				65ABEF2C691948C459AADBE0 /* Player */,
 			);
@@ -339,6 +342,14 @@
 				2BCFAC903645148F0B5D09FB /* IGWrappedUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		BB6A964BB216E830A2652CD4 /* Entry */ = {
+			isa = PBXGroup;
+			children = (
+				3CCA2D97285247A45D89C1C6 /* WrappedEntry.swift */,
+			);
+			path = Entry;
 			sourceTree = "<group>";
 		};
 		C2E6D2C88FE284C862A83BBC /* instagram */ = {
@@ -425,10 +436,10 @@
 			path = screens;
 			sourceTree = "<group>";
 		};
-		"TEMP_ACC8506E-2F9A-494D-8D13-9E4AB1EF7420" /* ios */ = {
+		"TEMP_9DD7FCAB-97E9-42B9-BB58-A9F6297E60FE" /* ios */ = {
 			isa = PBXGroup;
 			children = (
-				"TEMP_013DB93C-CE36-4EC0-B90E-8082E08FE9A8" /* Config.xcconfig */,
+				"TEMP_FE0CFAFD-9B11-4DC9-9D02-095B7C6189C8" /* Config.xcconfig */,
 			);
 			path = ios;
 			sourceTree = "<group>";
@@ -604,6 +615,7 @@
 				C7153039AE6A249EBC673067 /* Tokens.swift in Sources */,
 				85D828341254F2BF8C5DE5CB /* Typography.swift in Sources */,
 				D9C999A53A3FD80CD23B0958 /* WrappedComponents.swift in Sources */,
+				9E190CAA70FDA443759B7F64 /* WrappedEntry.swift in Sources */,
 				34E5F2CB76B722692854FF07 /* YearMemoriesCard.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -732,7 +744,7 @@
 		};
 		BB3E3DB93E2DD0015C6C8CC3 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_013DB93C-CE36-4EC0-B90E-8082E08FE9A8" /* Config.xcconfig */;
+			baseConfigurationReference = "TEMP_FE0CFAFD-9B11-4DC9-9D02-095B7C6189C8" /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -818,7 +830,7 @@
 		};
 		FC7905F3AA32487055CCDDEB /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_013DB93C-CE36-4EC0-B90E-8082E08FE9A8" /* Config.xcconfig */;
+			baseConfigurationReference = "TEMP_FE0CFAFD-9B11-4DC9-9D02-095B7C6189C8" /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;

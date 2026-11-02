@@ -8,6 +8,7 @@ struct InstagramShellView: View {
     @State private var showsBanner = !ProcessInfo.processInfo.arguments.contains("--reference")
     @State private var openStory: FriendStory?
     @State private var showsPlayer = false
+    @State private var showsEntry = false
     @State private var toast: String?
 
     var body: some View {
@@ -29,6 +30,7 @@ struct InstagramShellView: View {
         .task {
             if ProcessInfo.processInfo.arguments.contains("--reset-session") {
                 await SessionStore.shared.signOut()
+                WrappedIntro.clear()
             }
         }
         .onAppear {
@@ -40,7 +42,10 @@ struct InstagramShellView: View {
             }
         }
         .fullScreenCover(isPresented: $showsLogin) {
-            PersonaLoginView()
+            PersonaLoginView {
+                showsLogin = false
+                showsEntry = true
+            }
         }
     }
 
@@ -84,6 +89,11 @@ struct InstagramShellView: View {
                     showsPlayer = false
                 }
             }
+            if showsEntry {
+                WrappedEntryFlow {
+                    showsEntry = false
+                }
+            }
         }
     }
 
@@ -94,11 +104,11 @@ struct InstagramShellView: View {
                 IGStoryTray(
                     zoom: storyZoom,
                     openHandle: openStory?.handle,
-                    onWrapped: { showsLogin = true },
+                    onWrapped: { openWrapped() },
                     onFriend: open
                 )
                 if showsBanner {
-                    WrappedBanner(onOpen: { showsLogin = true }, onDismiss: { showsBanner = false })
+                    WrappedBanner(onOpen: { openWrapped() }, onDismiss: { showsBanner = false })
                         .padding(.horizontal, IGSpace.bannerInset)
                         .padding(.top, IGSpace.bannerGap)
                 }
@@ -133,6 +143,16 @@ struct InstagramShellView: View {
     private func closeStory() {
         withAnimation(.easeIn(duration: IGSpace.viewerDismiss)) {
             openStory = nil
+        }
+    }
+
+    private func openWrapped() {
+        Task {
+            if await SessionStore.shared.hasSession() {
+                showsEntry = true
+            } else {
+                showsLogin = true
+            }
         }
     }
 

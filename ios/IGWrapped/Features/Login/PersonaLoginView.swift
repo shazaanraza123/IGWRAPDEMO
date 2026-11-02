@@ -109,6 +109,7 @@ private final class LoginModel {
 }
 
 struct PersonaLoginView: View {
+    var onClaimed: () -> Void = {}
     @State private var model = LoginModel()
 
     var body: some View {
@@ -139,7 +140,12 @@ struct PersonaLoginView: View {
                     .foregroundStyle(WrappedColor.paper)
                 ForEach(DemoPersona.all) { persona in
                     Button {
-                        Task { await model.claim(persona) }
+                        Task {
+                            await model.claim(persona)
+                            if model.ready != nil {
+                                onClaimed()
+                            }
+                        }
                     } label: {
                         VStack(alignment: .leading, spacing: WrappedSpace.gridGap) {
                             Text(persona.name)
