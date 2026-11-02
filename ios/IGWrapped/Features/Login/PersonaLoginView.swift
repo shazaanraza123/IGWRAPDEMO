@@ -66,8 +66,10 @@ private final class LoginModel {
     var message: String?
     var isWorking = false
     var showsContext = false
+    var isResolving = true
 
     func restore() async {
+        defer { isResolving = false }
         if ProcessInfo.processInfo.arguments.contains("--reset-session") {
             await SessionStore.shared.signOut()
         }
@@ -112,7 +114,9 @@ struct PersonaLoginView: View {
     var body: some View {
         ZStack {
             WrappedColor.ink.ignoresSafeArea()
-            if let ready = model.ready {
+            if model.isResolving {
+                Color.clear
+            } else if let ready = model.ready {
                 readyView(ready)
             } else {
                 picker

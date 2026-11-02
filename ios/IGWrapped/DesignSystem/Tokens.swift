@@ -19,6 +19,13 @@ enum WrappedColor {
     static let sheet = Color(hex: 0x121214)
     /// Ghost mark field. Distinct from `ink`.
     static let ghostInk = Color(hex: 0x26262B)
+    /// Instagram shell, measured from `design/reference/instagram/01-home.png`.
+    static let igBackground = Color(hex: 0x000000)
+    static let igWhite = Color(hex: 0xFFFFFF)
+    static let igTabBar = Color(hex: 0x161D25)
+    static let igTabChip = Color(hex: 0x464A53)
+    static let igIcon = Color(hex: 0xB9BCC1)
+    static let igRingSeen = Color(hex: 0x464D53)
 
     static let storyRing = AngularGradient(
         colors: [igYellow, igOrange, igPink, igMagenta, igViolet, igYellow],
@@ -43,8 +50,51 @@ enum WrappedColor {
         ("surfaceRaised", surfaceRaised),
         ("muted", muted),
         ("sheet", sheet),
-        ("ghostInk", ghostInk)
+        ("ghostInk", ghostInk),
+        ("igBackground", igBackground),
+        ("igWhite", igWhite),
+        ("igTabBar", igTabBar),
+        ("igTabChip", igTabChip),
+        ("igIcon", igIcon),
+        ("igRingSeen", igRingSeen)
     ]
+}
+
+/// Chrome positions from `01-home.png`, mapped onto the 390×844 frame.
+enum IGSpace {
+    static let topBarHeight: CGFloat = 108
+    static let iconCenterY: CGFloat = 80
+    static let iconHit: CGFloat = 44
+    static let chromeIcon: CGFloat = 24
+    static let plusCenterX: CGFloat = 37
+    static let heartCenterX: CGFloat = 351
+    static let wordmarkWidth: CGFloat = 132
+    static let wordmarkHeight: CGFloat = 28
+    static let unreadDot: CGFloat = 8
+    static let storyDiameter: CGFloat = 74
+    static let storyGap: CGFloat = 19
+    static let storyLeading: CGFloat = 7
+    static let storyTopGap: CGFloat = 8
+    static let storyLabelGap: CGFloat = 8
+    static let ringStroke: CGFloat = 2.5
+    static let storyBadge: CGFloat = 22
+    static let bannerInset: CGFloat = 12
+    static let bannerRadius: CGFloat = 18
+    static let bannerGap: CGFloat = 12
+    static let postAvatar: CGFloat = 32
+    static let postInset: CGFloat = 12
+    static let postTopGap: CGFloat = 10
+    static let postAspect: CGFloat = 4.0 / 5.0
+    static let tabBarWidth: CGFloat = 338
+    static let tabBarHeight: CGFloat = 56
+    static let tabBarLeading: CGFloat = 25
+    static let tabBarBottom: CGFloat = 32
+    static let tabChipWidth: CGFloat = 56
+    static let tabChipHeight: CGFloat = 36
+    static let tabChipRadius: CGFloat = 12
+    static let tabCount: CGFloat = 5
+    static let profileDot: CGFloat = 26
+    static let tabClearance: CGFloat = 96
 }
 
 enum WrappedSpace {

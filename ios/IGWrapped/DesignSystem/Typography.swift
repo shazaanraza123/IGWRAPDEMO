@@ -60,6 +60,10 @@ enum WrappedTextStyle: String, CaseIterable, Identifiable {
     case eyebrow
     case caption
     case igChrome
+    case igStoryName
+    case igUsername
+    case igMeta
+    case bannerTitle
 
     var id: String { rawValue }
 
@@ -73,6 +77,10 @@ enum WrappedTextStyle: String, CaseIterable, Identifiable {
         case .eyebrow: "Archivo 12 / 1.0 · 800 · tracking 1.4 · uppercase"
         case .caption: "Archivo 13 / 1.2 · 600"
         case .igChrome: "SF Pro · shell"
+        case .igStoryName: "SF Pro 11 semibold"
+        case .igUsername: "SF Pro 14 semibold"
+        case .igMeta: "SF Pro 12 regular"
+        case .bannerTitle: "Archivo 28 / 0.95 · 900 · wdth 71"
         }
     }
 
@@ -87,6 +95,10 @@ enum WrappedTextStyle: String, CaseIterable, Identifiable {
         case .eyebrow: 12
         case .caption: 13
         case .igChrome: 12
+        case .igStoryName: 11
+        case .igUsername: 14
+        case .igMeta: 12
+        case .bannerTitle: 28
         }
     }
 
@@ -99,7 +111,8 @@ enum WrappedTextStyle: String, CaseIterable, Identifiable {
         case .body: 1.3
         case .eyebrow: 1
         case .caption: 1.2
-        case .igChrome: 1.2
+        case .igChrome, .igStoryName, .igUsername, .igMeta: 1.2
+        case .bannerTitle: 0.95
         }
     }
 
@@ -108,7 +121,9 @@ enum WrappedTextStyle: String, CaseIterable, Identifiable {
         case .hero, .display, .bigNumber, .title: 900
         case .eyebrow: 800
         case .body, .caption: 600
-        case .igChrome: 600
+        case .igChrome, .igStoryName, .igUsername: 600
+        case .igMeta: 400
+        case .bannerTitle: 900
         }
     }
 
@@ -116,7 +131,8 @@ enum WrappedTextStyle: String, CaseIterable, Identifiable {
         switch self {
         case .hero, .display, .bigNumber: 62
         case .title: 71
-        case .body, .eyebrow, .caption, .igChrome: 100
+        case .body, .eyebrow, .caption, .igChrome, .igStoryName, .igUsername, .igMeta: 100
+        case .bannerTitle: 71
         }
     }
 
@@ -129,12 +145,17 @@ enum WrappedTextStyle: String, CaseIterable, Identifiable {
     }
 
     var isUppercase: Bool {
-        self == .display || self == .eyebrow
+        self == .display || self == .eyebrow || self == .bannerTitle
     }
 
     var uiFont: UIFont {
-        if self == .igChrome {
+        switch self {
+        case .igChrome, .igStoryName, .igUsername:
             return .systemFont(ofSize: size, weight: .semibold)
+        case .igMeta:
+            return .systemFont(ofSize: size, weight: .regular)
+        default:
+            break
         }
         return ArchivoFont.uiFont(size: size, weight: weight, width: width)
     }
@@ -163,4 +184,10 @@ extension View {
     func wrappedType(_ style: WrappedTextStyle) -> some View {
         modifier(WrappedTypeModifier(style: style))
     }
+}
+
+enum IGFont {
+    static var icon: Font { .system(size: IGSpace.chromeIcon, weight: .regular) }
+    static var iconSelected: Font { .system(size: IGSpace.chromeIcon, weight: .semibold) }
+    static var badge: Font { .system(size: IGSpace.storyBadge / 2, weight: .bold) }
 }

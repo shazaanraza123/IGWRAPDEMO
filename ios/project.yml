@@ -28,6 +28,10 @@ targets:
       - path: IGWrapped
         excludes:
           - "**/.gitkeep"
+      - path: ../design/reference/instagram/01-home.png
+        buildPhase: resources
+      - path: ../design/photos/feed-chicago.jpg
+        buildPhase: resources
     dependencies:
       - package: Supabase
         product: Supabase

@@ -309,6 +309,10 @@ struct StyleguideView: View {
         case .eyebrow: "Your habits"
         case .caption: "Measured · posted Jul 19"
         case .igChrome: "maya.lens"
+        case .igStoryName: "Your story"
+        case .igUsername: "jules.mp"
+        case .igMeta: "Chicago, Illinois"
+        case .bannerTitle: "Your 2026 Wrapped is here"
         }
     }
 }

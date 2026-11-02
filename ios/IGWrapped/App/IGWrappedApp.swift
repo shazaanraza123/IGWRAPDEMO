@@ -12,10 +12,10 @@ struct IGWrappedApp: App {
             if ProcessInfo.processInfo.arguments.contains("--styleguide") {
                 StyleguideView()
             } else {
-                PersonaLoginView()
+                InstagramShellView()
             }
             #else
-            PersonaLoginView()
+            InstagramShellView()
             #endif
         }
     }
