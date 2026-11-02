@@ -1,83 +1,24 @@
 import SwiftUI
 import UIKit
 
-struct MayaBar: Equatable {
-    var label: String
-    var fraction: CGFloat
-    var strong: Bool
-}
-
-enum MayaPlot {
-    static let eyebrow = "One more thing"
-    static let headline = "PLOT\nTWIST."
-    static let sentence = "In June you fell into ceramics and never climbed out."
-    static let chartTitle = "Ceramics posts you liked and saved, by month"
-    static let provenance = "Measured · likes and saves"
-    static let bars: [MayaBar] = [
-        MayaBar(label: "J", fraction: 3.0 / 80.0, strong: false),
-        MayaBar(label: "F", fraction: 2.0 / 80.0, strong: false),
-        MayaBar(label: "M", fraction: 4.0 / 80.0, strong: false),
-        MayaBar(label: "A", fraction: 3.0 / 80.0, strong: false),
-        MayaBar(label: "M", fraction: 5.0 / 80.0, strong: false),
-        MayaBar(label: "J", fraction: 22.0 / 80.0, strong: true),
-        MayaBar(label: "J", fraction: 41.0 / 80.0, strong: true),
-        MayaBar(label: "A", fraction: 58.0 / 80.0, strong: true),
-        MayaBar(label: "S", fraction: 64.0 / 80.0, strong: true),
-        MayaBar(label: "O", fraction: 71.0 / 80.0, strong: true),
-        MayaBar(label: "N", fraction: 80.0 / 80.0, strong: true)
-    ]
-}
-
-enum MayaTeaser {
-    static let eyebrow = "Before we tell you"
-    static let headline = "THREE CLUES. ONE\nPERSONALITY."
-    static let clues: [(index: String, text: String)] = [
-        ("01", "You saved 1,214 posts"),
-        ("02", "You posted 38 times all year"),
-        ("03", "You watched 96% of friends\u{2019} Stories")
-    ]
-}
-
-enum MayaReveal {
-    static let eyebrow = "Your Instagram personality"
-    static let name = "THE\nCURATOR"
-    static let side = "with a side of The Ghost"
-    static let primary = PersonalityArchetype.curator
-    static let secondary = PersonalityArchetype.ghost
-    static let primaryMatch = "70% Curator match"
-    static let secondaryMatch = "30% Ghost match"
-    static let reasons: [(value: String, label: String)] = [
-        ("1,214", "posts saved"),
-        ("38", "posts all year"),
-        ("96%", "of friends\u{2019} Stories watched")
-    ]
-    static let shareTitle = "Share your personality"
-    static let shareCards = "See your share cards"
-}
-
-enum MayaShare {
-    static let handle = "@maya.lens"
-    static let year = "MY 2026"
-    static let eyebrow = "My Instagram personality"
-    static let name = "THE\nCURATOR"
-    static let statValue = "1,214"
-    static let statLabel = "posts saved"
-    static let photo = "year-card"
-    static let numbersTitle = "2026 IN NUMBERS"
-    static let stats: [(value: String, label: String)] = [
-        ("412", "Stories"),
-        ("38", "Posts"),
-        ("1,206", "Reels sent"),
-        ("1,214", "Saves")
-    ]
-    static let interestLabel = "Top interest"
-    static let interest = "Streetwear"
-    static let link = "INSTAGRAM.COM/WRAPPED"
-    static let hub = "Go to your Hub"
-}
-
 struct PlotTwistCard: View {
+    var card: RunCard
     var onShare: () -> Void
+
+    private var bars: [(label: String, fraction: CGFloat, strong: Bool)] {
+        let values = card.payload.monthly ?? []
+        let peak = CGFloat(values.max() ?? 0)
+        let turn = card.payload.turnMonth ?? 1
+        return values.enumerated().map { index, value in
+            let label = index < MonthLabel.letters.count ? MonthLabel.letters[index] : ""
+            let fraction = peak > 0 ? CGFloat(value) / peak : 0
+            return (label, fraction, index + 1 >= turn)
+        }
+    }
+
+    private var chartTitle: String {
+        "\(card.payload.category ?? "") posts you liked and saved, by month"
+    }
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var grown = false
@@ -87,7 +28,7 @@ struct PlotTwistCard: View {
             WrappedColor.igYellow.ignoresSafeArea().allowsHitTesting(false)
             VStack(alignment: .leading, spacing: CardSpace.plotGap) {
                 CardText(
-                    text: MayaPlot.eyebrow,
+                    text: "One more thing",
                     size: CardSpace.eyebrowSize,
                     weight: CardSpace.strong,
                     width: CardSpace.regular,
@@ -96,14 +37,14 @@ struct PlotTwistCard: View {
                     uppercase: true
                 )
                 DisplayHeadline(
-                    copy: MayaPlot.headline,
+                    copy: card.headline,
                     size: CardSpace.plotHeadline,
                     lineHeight: CardSpace.plotHeadlineLine,
                     tracking: CardSpace.plotHeadlineTracking,
                     color: WrappedColor.ink
                 )
                 CardText(
-                    text: MayaPlot.sentence,
+                    text: card.payload.sentence ?? "",
                     size: CardSpace.plotSentence,
                     weight: CardSpace.strong,
                     width: CardSpace.regular,
@@ -121,7 +62,7 @@ struct PlotTwistCard: View {
             VStack {
                 Spacer(minLength: 0).allowsHitTesting(false)
                 HStack(spacing: CardSpace.blockGap) {
-                    Text(MayaPlot.provenance)
+                    Text("Measured · likes and saves")
                         .wrappedType(.caption)
                         .foregroundStyle(WrappedColor.ink)
                         .allowsHitTesting(false)
@@ -144,11 +85,11 @@ struct PlotTwistCard: View {
 
     private var chart: some View {
         VStack(alignment: .leading, spacing: CardSpace.chipGap) {
-            Text(MayaPlot.chartTitle)
+            Text(chartTitle)
                 .font(ArchivoFont.font(size: CardSpace.plotChartTitle, weight: CardSpace.medium, width: CardSpace.regular))
                 .foregroundStyle(WrappedColor.ink)
             HStack(alignment: .bottom, spacing: CardSpace.plotBarGap) {
-                ForEach(Array(MayaPlot.bars.enumerated()), id: \.offset) { _, bar in
+                ForEach(Array(bars.enumerated()), id: \.offset) { _, bar in
                     RoundedRectangle(cornerRadius: CardSpace.plotBarRadius)
                         .fill(bar.strong ? WrappedColor.ink : WrappedColor.ink.opacity(CardSpace.barDim))
                         .frame(height: max(CardSpace.plotMinBar, CardSpace.plotChartHeight * bar.fraction * (grown ? 1 : 0)))
@@ -156,7 +97,7 @@ struct PlotTwistCard: View {
             }
             .frame(height: CardSpace.plotChartHeight, alignment: .bottom)
             HStack(spacing: CardSpace.plotBarGap) {
-                ForEach(Array(MayaPlot.bars.enumerated()), id: \.offset) { _, bar in
+                ForEach(Array(bars.enumerated()), id: \.offset) { _, bar in
                     Text(bar.label)
                         .font(ArchivoFont.font(size: CardSpace.plotLabel, weight: CardSpace.strong, width: CardSpace.regular))
                         .foregroundStyle(WrappedColor.ink)
@@ -165,20 +106,27 @@ struct PlotTwistCard: View {
             }
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(MayaPlot.chartTitle)
+        .accessibilityLabel(chartTitle)
     }
 }
 
 struct PersonalityTeaserCard: View {
+    var card: RunCard
     var onReveal: () -> Void
+
+    private var clues: [(index: String, text: String)] {
+        (card.payload.copy?.clues ?? []).enumerated().map { index, text in
+            (String(format: "%02d", index + 1), text)
+        }
+    }
 
     var body: some View {
         ZStack(alignment: .top) {
             WrappedColor.ink.ignoresSafeArea().allowsHitTesting(false)
             VStack(alignment: .leading, spacing: CardSpace.yearCopyGap) {
-                Eyebrow(text: MayaTeaser.eyebrow)
+                Eyebrow(text: "Before we tell you")
                 DisplayHeadline(
-                    copy: MayaTeaser.headline,
+                    copy: card.headline,
                     size: CardSpace.teaserHeadline,
                     lineHeight: CardSpace.teaserHeadlineLine,
                     tracking: CardSpace.teaserHeadlineTracking,
@@ -194,7 +142,7 @@ struct PersonalityTeaserCard: View {
                 .padding(.top, CardSpace.teaserOrbitTop)
 
             VStack(spacing: CardSpace.clueGap) {
-                ForEach(Array(MayaTeaser.clues.enumerated()), id: \.offset) { _, clue in
+                ForEach(Array(clues.enumerated()), id: \.offset) { _, clue in
                     ClueRow(index: clue.index, text: clue.text)
                 }
             }
@@ -261,8 +209,13 @@ struct PersonalityTeaserCard: View {
 }
 
 struct PersonalityRevealCard: View {
+    var card: RunCard
     var onShare: () -> Void
     var onShareCards: () -> Void
+
+    private var archetype: PersonalityArchetype {
+        PersonalityArchetype(rawValue: card.payload.primary ?? "") ?? .curator
+    }
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var revealed = false
@@ -273,7 +226,7 @@ struct PersonalityRevealCard: View {
             VStack(spacing: CardSpace.chipGap) {
                 mark
                 CardText(
-                    text: MayaReveal.eyebrow,
+                    text: "Your Instagram personality",
                     size: CardSpace.eyebrowSize,
                     weight: CardSpace.strong,
                     width: CardSpace.regular,
@@ -283,7 +236,7 @@ struct PersonalityRevealCard: View {
                     alignment: .center
                 )
                 DisplayHeadline(
-                    copy: MayaReveal.name,
+                    copy: card.payload.copy?.name ?? "",
                     size: CardSpace.revealName,
                     lineHeight: CardSpace.revealNameLine,
                     tracking: CardSpace.revealNameTracking,
@@ -292,7 +245,7 @@ struct PersonalityRevealCard: View {
                 )
                 .scaleEffect(revealed ? 1 : WrappedMotion.revealStart)
                 CardText(
-                    text: MayaReveal.side,
+                    text: card.payload.copy?.side ?? "",
                     size: CardSpace.revealSide,
                     weight: CardSpace.support,
                     width: CardSpace.regular,
@@ -302,16 +255,16 @@ struct PersonalityRevealCard: View {
                 VStack(spacing: CardSpace.chipGap) {
                     MatchBar(primary: CardSpace.primaryWidth)
                     HStack {
-                        Text(MayaReveal.primaryMatch)
+                        Text(card.payload.copy?.primaryMatch ?? "")
                         Spacer(minLength: 0)
-                        Text(MayaReveal.secondaryMatch)
+                        Text(card.payload.copy?.secondaryMatch ?? "")
                     }
                     .font(ArchivoFont.font(size: CardSpace.plotChartTitle, weight: CardSpace.medium, width: CardSpace.regular))
                     .foregroundStyle(WrappedColor.igWhite)
                 }
                 .padding(.top, CardSpace.chipGap)
                 HStack(alignment: .top, spacing: CardSpace.chipGap) {
-                    ForEach(Array(MayaReveal.reasons.enumerated()), id: \.offset) { _, reason in
+                    ForEach(Array((card.payload.reasons ?? []).enumerated()), id: \.offset) { _, reason in
                         VStack(alignment: .leading, spacing: CardSpace.reasonGap) {
                             CardText(
                                 text: reason.value,
@@ -348,10 +301,10 @@ struct PersonalityRevealCard: View {
 
             VStack(spacing: WrappedSpace.gridGap) {
                 Spacer(minLength: 0).allowsHitTesting(false)
-                SharePill(title: MayaReveal.shareTitle, expands: true, action: onShare)
+                SharePill(title: "Share your personality", expands: true, action: onShare)
                     .frame(maxWidth: .infinity)
                 Button(action: onShareCards) {
-                    Text(MayaReveal.shareCards)
+                    Text("See your share cards")
                         .font(ArchivoFont.font(size: CardSpace.footerLink, weight: CardSpace.medium, width: CardSpace.regular))
                         .foregroundStyle(WrappedColor.igWhite)
                         .frame(maxWidth: .infinity)
@@ -390,15 +343,18 @@ struct PersonalityRevealCard: View {
             Circle()
                 .fill(WrappedColor.ink)
                 .frame(width: CardSpace.revealInner, height: CardSpace.revealInner)
-            PersonalityMark(archetype: MayaReveal.primary, size: CardSpace.revealInner)
+            PersonalityMark(archetype: archetype, size: CardSpace.revealInner)
         }
         .frame(maxWidth: .infinity)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel(MayaReveal.primary.accessibilityLabel)
+        .accessibilityLabel(archetype.accessibilityLabel)
     }
 }
 
 struct ShareCardsCard: View {
+    var card: RunCard
+    var reveal: RunCard
+    var handle: String
     var onShare: () -> Void
     var onHub: () -> Void
     var startsOnNumbers: Bool
@@ -408,7 +364,10 @@ struct ShareCardsCard: View {
     @State private var safeBottom: CGFloat = 0
     @State private var dockReserve: CGFloat = CardSpace.shareDock
 
-    init(onShare: @escaping () -> Void, onHub: @escaping () -> Void, startsOnNumbers: Bool = false) {
+    init(card: RunCard, reveal: RunCard, handle: String, onShare: @escaping () -> Void, onHub: @escaping () -> Void, startsOnNumbers: Bool = false) {
+        self.card = card
+        self.reveal = reveal
+        self.handle = handle
         self.onShare = onShare
         self.onHub = onHub
         self.startsOnNumbers = startsOnNumbers
@@ -421,13 +380,13 @@ struct ShareCardsCard: View {
                 shareField
                     .ignoresSafeArea()
                     .allowsHitTesting(false)
-                IdentityFace(bottomReserve: dockReserve)
+                IdentityFace(card: card, reveal: reveal, handle: handle, bottomReserve: dockReserve)
                     .opacity(face == 0 ? 1 : 0)
                     .accessibilityElement(children: .ignore)
                     .accessibilityIdentifier("share-identity")
                     .accessibilityHidden(face != 0)
                     .allowsHitTesting(false)
-                NumbersFace(bottomReserve: dockReserve)
+                NumbersFace(card: card, handle: handle, bottomReserve: dockReserve)
                     .opacity(face == 1 ? 1 : 0)
                     .accessibilityElement(children: .ignore)
                     .accessibilityIdentifier("share-numbers")
@@ -453,7 +412,7 @@ struct ShareCardsCard: View {
             )
             SharePill(title: "Share", identifier: "share-card", action: onShare)
             Button(action: onHub) {
-                Text(MayaShare.hub)
+                Text("Go to your Hub")
                     .font(ArchivoFont.font(size: CardSpace.footerLink, weight: CardSpace.strong, width: CardSpace.regular))
                     .foregroundStyle(face == 0 ? WrappedColor.igWhite : WrappedColor.ink)
                     .frame(maxWidth: .infinity)
@@ -498,7 +457,14 @@ struct ShareCardsCard: View {
 }
 
 private struct IdentityFace: View {
+    var card: RunCard
+    var reveal: RunCard
+    var handle: String
     var bottomReserve: CGFloat
+
+    private var archetype: PersonalityArchetype {
+        PersonalityArchetype(rawValue: reveal.payload.primary ?? "") ?? .curator
+    }
 
     var body: some View {
         identityStack
@@ -507,9 +473,9 @@ private struct IdentityFace: View {
     private var identityStack: some View {
         VStack(spacing: CardSpace.chipGap) {
             HStack {
-                Text(MayaShare.handle)
+                Text("@\(handle)")
                 Spacer(minLength: 0)
-                Text(MayaShare.year)
+                Text(card.payload.copy?.identityYear ?? "")
             }
             .font(ArchivoFont.font(size: CardSpace.shareSize, weight: CardSpace.strong, width: CardSpace.regular))
             .foregroundStyle(WrappedColor.igWhite)
@@ -525,14 +491,14 @@ private struct IdentityFace: View {
                         )
                     )
                 Circle().fill(WrappedColor.ink).padding(CardSpace.revealRing)
-                PersonalityMark(archetype: MayaReveal.primary, size: CardSpace.revealInner)
+                PersonalityMark(archetype: archetype, size: CardSpace.revealInner)
             }
             .frame(width: CardSpace.revealMark, height: CardSpace.revealMark)
             .frame(maxWidth: .infinity)
-            .accessibilityLabel(MayaReveal.primary.accessibilityLabel)
+            .accessibilityLabel(archetype.accessibilityLabel)
 
             CardText(
-                text: MayaShare.eyebrow,
+                text: "My Instagram personality",
                 size: CardSpace.identityKicker,
                 weight: CardSpace.strong,
                 width: CardSpace.regular,
@@ -542,7 +508,7 @@ private struct IdentityFace: View {
                 alignment: .center
             )
             DisplayHeadline(
-                copy: MayaShare.name,
+                copy: reveal.payload.copy?.name ?? "",
                 size: CardSpace.identityName,
                 lineHeight: CardSpace.identityNameLine,
                 tracking: CardSpace.identityNameTracking,
@@ -552,13 +518,13 @@ private struct IdentityFace: View {
             Spacer(minLength: 0)
             HStack(alignment: .firstTextBaseline, spacing: CardSpace.yearCopyGap) {
                 CardText(
-                    text: MayaShare.statValue,
+                    text: card.payload.identity?.stat.value ?? "",
                     size: CardSpace.identityStat,
                     lineHeight: CardSpace.identityStatLine,
                     color: WrappedColor.igWhite
                 )
                 CardText(
-                    text: MayaShare.statLabel,
+                    text: card.payload.identity?.stat.label ?? "",
                     size: CardSpace.identityCaption,
                     weight: CardSpace.strong,
                     width: CardSpace.regular,
@@ -578,6 +544,8 @@ private struct IdentityFace: View {
 }
 
 private struct NumbersFace: View {
+    var card: RunCard
+    var handle: String
     var bottomReserve: CGFloat
 
     var body: some View {
@@ -588,9 +556,9 @@ private struct NumbersFace: View {
         VStack(alignment: .leading, spacing: 0) {
             VStack(spacing: CardSpace.chipGap) {
                 HStack {
-                    Text(MayaShare.handle)
+                    Text("@\(handle)")
                     Spacer(minLength: 0)
-                    Text(MayaShare.year)
+                    Text(card.payload.copy?.identityYear ?? "")
                 }
                 .font(ArchivoFont.font(size: CardSpace.shareSize, weight: CardSpace.strong, width: CardSpace.regular))
                 .foregroundStyle(WrappedColor.igWhite)
@@ -602,7 +570,7 @@ private struct NumbersFace: View {
             .frame(height: CardSpace.numbersHeader, alignment: .top)
 
             DisplayHeadline(
-                copy: MayaShare.numbersTitle,
+                copy: card.payload.copy?.numbersTitle ?? "",
                 size: CardSpace.numbersTitle,
                 lineHeight: CardSpace.numbersTitleLine,
                 tracking: CardSpace.algorithmHeadlineTracking,
@@ -618,7 +586,7 @@ private struct NumbersFace: View {
                 ],
                 spacing: CardSpace.openingSupport
             ) {
-                ForEach(Array(MayaShare.stats.enumerated()), id: \.offset) { _, stat in
+                ForEach(Array((card.payload.numbers?.stats ?? []).enumerated()), id: \.offset) { _, stat in
                     VStack(alignment: .leading, spacing: CardSpace.reasonGap) {
                         CardText(
                             text: stat.value,
@@ -646,7 +614,7 @@ private struct NumbersFace: View {
 
             HStack(alignment: .firstTextBaseline) {
                 CardText(
-                    text: MayaShare.interestLabel,
+                    text: "Top interest",
                     size: CardSpace.numbersLabel,
                     weight: CardSpace.strong,
                     width: CardSpace.regular,
@@ -654,7 +622,7 @@ private struct NumbersFace: View {
                 )
                 Spacer(minLength: 0)
                 CardText(
-                    text: MayaShare.interest,
+                    text: card.payload.numbers?.topInterest ?? "",
                     size: CardSpace.numbersInterest,
                     color: WrappedColor.ink,
                     uppercase: true
@@ -691,7 +659,7 @@ private struct NumbersFace: View {
                 )
                 .frame(width: CardSpace.numbersRingBox, height: CardSpace.numbersRingBox)
             Group {
-                if let image = BundlePhoto.image(named: MayaShare.photo) {
+                if let image = BundlePhoto.image(named: card.payload.numbers?.photo ?? "") {
                     Image(uiImage: image).resizable().scaledToFill()
                 } else {
                     MonthTone.gradient(2)
@@ -723,7 +691,7 @@ private func cardFooter(markBorder: Color, word: Color) -> some View {
                 .foregroundStyle(word)
         }
         Spacer(minLength: 0)
-        Text(MayaShare.link)
+        Text("INSTAGRAM.COM/WRAPPED")
             .font(ArchivoFont.font(
                 size: CardSpace.footerLink,
                 weight: CardSpace.strong,

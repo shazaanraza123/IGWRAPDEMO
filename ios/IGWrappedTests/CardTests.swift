@@ -2,26 +2,31 @@ import Foundation
 import Testing
 @testable import IGWrapped
 
-@Test func mayaCardCopyMatchesTheSchema() {
-    #expect(MayaOpening.headline == "2026 LOOKED\nGOOD ON\nYOU.")
-    #expect(MayaYear.headline == "YOU HAD QUITE\nA YEAR.")
-    #expect(MayaFeed.headline == "YOUR FEED\nHAD A COLOR.")
-    #expect(MayaChat.headline == "THE STORY THAT\nBROKE THE\nGROUP CHAT.")
-    #expect(MayaReveal.name == "THE\nCURATOR")
-    #expect(MayaOpening.support == "Built from your own posts and Stories, Jan 1 to Nov 15.")
-    #expect(MayaYear.support == "August was your busiest month: 9 posts, 61 Stories.")
-    #expect(MayaYear.playLabel == "PLAY YOUR YEAR · 0:15")
-    #expect(MayaYear.playUnavailable == "Add month photos to play")
-    #expect(MayaYear.months.map(\.photo) == (1...11).map { String(format: "m-%02d", $0) })
-    #expect(MayaYear.montageReady == false)
-    #expect(MayaYear.topMonth == 8)
-    #expect(MayaYear.montageSeconds == 15)
-    #expect(MayaYear.months.count == 11)
-    #expect(MayaFeed.footnote == "% = main color in each of 1,840 liked posts")
-    #expect(MayaFeed.swatches.map(\.percent) == ["31%", "24%", "19%", "15%", "11%"])
-    #expect(MayaAlgorithm.undercut == "63 watched. No judgment.")
-    #expect(MayaAlgorithm.topics.map(\.name) == ["Streetwear drops", "Film cameras", "Ceramic frogs"])
-    #expect(MayaAlgorithm.topics[2].undercut)
+private final class RunBundleProbe: NSObject {}
+
+@Test func mayaCardCopyMatchesTheSchema() throws {
+    let url = try #require(Bundle(for: RunBundleProbe.self).url(forResource: "maya", withExtension: "json"))
+    let bundle = try JSONDecoder().decode(RunBundle.self, from: Data(contentsOf: url))
+    #expect(bundle.metric("posts") == 38)
+    #expect(bundle.metric("stories") == 412)
+    #expect(bundle.metric("reels_sent") == 1_206)
+    #expect(bundle.metric("saves") == 1_214)
+    #expect(bundle.metric("days_active") == 301)
+    #expect(bundle.metric("liked_posts") == 1_840)
+    #expect(bundle.metric("friends_stories_watched_pct") == 96)
+    #expect(bundle.card(number: 1)?.headline == "2026 LOOKED\nGOOD ON\nYOU.")
+    #expect(bundle.card(number: 2)?.headline == "YOU HAD QUITE\nA YEAR.")
+    #expect(bundle.card(number: 3)?.headline == "YOUR FEED\nHAD A COLOR.")
+    #expect(bundle.card(number: 1)?.support == "Built from your own posts and Stories, Jan 1 to Nov 15.")
+    #expect(bundle.card(number: 2)?.support == "August was your busiest month: 9 posts, 61 Stories.")
+    #expect(bundle.card(number: 2)?.payload.copy?.playLabel == "PLAY YOUR\nYEAR · 0:15")
+    #expect(bundle.card(number: 3)?.payload.copy?.footnote == "% = main color in each of 1,840 liked posts")
+    let months = bundle.card(number: 2)?.payload.months ?? []
+    #expect(months.map(\.photo) == (1...11).map { String(format: "m-%02d", $0) })
+    #expect(MontageGate.ready(months) == false)
+    #expect(bundle.card(number: 2)?.payload.topMonth == 8)
+    #expect(bundle.card(number: 2)?.payload.montageSeconds == 15)
+    #expect(months.count == 11)
 }
 
 @Test func cardChromeFollowsTheHtml() {
@@ -43,6 +48,11 @@ import Testing
     #expect(model.card == 10)
 }
 
+@Test @MainActor func offlineSessionDoesNotOpenAClient() {
+    #expect(Backend.active == false)
+    #expect(SessionStore.shared.client == nil)
+}
+
 @Test @MainActor func feedbackSelectionPersistsLocally() {
     let name = "feedback-\(UUID().uuidString)"
     let defaults = UserDefaults(suiteName: name)!
@@ -59,7 +69,7 @@ import Testing
     #expect(PersonAvatar.initial("@maya.lens") == "M")
     #expect(PersonAvatar.photoName(for: "jules.mp") == "friend-jules")
     #expect(PersonAvatar.photoName(for: "maya.lens") == "maya-profile")
-    for handle in MayaCircle.handles + [MayaOpening.handle] {
+    for handle in ["dee.films", "jules.mp", "nico_k", "sam.wav", "tori.eats", "maya.lens"] {
         #expect(!PersonAvatar.photoName(for: handle).hasPrefix("tile"))
         let swatch = PersonSwatch.forHandle(handle)
         #expect(swatch == PersonSwatch.forHandle(handle))

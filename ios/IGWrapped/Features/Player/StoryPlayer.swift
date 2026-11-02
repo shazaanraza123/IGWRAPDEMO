@@ -10,18 +10,31 @@ struct StoryPlayer: View {
     @State private var isMuted = false
     @State private var dismissDrag: CGFloat = 0
     @State private var chapterDrag: CGFloat = 0
-    @State private var openMonth: MayaMonth?
+    @State private var openMonth: MonthFace?
     @State private var showsMontage = false
     @State private var showsPost = false
     @State private var showsStory = false
     @State private var revealPulse = 0
     private let startsOnNumbers: Bool
+    private let deck: RunBundle
     private let audio = AudioService.shared
 
-    init(onExit: @escaping () -> Void, omitted: Set<Int> = []) {
+    init(onExit: @escaping () -> Void, bundle: RunBundle? = nil, omitted: Set<Int> = []) {
         self.onExit = onExit
-        var model = StoryPlayerModel()
         let arguments = ProcessInfo.processInfo.arguments
+        let resolved: RunBundle
+        if let bundle {
+            resolved = bundle
+        } else if arguments.contains("--teen") {
+            resolved = (try? RunBundle.load(named: "maya-teen")) ?? .empty
+        } else {
+            resolved = (try? RunBundle.load(named: "maya")) ?? .empty
+        }
+        deck = resolved
+        var model = StoryPlayerModel()
+        if !resolved.cards.isEmpty {
+            model.included = resolved.deckNumbers
+        }
         if let flag = arguments.firstIndex(of: "--player-card"),
            flag + 1 < arguments.count,
            let number = Int(arguments[flag + 1]),
@@ -31,8 +44,8 @@ struct StoryPlayer: View {
         if arguments.contains("--player-paused") {
             model.autoplay = false
         }
-        if arguments.contains("--teen") {
-            model.omitted = [8, 9]
+        if bundle == nil, arguments.contains("--teen") {
+            model.omitted = []
         } else {
             model.omitted = omitted
         }
@@ -74,16 +87,16 @@ struct StoryPlayer: View {
                     self.openMonth = nil
                 }
             }
-            if showsMontage, MayaYear.montageReady {
-                YearMontage {
+            if showsMontage, montageReady, let yearCard {
+                YearMontage(card: yearCard) {
                     showsMontage = false
                 }
             }
             if showsPost {
-                PostDetailCover { showsPost = false }
+                PostDetailCover(card: faceCard(6), handle: deck.card(number: 1)?.payload.handle ?? "") { showsPost = false }
             }
             if showsStory {
-                StoryReplayCover { showsStory = false }
+                StoryReplayCover(card: faceCard(7)) { showsStory = false }
             }
             if let toast = model.toast {
                 Text(toast)
@@ -151,6 +164,16 @@ struct StoryPlayer: View {
         }
     }
 
+    private var yearCard: RunCard? { deck.card(number: 2) }
+
+    private var montageReady: Bool {
+        MontageGate.ready(yearCard?.payload.months ?? [])
+    }
+
+    private func faceCard(_ number: Int) -> RunCard {
+        deck.card(number: number) ?? .placeholder(type: "card", number: number)
+    }
+
     private var cubeAngle: Double {
         Double(chapterDrag / WrappedSpace.frameWidth) * 90
     }
@@ -193,46 +216,52 @@ struct StoryPlayer: View {
     private func cardContent(_ card: Int) -> some View {
         switch card {
         case 1:
-            OpeningCard {
+            OpeningCard(card: faceCard(1), year: deck.run.year) {
                 withAnimation(cardAnimation) { step(model.goForward()) }
             }
         case 2:
             YearMemoriesCard(
+                card: faceCard(2),
                 onMonth: { openMonth = $0 },
                 onPlay: {
-                    guard MayaYear.montageReady else { return }
+                    guard montageReady else { return }
                     showsMontage = true
                 }
             )
         case 3:
-            FeedColorCard(onShare: { showUnavailable(.share) })
+            FeedColorCard(card: faceCard(3), onShare: { showUnavailable(.share) })
         case 4:
             AlgorithmCard(
+                card: faceCard(4),
                 onShare: { showUnavailable(.share) },
                 onSaved: { showToast("Got it. We'll tune Explore.") }
             )
         case 5:
-            ReelsCard(onShare: { showUnavailable(.share) })
+            ReelsCard(card: faceCard(5), onShare: { showUnavailable(.share) })
         case 6:
             MainCharacterCard(
+                card: faceCard(6),
+                handle: deck.card(number: 1)?.payload.handle ?? "",
                 onShare: { showUnavailable(.share) },
                 onOpenPost: { showsPost = true }
             )
         case 7:
             GroupChatCard(
+                card: faceCard(7),
                 onShare: { showUnavailable(.share) },
                 onOpenStory: { showsStory = true }
             )
         case 8:
-            CircleCard()
+            CircleCard(card: faceCard(8))
         case 9:
-            ThreeAMCard(onShare: { showUnavailable(.share) })
+            ThreeAMCard(card: faceCard(9), onShare: { showUnavailable(.share) })
         case 10:
-            PlotTwistCard(onShare: { showUnavailable(.share) })
+            PlotTwistCard(card: faceCard(10), onShare: { showUnavailable(.share) })
         case 11:
-            PersonalityTeaserCard(onReveal: revealPersonality)
+            PersonalityTeaserCard(card: faceCard(11), onReveal: revealPersonality)
         case 12:
             PersonalityRevealCard(
+                card: faceCard(12),
                 onShare: { showUnavailable(.share) },
                 onShareCards: {
                     withAnimation(cardAnimation) { step(model.goForward()) }
@@ -240,6 +269,9 @@ struct StoryPlayer: View {
             )
         case 13:
             ShareCardsCard(
+                card: faceCard(13),
+                reveal: faceCard(12),
+                handle: deck.card(number: 1)?.payload.handle ?? "",
                 onShare: { showUnavailable(.share) },
                 onHub: { showUnavailable(.hub) },
                 startsOnNumbers: startsOnNumbers

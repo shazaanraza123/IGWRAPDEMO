@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct OpeningCard: View {
+    var card: RunCard
+    var year: Int
     var onStart: () -> Void
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -57,15 +59,20 @@ struct OpeningCard: View {
     private var grid: some View {
         let columns = Array(repeating: GridItem(.flexible(), spacing: WrappedSpace.gridGap), count: 3)
         return LazyVGrid(columns: columns, spacing: WrappedSpace.gridGap) {
-            tile(MayaOpening.photos[0])
+            tile(photo(0))
             WrappedColor.ink
-            tile(MayaOpening.photos[1])
-            tile(MayaOpening.photos[2])
-            tile(MayaOpening.photos[3])
-            tile(MayaOpening.photos[4])
+            tile(photo(1))
+            tile(photo(2))
+            tile(photo(3))
+            tile(photo(4))
         }
         .padding(.horizontal, WrappedSpace.gutter)
         .padding(.top, CardSpace.openingGridTop)
+    }
+
+    private func photo(_ index: Int) -> String {
+        let photos = card.payload.photos ?? []
+        return photos.indices.contains(index) ? photos[index] : ""
     }
 
     private func tile(_ name: String) -> some View {
@@ -93,7 +100,7 @@ struct OpeningCard: View {
             )
             Spacer(minLength: 0)
             CardText(
-                text: "2026",
+                text: "\(year)",
                 size: CardSpace.openingYearSize,
                 tracking: CardSpace.openingYearTracking,
                 lineHeight: CardSpace.openingYearLine,
@@ -112,20 +119,20 @@ struct OpeningCard: View {
     private var copy: some View {
         VStack(alignment: .leading, spacing: CardSpace.openingCopyGap) {
             CardText(
-                text: "@\(MayaOpening.handle)",
+                text: "@\(card.payload.handle ?? "")",
                 size: CardSpace.openingHandleSize,
                 width: CardSpace.regular,
                 color: WrappedColor.ink
             )
             DisplayHeadline(
-                copy: MayaOpening.headline,
+                copy: card.headline,
                 size: CardSpace.openingHeadline,
                 lineHeight: CardSpace.openingHeadlineLine,
                 tracking: CardSpace.openingHeadlineTracking,
                 color: WrappedColor.ink
             )
             CardText(
-                text: MayaOpening.support,
+                text: card.support,
                 size: CardSpace.openingSupport,
                 weight: CardSpace.support,
                 width: CardSpace.regular,

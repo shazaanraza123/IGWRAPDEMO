@@ -345,7 +345,7 @@ export function renderCopy(card: EngineCard, metrics: Metric[]) {
   switch (card.type) {
     case "opening":
       return {
-        headline: `${year} looked good on you.`,
+        headline: `${year} LOOKED\nGOOD ON\nYOU.`,
         support: `Built from your own posts and Stories, ${card.payload.windowLabel}.`,
       };
     case "yearInMemories": {
@@ -356,8 +356,9 @@ export function renderCopy(card: EngineCard, metrics: Metric[]) {
       if (month === null || posts === null || stories === null || covered === null) return undefined;
       const coveredLabel = covered === 1 ? "month" : "months";
       return {
+        headline: "YOU HAD QUITE\nA YEAR.",
         support: `${month} was your busiest month: ${formatCount(posts)} posts, ${formatCount(stories)} Stories.`,
-        playLabel: `PLAY YOUR YEAR ${DOT} ${formatDuration(MONTAGE_SECONDS)}`,
+        playLabel: `PLAY YOUR\nYEAR ${DOT} ${formatDuration(MONTAGE_SECONDS)}`,
         hubHighlight: `${formatCount(covered)} ${coveredLabel}`,
         hubDetail: `Play the ${MONTAGE_SECONDS}-second recap`,
       };
@@ -365,7 +366,10 @@ export function renderCopy(card: EngineCard, metrics: Metric[]) {
     case "feedColor": {
       const liked = num(metrics, "liked_posts");
       if (liked === null) return undefined;
-      return { footnote: `% = main color in each of ${formatCount(liked)} liked posts` };
+      return {
+        headline: "YOUR FEED\nHAD A COLOR.",
+        footnote: `% = main color in each of ${formatCount(liked)} liked posts`,
+      };
     }
     case "yourAlgorithm": {
       const topics = card.payload.topics as { name: string; isUndercut?: boolean }[];
@@ -373,7 +377,10 @@ export function renderCopy(card: EngineCard, metrics: Metric[]) {
       if (!undercut) return undefined;
       const watched = rows(metrics, "explore_topic_watched").find((metric) => metric.value_text === undercut.name);
       if (watched?.value_num == null) return undefined;
-      return { undercut: `${formatCount(watched.value_num)} watched. No judgment.` };
+      return {
+        headline: "YOUR ALGORITHM\nTHINKS YOU'RE\nINTO...",
+        undercut: `${formatCount(watched.value_num)} watched. No judgment.`,
+      };
     }
     case "reelsRabbitHole": {
       const rising = card.payload.fastestRising as { name: string; multiple: number; since: string };
@@ -381,6 +388,7 @@ export function renderCopy(card: EngineCard, metrics: Metric[]) {
       if (sent === null) return undefined;
       const pace = `${rising.name}, ${formatMultiple(rising.multiple)} since ${rising.since}`;
       return {
+        headline: "DOWN THE\nRABBIT HOLE.",
         fastestRising: pace,
         sent: `And you sent ${formatCount(sent)} of them to friends.`,
         hubDetail: `${formatMultiple(rising.multiple)} since ${rising.since}`,
@@ -394,6 +402,7 @@ export function renderCopy(card: EngineCard, metrics: Metric[]) {
       if (comments === null || vsAverage === null || likes === null || postedAt === null) return undefined;
       const when = formatShortDate(postedAt);
       return {
+        headline: "MAIN CHARACTER\nPOST",
         comments: `${formatCount(comments)} comments. Unhinged ones.`,
         average: `That's ${formatMultiple(vsAverage)} your average post.`,
         posted: `Measured ${DOT} posted ${when}`,
@@ -405,18 +414,26 @@ export function renderCopy(card: EngineCard, metrics: Metric[]) {
     case "brokeTheGroupChat": {
       const postedAt = text(metrics, "story_replies_24h") ? (card.payload.postedAt as string) : null;
       if (!postedAt) return undefined;
-      return { storyChip: `Story ${DOT} ${formatShortDate(postedAt)}` };
+      return {
+        headline: "THE STORY THAT\nBROKE THE\nGROUP CHAT.",
+        storyChip: `Story ${DOT} ${formatShortDate(postedAt)}`,
+      };
     }
     case "threeAmClub": {
       const time = text(metrics, "latest_local_time");
       if (!time) return undefined;
-      return { headline: "Welcome to the 3AM club.", time: formatClock(time) };
+      return {
+        headline: "WELCOME TO\nTHE 3AM CLUB.",
+        time: formatClock(time),
+        note: `A ${card.payload.weekday} in ${card.payload.month}. We hope it was worth it.`,
+      };
     }
     case "personalityTeaser": {
       const reasons = reasonColumns(metrics);
       if (!reasons) return undefined;
       const [saves, posts, watched] = reasons;
       return {
+        headline: "THREE CLUES. ONE\nPERSONALITY.",
         clues: [
           `You saved ${saves[0]} posts`,
           `You posted ${posts[0]} times all year`,
@@ -428,12 +445,22 @@ export function renderCopy(card: EngineCard, metrics: Metric[]) {
       const primary = card.payload.primary as string;
       const secondary = card.payload.secondary as string;
       return {
+        name: `THE\n${archetypeLabel(primary).toUpperCase()}`,
+        side: `with a side of The ${archetypeLabel(secondary)}`,
         primaryMatch: `${card.payload.primaryScore}% ${archetypeLabel(primary)} match`,
         secondaryMatch: `${card.payload.secondaryScore}% ${archetypeLabel(secondary)} match`,
       };
     }
     case "shareCards":
-      return { identityYear: `MY ${year}`, numbersTitle: `${year} in numbers` };
+      return { identityYear: `MY ${year}`, numbersTitle: `${year} IN NUMBERS` };
+    case "yourCircle":
+      return {
+        headline: "YOUR CIRCLE.",
+        note: "The five accounts you showed up for most. No ranking, no scores.",
+        privacy: "Want the ranked version? It lives in Privacy, off by default.",
+      };
+    case "plotTwist":
+      return { headline: "PLOT\nTWIST." };
     default:
       return undefined;
   }
@@ -710,6 +737,60 @@ export type PersonalRun = {
   scores: ArchetypeScore[];
   cards: EngineCard[];
 };
+
+export type RunBundle = {
+  run: {
+    year: number;
+    edition: "personal";
+    period_start: string;
+    period_end: string;
+    tier: "full" | "lite";
+    status: "ready";
+    engine_version: string;
+    copy: { window: string; summary: string };
+  };
+  metrics: Metric[];
+  archetypes: ArchetypeScore[];
+  cards: {
+    code: string;
+    type: CardType;
+    chapter: Chapter;
+    sort_order: number;
+    payload: Record<string, unknown>;
+    shareable: boolean;
+    teen_safe: boolean;
+    hidden: boolean;
+  }[];
+};
+
+/// The JSON shipped in the app. Same cards, metrics, and scores `build-run` persists, without random ids.
+export function buildRunBundle(source: RunSource, profile: RunProfile, privacy: PrivacySettings = DEFAULT_PRIVACY): RunBundle {
+  const personal = buildPersonalRun(source, profile, privacy);
+  return {
+    run: {
+      year: personal.year,
+      edition: personal.edition,
+      period_start: personal.period_start,
+      period_end: personal.period_end,
+      tier: personal.tier,
+      status: "ready",
+      engine_version: personal.engine_version,
+      copy: personal.copy,
+    },
+    metrics: personal.metrics,
+    archetypes: personal.scores,
+    cards: personal.cards.map((card) => ({
+      code: card.code,
+      type: card.type,
+      chapter: card.chapter,
+      sort_order: card.sort_order,
+      payload: card.payload,
+      shareable: card.shareable,
+      teen_safe: card.teen_safe,
+      hidden: card.hidden,
+    })),
+  };
+}
 
 export function buildPersonalRun(source: RunSource, profile: RunProfile, privacy: PrivacySettings = DEFAULT_PRIVACY): PersonalRun {
   const metrics = computeMetrics(source, source.window);

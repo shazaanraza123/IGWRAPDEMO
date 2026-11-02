@@ -1,0 +1,37 @@
+{
+  "archetypes": [],
+  "cards": [
+    {
+      "chapter": "memories",
+      "code": "P01",
+      "hidden": false,
+      "payload": {
+        "copy": {
+          "headline": "2026 LOOKED\nGOOD ON\nYOU.",
+          "support": "Built from your own posts and Stories, Jan 1 to Nov 15."
+        },
+        "handle": "emerging",
+        "photos": [],
+        "windowLabel": "Jan 1 to Nov 15"
+      },
+      "shareable": true,
+      "sort_order": 1,
+      "teen_safe": true,
+      "type": "opening"
+    }
+  ],
+  "metrics": [],
+  "run": {
+    "copy": {
+      "summary": "1 card. Replay them, remix them, share the ones you like.",
+      "window": "JAN 1 TO NOV 15, 2026"
+    },
+    "edition": "personal",
+    "engine_version": "1",
+    "period_end": "2026-11-15",
+    "period_start": "2026-01-01",
+    "status": "ready",
+    "tier": "lite",
+    "year": 2026
+  }
+}

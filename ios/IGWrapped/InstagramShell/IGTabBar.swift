@@ -57,7 +57,7 @@ struct IGTabBar: View {
                         .frame(width: IGSpace.tabChipWidth, height: IGSpace.tabChipHeight)
                 }
                 if tab == .profile {
-                    PersonAvatar(handle: MayaOpening.handle, photo: PersonAvatar.photoName(for: MayaOpening.handle))
+                    PersonAvatar(handle: "maya.lens", photo: PersonAvatar.photoName(for: "maya.lens"))
                         .frame(width: IGSpace.profileDot, height: IGSpace.profileDot)
                         .overlay {
                             Circle().stroke(WrappedColor.igWhite, lineWidth: selected ? IGSpace.ringStroke : 0)

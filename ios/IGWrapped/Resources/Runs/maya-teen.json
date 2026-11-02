@@ -1,0 +1,1207 @@
+{
+  "archetypes": [
+    {
+      "archetype": "curator",
+      "rank": 1,
+      "rationale": {
+        "inputs": [
+          {
+            "key": "saves",
+            "value": 1214
+          },
+          {
+            "key": "posts",
+            "value": 38
+          }
+        ]
+      },
+      "score": 70
+    },
+    {
+      "archetype": "ghost",
+      "rank": 2,
+      "rationale": {
+        "inputs": [
+          {
+            "key": "friends_stories_watched_pct",
+            "value": 96
+          },
+          {
+            "key": "posts",
+            "value": 38
+          },
+          {
+            "key": "saves",
+            "value": 1214
+          }
+        ]
+      },
+      "score": 30
+    }
+  ],
+  "cards": [
+    {
+      "chapter": "memories",
+      "code": "P01",
+      "hidden": false,
+      "payload": {
+        "copy": {
+          "headline": "2026 LOOKED\nGOOD ON\nYOU.",
+          "support": "Built from your own posts and Stories, Jan 1 to Nov 15."
+        },
+        "handle": "maya.lens",
+        "photos": [
+          "tile-1",
+          "tile-2",
+          "tile-3",
+          "tile-4",
+          "tile-5"
+        ],
+        "windowLabel": "Jan 1 to Nov 15"
+      },
+      "shareable": true,
+      "sort_order": 1,
+      "teen_safe": true,
+      "type": "opening"
+    },
+    {
+      "chapter": "memories",
+      "code": "P02",
+      "hidden": false,
+      "payload": {
+        "copy": {
+          "headline": "YOU HAD QUITE\nA YEAR.",
+          "hubDetail": "Play the 15-second recap",
+          "hubHighlight": "11 months",
+          "playLabel": "PLAY YOUR\nYEAR · 0:15",
+          "support": "August was your busiest month: 9 posts, 61 Stories."
+        },
+        "montageSeconds": 15,
+        "months": [
+          {
+            "month": 1,
+            "photo": "m-01"
+          },
+          {
+            "month": 2,
+            "photo": "m-02"
+          },
+          {
+            "month": 3,
+            "photo": "m-03"
+          },
+          {
+            "month": 4,
+            "photo": "m-04"
+          },
+          {
+            "month": 5,
+            "photo": "m-05"
+          },
+          {
+            "month": 6,
+            "photo": "m-06"
+          },
+          {
+            "month": 7,
+            "photo": "m-07"
+          },
+          {
+            "month": 8,
+            "photo": "m-08"
+          },
+          {
+            "month": 9,
+            "photo": "m-09"
+          },
+          {
+            "month": 10,
+            "photo": "m-10"
+          },
+          {
+            "month": 11,
+            "photo": "m-11"
+          }
+        ],
+        "topMonth": 8,
+        "topMonthPosts": 9,
+        "topMonthStories": 61
+      },
+      "shareable": true,
+      "sort_order": 2,
+      "teen_safe": true,
+      "type": "yearInMemories"
+    },
+    {
+      "chapter": "interests",
+      "code": "P03",
+      "hidden": false,
+      "payload": {
+        "copy": {
+          "footnote": "% = main color in each of 1,840 liked posts",
+          "headline": "YOUR FEED\nHAD A COLOR."
+        },
+        "likedPosts": 1840,
+        "paletteName": "Midnight Camel",
+        "swatches": [
+          {
+            "hex": "#1F2A44",
+            "pct": 31
+          },
+          {
+            "hex": "#C8A27C",
+            "pct": 24
+          },
+          {
+            "hex": "#8B3A3A",
+            "pct": 19
+          },
+          {
+            "hex": "#E9E1D3",
+            "pct": 15
+          },
+          {
+            "hex": "#4E6B4A",
+            "pct": 11
+          }
+        ]
+      },
+      "shareable": true,
+      "sort_order": 3,
+      "teen_safe": true,
+      "type": "feedColor"
+    },
+    {
+      "chapter": "interests",
+      "code": "P04",
+      "hidden": false,
+      "payload": {
+        "copy": {
+          "headline": "YOUR ALGORITHM\nTHINKS YOU'RE\nINTO...",
+          "undercut": "63 watched. No judgment."
+        },
+        "topics": [
+          {
+            "name": "Streetwear drops"
+          },
+          {
+            "name": "Film cameras"
+          },
+          {
+            "isUndercut": true,
+            "name": "Ceramic frogs",
+            "watched": 63
+          }
+        ]
+      },
+      "shareable": true,
+      "sort_order": 4,
+      "teen_safe": true,
+      "type": "yourAlgorithm"
+    },
+    {
+      "chapter": "interests",
+      "code": "P05",
+      "hidden": false,
+      "payload": {
+        "categories": [
+          [
+            "Streetwear",
+            31
+          ],
+          [
+            "Food in Chicago",
+            22
+          ],
+          [
+            "Film photography",
+            18
+          ],
+          [
+            "Interior design",
+            12
+          ],
+          [
+            "Ceramics",
+            9
+          ]
+        ],
+        "copy": {
+          "fastestRising": "Ceramics, 4x since June",
+          "headline": "DOWN THE\nRABBIT HOLE.",
+          "hubDetail": "4x since June",
+          "sent": "And you sent 1,206 of them to friends."
+        },
+        "fastestRising": {
+          "multiple": 4,
+          "name": "Ceramics",
+          "since": "June"
+        },
+        "reelsSent": 1206
+      },
+      "shareable": true,
+      "sort_order": 5,
+      "teen_safe": true,
+      "type": "reelsRabbitHole"
+    },
+    {
+      "chapter": "moments",
+      "code": "P06",
+      "hidden": false,
+      "payload": {
+        "comments": 418,
+        "copy": {
+          "average": "That's 3x your average post.",
+          "comments": "418 comments. Unhinged ones.",
+          "dateChip": "Jul 19",
+          "headline": "MAIN CHARACTER\nPOST",
+          "hubDetail": "Jul 19, 3x your average",
+          "hubHighlight": "2,184 likes",
+          "posted": "Measured · posted Jul 19"
+        },
+        "likes": 2184,
+        "photo": "main-character",
+        "postId": "post_0719",
+        "postedAt": "2026-07-19",
+        "vsAverage": 3
+      },
+      "shareable": true,
+      "sort_order": 6,
+      "teen_safe": true,
+      "type": "mainCharacterPost"
+    },
+    {
+      "chapter": "moments",
+      "code": "P07",
+      "hidden": false,
+      "payload": {
+        "copy": {
+          "headline": "THE STORY THAT\nBROKE THE\nGROUP CHAT.",
+          "storyChip": "Story · Mar 14"
+        },
+        "photo": "story-0314",
+        "postedAt": "2026-03-14",
+        "replies": 47,
+        "storyId": "story_0314",
+        "windowHours": 24
+      },
+      "shareable": true,
+      "sort_order": 7,
+      "teen_safe": true,
+      "type": "brokeTheGroupChat"
+    },
+    {
+      "chapter": "identity",
+      "code": "P10",
+      "hidden": false,
+      "payload": {
+        "category": "Ceramics",
+        "copy": {
+          "headline": "PLOT\nTWIST."
+        },
+        "monthly": [
+          3,
+          2,
+          4,
+          3,
+          5,
+          22,
+          41,
+          58,
+          64,
+          71,
+          80
+        ],
+        "sentence": "In June you fell into ceramics and never climbed out.",
+        "turnMonth": 6
+      },
+      "shareable": true,
+      "sort_order": 8,
+      "teen_safe": true,
+      "type": "plotTwist"
+    },
+    {
+      "chapter": "identity",
+      "code": "P11",
+      "hidden": false,
+      "payload": {
+        "copy": {
+          "clues": [
+            "You saved 1,214 posts",
+            "You posted 38 times all year",
+            "You watched 96% of friends’ Stories"
+          ],
+          "headline": "THREE CLUES. ONE\nPERSONALITY."
+        }
+      },
+      "shareable": false,
+      "sort_order": 9,
+      "teen_safe": true,
+      "type": "personalityTeaser"
+    },
+    {
+      "chapter": "identity",
+      "code": "P12",
+      "hidden": false,
+      "payload": {
+        "copy": {
+          "name": "THE\nCURATOR",
+          "primaryMatch": "70% Curator match",
+          "secondaryMatch": "30% Ghost match",
+          "side": "with a side of The Ghost"
+        },
+        "primary": "curator",
+        "primaryScore": 70,
+        "reasons": [
+          [
+            "1,214",
+            "posts saved"
+          ],
+          [
+            "38",
+            "posts all year"
+          ],
+          [
+            "96%",
+            "of friends’ Stories watched"
+          ]
+        ],
+        "secondary": "ghost",
+        "secondaryScore": 30
+      },
+      "shareable": true,
+      "sort_order": 10,
+      "teen_safe": true,
+      "type": "personalityReveal"
+    },
+    {
+      "chapter": "identity",
+      "code": "P13",
+      "hidden": false,
+      "payload": {
+        "copy": {
+          "identityYear": "MY 2026",
+          "numbersTitle": "2026 IN NUMBERS"
+        },
+        "identity": {
+          "archetype": "curator",
+          "stat": [
+            "1,214",
+            "posts saved"
+          ]
+        },
+        "numbers": {
+          "photo": "year-card",
+          "stats": [
+            [
+              "412",
+              "Stories"
+            ],
+            [
+              "38",
+              "Posts"
+            ],
+            [
+              "1,206",
+              "Reels sent"
+            ],
+            [
+              "1,214",
+              "Saves"
+            ]
+          ],
+          "topInterest": "Streetwear"
+        }
+      },
+      "shareable": true,
+      "sort_order": 11,
+      "teen_safe": true,
+      "type": "shareCards"
+    }
+  ],
+  "metrics": [
+    {
+      "key": "posts",
+      "method": "Posts you shared in the window.",
+      "provenance": "measured",
+      "unit": "posts",
+      "value_num": 38,
+      "value_text": null,
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "stories",
+      "method": "Stories you shared in the window.",
+      "provenance": "measured",
+      "unit": "stories",
+      "value_num": 412,
+      "value_text": null,
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "reels_sent",
+      "method": "Reels you sent to friends in the window.",
+      "provenance": "measured",
+      "unit": "reels",
+      "value_num": 1206,
+      "value_text": null,
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "saves",
+      "method": "Posts you saved in the window.",
+      "provenance": "measured",
+      "unit": "saves",
+      "value_num": 1214,
+      "value_text": null,
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "days_active",
+      "method": "Days you were active in the window.",
+      "provenance": "measured",
+      "unit": "days",
+      "value_num": 301,
+      "value_text": null,
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "liked_posts",
+      "method": "Posts you liked in the window.",
+      "provenance": "measured",
+      "unit": "posts",
+      "value_num": 1840,
+      "value_text": null,
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "friends_stories_watched_pct",
+      "method": "Share of friends' Stories you watched.",
+      "provenance": "measured",
+      "unit": "percent",
+      "value_num": 96,
+      "value_text": null,
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "monthly_posts",
+      "method": "Posts you shared in this month.",
+      "provenance": "measured",
+      "unit": "posts",
+      "value_num": 2,
+      "value_text": "1",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "monthly_stories",
+      "method": "Stories you shared in this month.",
+      "provenance": "measured",
+      "unit": "stories",
+      "value_num": 30,
+      "value_text": "1",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "monthly_posts",
+      "method": "Posts you shared in this month.",
+      "provenance": "measured",
+      "unit": "posts",
+      "value_num": 2,
+      "value_text": "2",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "monthly_stories",
+      "method": "Stories you shared in this month.",
+      "provenance": "measured",
+      "unit": "stories",
+      "value_num": 28,
+      "value_text": "2",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "monthly_posts",
+      "method": "Posts you shared in this month.",
+      "provenance": "measured",
+      "unit": "posts",
+      "value_num": 3,
+      "value_text": "3",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "monthly_stories",
+      "method": "Stories you shared in this month.",
+      "provenance": "measured",
+      "unit": "stories",
+      "value_num": 36,
+      "value_text": "3",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "monthly_posts",
+      "method": "Posts you shared in this month.",
+      "provenance": "measured",
+      "unit": "posts",
+      "value_num": 3,
+      "value_text": "4",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "monthly_stories",
+      "method": "Stories you shared in this month.",
+      "provenance": "measured",
+      "unit": "stories",
+      "value_num": 34,
+      "value_text": "4",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "monthly_posts",
+      "method": "Posts you shared in this month.",
+      "provenance": "measured",
+      "unit": "posts",
+      "value_num": 3,
+      "value_text": "5",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "monthly_stories",
+      "method": "Stories you shared in this month.",
+      "provenance": "measured",
+      "unit": "stories",
+      "value_num": 38,
+      "value_text": "5",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "monthly_posts",
+      "method": "Posts you shared in this month.",
+      "provenance": "measured",
+      "unit": "posts",
+      "value_num": 4,
+      "value_text": "6",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "monthly_stories",
+      "method": "Stories you shared in this month.",
+      "provenance": "measured",
+      "unit": "stories",
+      "value_num": 40,
+      "value_text": "6",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "monthly_posts",
+      "method": "Posts you shared in this month.",
+      "provenance": "measured",
+      "unit": "posts",
+      "value_num": 4,
+      "value_text": "7",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "monthly_stories",
+      "method": "Stories you shared in this month.",
+      "provenance": "measured",
+      "unit": "stories",
+      "value_num": 44,
+      "value_text": "7",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "monthly_posts",
+      "method": "Posts you shared in this month.",
+      "provenance": "measured",
+      "unit": "posts",
+      "value_num": 9,
+      "value_text": "8",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "monthly_stories",
+      "method": "Stories you shared in this month.",
+      "provenance": "measured",
+      "unit": "stories",
+      "value_num": 61,
+      "value_text": "8",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "monthly_posts",
+      "method": "Posts you shared in this month.",
+      "provenance": "measured",
+      "unit": "posts",
+      "value_num": 3,
+      "value_text": "9",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "monthly_stories",
+      "method": "Stories you shared in this month.",
+      "provenance": "measured",
+      "unit": "stories",
+      "value_num": 36,
+      "value_text": "9",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "monthly_posts",
+      "method": "Posts you shared in this month.",
+      "provenance": "measured",
+      "unit": "posts",
+      "value_num": 3,
+      "value_text": "10",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "monthly_stories",
+      "method": "Stories you shared in this month.",
+      "provenance": "measured",
+      "unit": "stories",
+      "value_num": 35,
+      "value_text": "10",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "monthly_posts",
+      "method": "Posts you shared in this month.",
+      "provenance": "measured",
+      "unit": "posts",
+      "value_num": 2,
+      "value_text": "11",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "monthly_stories",
+      "method": "Stories you shared in this month.",
+      "provenance": "measured",
+      "unit": "stories",
+      "value_num": 30,
+      "value_text": "11",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "top_month",
+      "method": "Month with the most posts, then the most Stories.",
+      "provenance": "measured",
+      "unit": "month",
+      "value_num": 8,
+      "value_text": "August",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "top_month_posts",
+      "method": "Posts in your busiest month.",
+      "provenance": "measured",
+      "unit": "posts",
+      "value_num": 9,
+      "value_text": "8",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "top_month_stories",
+      "method": "Stories in your busiest month.",
+      "provenance": "measured",
+      "unit": "stories",
+      "value_num": 61,
+      "value_text": "8",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "months_covered",
+      "method": "Months in the window with a memory.",
+      "provenance": "measured",
+      "unit": "months",
+      "value_num": 11,
+      "value_text": null,
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "feed_swatch",
+      "method": "Share of liked posts with this main color.",
+      "provenance": "measured",
+      "unit": "percent",
+      "value_num": 31,
+      "value_text": "#1F2A44",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "feed_swatch",
+      "method": "Share of liked posts with this main color.",
+      "provenance": "measured",
+      "unit": "percent",
+      "value_num": 24,
+      "value_text": "#C8A27C",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "feed_swatch",
+      "method": "Share of liked posts with this main color.",
+      "provenance": "measured",
+      "unit": "percent",
+      "value_num": 19,
+      "value_text": "#8B3A3A",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "feed_swatch",
+      "method": "Share of liked posts with this main color.",
+      "provenance": "measured",
+      "unit": "percent",
+      "value_num": 15,
+      "value_text": "#E9E1D3",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "feed_swatch",
+      "method": "Share of liked posts with this main color.",
+      "provenance": "measured",
+      "unit": "percent",
+      "value_num": 11,
+      "value_text": "#4E6B4A",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "explore_topic",
+      "method": "Your taps tune Explore. Undo in Settings.",
+      "provenance": "inferred",
+      "unit": "score",
+      "value_num": 0.91,
+      "value_text": "Streetwear drops",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "explore_topic",
+      "method": "Your taps tune Explore. Undo in Settings.",
+      "provenance": "inferred",
+      "unit": "score",
+      "value_num": 0.84,
+      "value_text": "Film cameras",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "explore_topic",
+      "method": "Your taps tune Explore. Undo in Settings.",
+      "provenance": "inferred",
+      "unit": "score",
+      "value_num": 0.41,
+      "value_text": "Ceramic frogs",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "explore_topic_watched",
+      "method": "Times you watched this topic.",
+      "provenance": "inferred",
+      "unit": "plays",
+      "value_num": 63,
+      "value_text": "Ceramic frogs",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "reels_category_share",
+      "method": "Top 5 categories by share of your Reels watch time. Other categories: 8%.",
+      "provenance": "measured",
+      "unit": "percent",
+      "value_num": 31,
+      "value_text": "Streetwear",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "reels_category_share",
+      "method": "Top 5 categories by share of your Reels watch time. Other categories: 8%.",
+      "provenance": "measured",
+      "unit": "percent",
+      "value_num": 22,
+      "value_text": "Food in Chicago",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "reels_category_share",
+      "method": "Top 5 categories by share of your Reels watch time. Other categories: 8%.",
+      "provenance": "measured",
+      "unit": "percent",
+      "value_num": 18,
+      "value_text": "Film photography",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "reels_category_share",
+      "method": "Top 5 categories by share of your Reels watch time. Other categories: 8%.",
+      "provenance": "measured",
+      "unit": "percent",
+      "value_num": 12,
+      "value_text": "Interior design",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "reels_category_share",
+      "method": "Top 5 categories by share of your Reels watch time. Other categories: 8%.",
+      "provenance": "measured",
+      "unit": "percent",
+      "value_num": 9,
+      "value_text": "Ceramics",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "top_reels_category",
+      "method": "The largest share of your Reels watch time.",
+      "provenance": "measured",
+      "unit": "percent",
+      "value_num": 31,
+      "value_text": "Streetwear",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "fastest_rising_multiple",
+      "method": "How many times this category grew since the turn.",
+      "provenance": "measured",
+      "unit": "times",
+      "value_num": 4,
+      "value_text": "Ceramics",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "fastest_rising_since_month",
+      "method": "Month the fastest-rising category took off.",
+      "provenance": "measured",
+      "unit": "month",
+      "value_num": 6,
+      "value_text": "Ceramics",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "plot_turn_month",
+      "method": "Month the fastest-rising category took off.",
+      "provenance": "measured",
+      "unit": "month",
+      "value_num": 6,
+      "value_text": "June",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "ceramics_monthly",
+      "method": "Likes and saves in Ceramics, by month.",
+      "provenance": "measured",
+      "unit": "likes_and_saves",
+      "value_num": 3,
+      "value_text": "1",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "ceramics_monthly",
+      "method": "Likes and saves in Ceramics, by month.",
+      "provenance": "measured",
+      "unit": "likes_and_saves",
+      "value_num": 2,
+      "value_text": "2",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "ceramics_monthly",
+      "method": "Likes and saves in Ceramics, by month.",
+      "provenance": "measured",
+      "unit": "likes_and_saves",
+      "value_num": 4,
+      "value_text": "3",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "ceramics_monthly",
+      "method": "Likes and saves in Ceramics, by month.",
+      "provenance": "measured",
+      "unit": "likes_and_saves",
+      "value_num": 3,
+      "value_text": "4",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "ceramics_monthly",
+      "method": "Likes and saves in Ceramics, by month.",
+      "provenance": "measured",
+      "unit": "likes_and_saves",
+      "value_num": 5,
+      "value_text": "5",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "ceramics_monthly",
+      "method": "Likes and saves in Ceramics, by month.",
+      "provenance": "measured",
+      "unit": "likes_and_saves",
+      "value_num": 22,
+      "value_text": "6",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "ceramics_monthly",
+      "method": "Likes and saves in Ceramics, by month.",
+      "provenance": "measured",
+      "unit": "likes_and_saves",
+      "value_num": 41,
+      "value_text": "7",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "ceramics_monthly",
+      "method": "Likes and saves in Ceramics, by month.",
+      "provenance": "measured",
+      "unit": "likes_and_saves",
+      "value_num": 58,
+      "value_text": "8",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "ceramics_monthly",
+      "method": "Likes and saves in Ceramics, by month.",
+      "provenance": "measured",
+      "unit": "likes_and_saves",
+      "value_num": 64,
+      "value_text": "9",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "ceramics_monthly",
+      "method": "Likes and saves in Ceramics, by month.",
+      "provenance": "measured",
+      "unit": "likes_and_saves",
+      "value_num": 71,
+      "value_text": "10",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "ceramics_monthly",
+      "method": "Likes and saves in Ceramics, by month.",
+      "provenance": "measured",
+      "unit": "likes_and_saves",
+      "value_num": 80,
+      "value_text": "11",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "plot_category",
+      "method": "Likes and saves in this category.",
+      "provenance": "measured",
+      "unit": null,
+      "value_num": null,
+      "value_text": "Ceramics",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "main_post_likes",
+      "method": "Likes on your most-liked post in the window.",
+      "provenance": "measured",
+      "unit": "likes",
+      "value_num": 2184,
+      "value_text": "post_0719",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "main_post_comments",
+      "method": "Comments on your most-liked post.",
+      "provenance": "measured",
+      "unit": "comments",
+      "value_num": 418,
+      "value_text": "post_0719",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "main_post_avg_likes",
+      "method": "Average likes on your posts in the window.",
+      "provenance": "measured",
+      "unit": "likes",
+      "value_num": 728,
+      "value_text": "post_0719",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "main_post_vs_average",
+      "method": "Likes on that post divided by your average likes per post.",
+      "provenance": "measured",
+      "unit": "times",
+      "value_num": 3,
+      "value_text": "post_0719",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "main_post_posted_at",
+      "method": "The day you posted your most-liked post.",
+      "provenance": "measured",
+      "unit": null,
+      "value_num": null,
+      "value_text": "2026-07-19",
+      "window_end": "2026-07-19",
+      "window_start": "2026-07-19"
+    },
+    {
+      "key": "story_replies_24h",
+      "method": "Replies in the 24 hours after you posted this Story.",
+      "provenance": "measured",
+      "unit": "replies",
+      "value_num": 47,
+      "value_text": "story_0314",
+      "window_end": "2026-03-15",
+      "window_start": "2026-03-14"
+    },
+    {
+      "key": "circle_member",
+      "method": "Accounts you interacted with. Shown unranked.",
+      "provenance": "measured",
+      "unit": null,
+      "value_num": null,
+      "value_text": "dee.films",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "circle_member",
+      "method": "Accounts you interacted with. Shown unranked.",
+      "provenance": "measured",
+      "unit": null,
+      "value_num": null,
+      "value_text": "jules.mp",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "circle_member",
+      "method": "Accounts you interacted with. Shown unranked.",
+      "provenance": "measured",
+      "unit": null,
+      "value_num": null,
+      "value_text": "nico_k",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "circle_member",
+      "method": "Accounts you interacted with. Shown unranked.",
+      "provenance": "measured",
+      "unit": null,
+      "value_num": null,
+      "value_text": "sam.wav",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "circle_member",
+      "method": "Accounts you interacted with. Shown unranked.",
+      "provenance": "measured",
+      "unit": null,
+      "value_num": null,
+      "value_text": "tori.eats",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "latest_local_time",
+      "method": "The latest time you were active, in your local time.",
+      "provenance": "measured",
+      "unit": null,
+      "value_num": null,
+      "value_text": "03:42",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "latest_session_weekday",
+      "method": "Weekday of that latest session.",
+      "provenance": "measured",
+      "unit": null,
+      "value_num": null,
+      "value_text": "Tuesday",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    },
+    {
+      "key": "latest_session_month",
+      "method": "Month of that latest session.",
+      "provenance": "measured",
+      "unit": "month",
+      "value_num": 5,
+      "value_text": "May",
+      "window_end": "2026-11-15",
+      "window_start": "2026-01-01"
+    }
+  ],
+  "run": {
+    "copy": {
+      "summary": "11 cards. Replay them, remix them, share the ones you like.",
+      "window": "JAN 1 TO NOV 15, 2026"
+    },
+    "edition": "personal",
+    "engine_version": "1",
+    "period_end": "2026-11-15",
+    "period_start": "2026-01-01",
+    "status": "ready",
+    "tier": "full",
+    "year": 2026
+  }
+}

@@ -1,52 +1,16 @@
 import SwiftUI
 
-enum MayaReels {
-    static let headline = "DOWN THE\nRABBIT HOLE."
-    static let fastestRising = "Ceramics, 4x since June"
-    static let sent = "And you sent 1,206 of them to friends."
-    static let categories: [(name: String, percent: String, width: CGFloat)] = [
-        ("Streetwear", "31%", 1),
-        ("Food in Chicago", "22%", 22.0 / 31.0),
-        ("Film photography", "18%", 18.0 / 31.0),
-        ("Interior design", "12%", 12.0 / 31.0),
-        ("Ceramics", "9%", 9.0 / 31.0)
-    ]
-}
-
-enum MayaPost {
-    static let headline = "MAIN CHARACTER\nPOST"
-    static let likes = "2,184"
-    static let comments = "418 comments. Unhinged ones."
-    static let average = "That's 3x your average post."
-    static let posted = "Measured · posted Jul 19"
-    static let dateChip = "Jul 19"
-    static let photo = "main-character"
-}
-
-enum MayaChat {
-    static let headline = "THE STORY THAT\nBROKE THE\nGROUP CHAT."
-    static let replies = "47"
-    static let repliesCaption = "replies in a day"
-    static let storyChip = "Story · Mar 14"
-    static let note = "Your most-replied Story of the year. Who said what stays in your DMs."
-    static let photo = "story-0314"
-}
-
-enum MayaCircle {
-    static let headline = "YOUR CIRCLE."
-    static let note = "The five accounts you showed up for most. No ranking, no scores."
-    static let privacy = "Want the ranked version? It lives in Privacy, off by default."
-    static let handles = ["dee.films", "jules.mp", "nico_k", "sam.wav", "tori.eats"]
-}
-
-enum MayaNight {
-    static let headline = "WELCOME TO\nTHE 3AM CLUB."
-    static let time = "3:42 AM"
-    static let note = "A Tuesday in May. We hope it was worth it."
-}
-
 struct ReelsCard: View {
+    var card: RunCard
     var onShare: () -> Void
+
+    private var categories: [NamedPercent] { card.payload.categories ?? [] }
+
+    private func barWidth(_ category: NamedPercent) -> CGFloat {
+        let first = CGFloat(categories.first?.percent ?? 0)
+        guard first > 0 else { return 0 }
+        return CGFloat(category.percent) / first
+    }
     @State private var selected: String?
 
     var body: some View {
@@ -61,7 +25,7 @@ struct ReelsCard: View {
                 Spacer(minLength: 0).allowsHitTesting(false)
                 rising.allowsHitTesting(false)
                 CardText(
-                    text: MayaReels.sent,
+                    text: card.payload.copy?.sent ?? "",
                     size: CardSpace.openingSupport,
                     weight: CardSpace.medium,
                     width: CardSpace.regular,
@@ -90,7 +54,7 @@ struct ReelsCard: View {
                 color: WrappedColor.ink
             )
             DisplayHeadline(
-                copy: MayaReels.headline,
+                copy: card.headline,
                 size: CardSpace.reelsHeadline,
                 lineHeight: CardSpace.openingHeadlineLine,
                 tracking: CardSpace.yearHeadlineTracking,
@@ -110,7 +74,7 @@ struct ReelsCard: View {
 
     private var bars: some View {
         VStack(alignment: .leading, spacing: CardSpace.yearCopyGap) {
-            ForEach(Array(MayaReels.categories.enumerated()), id: \.element.name) { index, category in
+            ForEach(Array(categories.enumerated()), id: \.element.name) { index, category in
                 Button {
                     selected = selected == category.name ? nil : category.name
                 } label: {
@@ -125,7 +89,7 @@ struct ReelsCard: View {
                             )
                             Spacer(minLength: 0)
                             CardText(
-                                text: category.percent,
+                                text: "\(category.percent)%",
                                 size: CardSpace.yearSupportSize,
                                 weight: CardSpace.strong,
                                 width: CardSpace.regular,
@@ -137,7 +101,7 @@ struct ReelsCard: View {
                                 .fill(WrappedColor.ink.opacity(CardSpace.barTrack))
                             RoundedRectangle(cornerRadius: CardSpace.chipRadius)
                                 .fill(WrappedColor.ink)
-                                .frame(width: proxy.size.width * category.width)
+                                .frame(width: proxy.size.width * barWidth(category))
                         }
                         .frame(height: CardSpace.reelsBar)
                     }
@@ -146,7 +110,7 @@ struct ReelsCard: View {
                 }
                 .buttonStyle(.plain)
                 .accessibilityIdentifier("reel-cat-\(index)")
-                .accessibilityLabel("\(category.name), \(category.percent)")
+                .accessibilityLabel("\(category.name), \(category.percent)%")
             }
         }
         .padding(.horizontal, WrappedSpace.gutter)
@@ -187,7 +151,7 @@ struct ReelsCard: View {
                     color: WrappedColor.igYellow
                 )
                 CardText(
-                    text: MayaReels.fastestRising,
+                    text: card.payload.copy?.fastestRising ?? "",
                     size: CardSpace.openingHandleSize,
                     width: CardSpace.semiCondensed,
                     color: WrappedColor.igWhite,
@@ -203,6 +167,8 @@ struct ReelsCard: View {
 }
 
 struct MainCharacterCard: View {
+    var card: RunCard
+    var handle: String
     var onShare: () -> Void
     var onOpenPost: () -> Void
 
@@ -219,7 +185,7 @@ struct MainCharacterCard: View {
                     color: WrappedColor.ink
                 )
                 DisplayHeadline(
-                    copy: MayaPost.headline,
+                    copy: card.headline,
                     size: CardSpace.postHeadline,
                     lineHeight: CardSpace.openingHeadlineLine,
                     tracking: CardSpace.algorithmHeadlineTracking,
@@ -246,7 +212,7 @@ struct MainCharacterCard: View {
                 .padding(.top, 272)
 
             CardText(
-                text: MayaPost.comments,
+                text: card.payload.copy?.comments ?? "",
                 size: CardSpace.yearSupportSize,
                 weight: CardSpace.medium,
                 width: CardSpace.regular,
@@ -264,7 +230,7 @@ struct MainCharacterCard: View {
             VStack {
                 Spacer(minLength: 0).allowsHitTesting(false)
                 CardText(
-                    text: MayaPost.average,
+                    text: card.payload.copy?.average ?? "",
                     size: CardSpace.averageLine,
                     weight: CardSpace.strong,
                     width: CardSpace.regular,
@@ -273,7 +239,7 @@ struct MainCharacterCard: View {
                 .allowsHitTesting(false)
                 .padding(.horizontal, WrappedSpace.gutter)
                 HStack(spacing: CardSpace.blockGap) {
-                    Text(MayaPost.posted)
+                    Text(card.payload.copy?.posted ?? "")
                         .wrappedType(.caption)
                         .foregroundStyle(WrappedColor.ink)
                         .allowsHitTesting(false)
@@ -287,13 +253,13 @@ struct MainCharacterCard: View {
 
     private var postCard: some View {
         VStack(alignment: .leading, spacing: CardSpace.yearCopyGap) {
-            photo(MayaPost.photo)
+            photo(card.payload.photo ?? "")
                 .frame(width: 300, height: 250)
                 .clipped()
             HStack {
-                CardText(text: "@\(MayaOpening.handle)", size: WrappedTextStyle.caption.size, weight: WrappedTextStyle.caption.weight, width: CardSpace.regular, color: WrappedColor.ink)
+                CardText(text: "@\(handle)", size: WrappedTextStyle.caption.size, weight: WrappedTextStyle.caption.weight, width: CardSpace.regular, color: WrappedColor.ink)
                 Spacer()
-                CardText(text: MayaPost.dateChip, size: WrappedTextStyle.caption.size, weight: WrappedTextStyle.caption.weight, width: CardSpace.regular, color: WrappedColor.muted)
+                CardText(text: card.payload.copy?.dateChip ?? "", size: WrappedTextStyle.caption.size, weight: WrappedTextStyle.caption.weight, width: CardSpace.regular, color: WrappedColor.muted)
             }
         }
         .padding(CardSpace.openingBadgePad)
@@ -306,7 +272,7 @@ struct MainCharacterCard: View {
         HStack(spacing: CardSpace.chipGap) {
             Image(systemName: "heart.fill")
                 .foregroundStyle(WrappedColor.igWhite)
-            CardText(text: MayaPost.likes, size: CardSpace.postLikes, width: CardSpace.titleWidth, color: WrappedColor.igWhite)
+            CardText(text: CountText.string(card.payload.likes ?? 0), size: CardSpace.postLikes, width: CardSpace.titleWidth, color: WrappedColor.igWhite)
         }
         .padding(CardSpace.blockGap)
         .background(RoundedRectangle(cornerRadius: CardSpace.stickerRadius).fill(WrappedColor.likeRed))
@@ -325,18 +291,20 @@ struct MainCharacterCard: View {
 }
 
 struct PostDetailCover: View {
+    var card: RunCard
+    var handle: String
     var onClose: () -> Void
 
     var body: some View {
         ZStack {
             WrappedColor.igBackground.ignoresSafeArea()
             VStack(spacing: CardSpace.blockGap) {
-                if let image = BundlePhoto.image(named: MayaPost.photo) {
+                if let image = BundlePhoto.image(named: card.payload.photo ?? "") {
                     Image(uiImage: image).resizable().scaledToFit()
                 }
-                CardText(text: "@\(MayaOpening.handle)", size: CardSpace.openingHandleSize, width: CardSpace.regular, color: WrappedColor.igWhite)
-                CardText(text: MayaPost.likes, size: CardSpace.stickerName, color: WrappedColor.igWhite)
-                CardText(text: MayaPost.comments, size: CardSpace.yearSupportSize, weight: WrappedTextStyle.body.weight, width: CardSpace.regular, color: WrappedColor.igWhite)
+                CardText(text: "@\(handle)", size: CardSpace.openingHandleSize, width: CardSpace.regular, color: WrappedColor.igWhite)
+                CardText(text: CountText.string(card.payload.likes ?? 0), size: CardSpace.stickerName, color: WrappedColor.igWhite)
+                CardText(text: card.payload.copy?.comments ?? "", size: CardSpace.yearSupportSize, weight: WrappedTextStyle.body.weight, width: CardSpace.regular, color: WrappedColor.igWhite)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -344,12 +312,13 @@ struct PostDetailCover: View {
         .onTapGesture(perform: onClose)
         .accessibilityElement(children: .ignore)
         .accessibilityIdentifier("post-detail")
-        .accessibilityLabel(MayaPost.comments)
+        .accessibilityLabel(card.payload.copy?.comments ?? "")
         .accessibilityAddTraits(.isButton)
     }
 }
 
 struct GroupChatCard: View {
+    var card: RunCard
     var onShare: () -> Void
     var onOpenStory: () -> Void
 
@@ -362,7 +331,7 @@ struct GroupChatCard: View {
             WrappedColor.closeGreen.ignoresSafeArea().allowsHitTesting(false)
             VStack(alignment: .leading, spacing: CardSpace.yearCopyGap) {
                 CardText(text: "YOUR MOMENTS", size: WrappedTextStyle.eyebrow.size, weight: WrappedTextStyle.eyebrow.weight, width: WrappedTextStyle.eyebrow.width, tracking: WrappedTextStyle.eyebrow.tracking, color: WrappedColor.ink)
-                DisplayHeadline(copy: MayaChat.headline, size: CardSpace.chatHeadline, lineHeight: CardSpace.openingHeadlineLine, tracking: CardSpace.algorithmHeadlineTracking, color: WrappedColor.ink)
+                DisplayHeadline(copy: card.headline, size: CardSpace.chatHeadline, lineHeight: CardSpace.openingHeadlineLine, tracking: CardSpace.algorithmHeadlineTracking, color: WrappedColor.ink)
             }
             .allowsHitTesting(false)
             .padding(.horizontal, WrappedSpace.gutter)
@@ -390,8 +359,8 @@ struct GroupChatCard: View {
             .padding(.top, 352)
 
             VStack(alignment: .leading, spacing: 0) {
-                CardText(text: MayaChat.replies, size: CardSpace.chatReplies, tracking: CardSpace.openingYearTracking, lineHeight: 0.85, color: WrappedColor.ink)
-                CardText(text: MayaChat.repliesCaption, size: CardSpace.chatCaption, weight: CardSpace.strong, width: CardSpace.regular, color: WrappedColor.ink)
+                CardText(text: card.payload.replies.map(String.init) ?? "", size: CardSpace.chatReplies, tracking: CardSpace.openingYearTracking, lineHeight: 0.85, color: WrappedColor.ink)
+                CardText(text: "replies in a day", size: CardSpace.chatCaption, weight: CardSpace.strong, width: CardSpace.regular, color: WrappedColor.ink)
             }
             .allowsHitTesting(false)
             .padding(.leading, 216)
@@ -399,7 +368,7 @@ struct GroupChatCard: View {
 
             VStack {
                 Spacer(minLength: 0).allowsHitTesting(false)
-                CardText(text: MayaChat.note, size: CardSpace.yearSupportSize, weight: WrappedTextStyle.body.weight, width: WrappedTextStyle.body.width, color: WrappedColor.ink)
+                CardText(text: "Your most-replied Story of the year. Who said what stays in your DMs.", size: CardSpace.yearSupportSize, weight: WrappedTextStyle.body.weight, width: WrappedTextStyle.body.width, color: WrappedColor.ink)
                     .allowsHitTesting(false)
                     .padding(.horizontal, WrappedSpace.gutter)
                 SharePill(title: "Share this story", action: onShare)
@@ -413,10 +382,10 @@ struct GroupChatCard: View {
     private var storyThumb: some View {
         ZStack(alignment: .bottomLeading) {
             MonthTone.gradient(2)
-            if let image = BundlePhoto.image(named: MayaChat.photo) {
+            if let image = BundlePhoto.image(named: card.payload.photo ?? "") {
                 Image(uiImage: image).resizable().scaledToFill()
             }
-            CardText(text: MayaChat.storyChip, size: CardSpace.storyChipSize, weight: CardSpace.strong, width: CardSpace.regular, tracking: CardSpace.chipTracking, color: WrappedColor.igWhite)
+            CardText(text: card.payload.copy?.storyChip ?? "", size: CardSpace.storyChipSize, weight: CardSpace.strong, width: CardSpace.regular, tracking: CardSpace.chipTracking, color: WrappedColor.igWhite)
                 .padding(CardSpace.openingBadgePad)
         }
         .frame(width: 168, height: 280)
@@ -427,12 +396,13 @@ struct GroupChatCard: View {
 }
 
 struct StoryReplayCover: View {
+    var card: RunCard
     var onClose: () -> Void
 
     var body: some View {
         ZStack(alignment: .top) {
             MonthTone.gradient(2).ignoresSafeArea()
-            if let image = BundlePhoto.image(named: MayaChat.photo) {
+            if let image = BundlePhoto.image(named: card.payload.photo ?? "") {
                 Image(uiImage: image).resizable().scaledToFill().ignoresSafeArea()
             }
             Capsule()
@@ -440,7 +410,7 @@ struct StoryReplayCover: View {
                 .frame(height: WrappedSpace.progressThickness)
                 .padding(.horizontal, CardSpace.chromeLeading)
                 .padding(.top, WrappedSpace.progressTop)
-            CardText(text: MayaChat.storyChip, size: CardSpace.openingHandleSize, weight: CardSpace.strong, width: CardSpace.regular, color: WrappedColor.igWhite)
+            CardText(text: card.payload.copy?.storyChip ?? "", size: CardSpace.openingHandleSize, weight: CardSpace.strong, width: CardSpace.regular, color: WrappedColor.igWhite)
                 .padding(.top, WrappedSpace.contentTop)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -448,12 +418,13 @@ struct StoryReplayCover: View {
         .onTapGesture(perform: onClose)
         .accessibilityElement(children: .ignore)
         .accessibilityIdentifier("story-replay")
-        .accessibilityLabel(MayaChat.storyChip)
+        .accessibilityLabel(card.payload.copy?.storyChip ?? "")
         .accessibilityAddTraits(.isButton)
     }
 }
 
 struct CircleCard: View {
+    var card: RunCard
     @State private var enlarged: String?
 
     var body: some View {
@@ -461,8 +432,8 @@ struct CircleCard: View {
             WrappedColor.igOrange.ignoresSafeArea().allowsHitTesting(false)
             VStack(alignment: .leading, spacing: CardSpace.blockGap) {
                 CardText(text: "YOUR PEOPLE", size: WrappedTextStyle.eyebrow.size, weight: WrappedTextStyle.eyebrow.weight, width: WrappedTextStyle.eyebrow.width, tracking: WrappedTextStyle.eyebrow.tracking, color: WrappedColor.ink)
-                DisplayHeadline(copy: MayaCircle.headline, size: CardSpace.openingHeadline, lineHeight: CardSpace.openingHeadlineLine, tracking: CardSpace.openingHeadlineTracking, color: WrappedColor.ink)
-                CardText(text: MayaCircle.note, size: CardSpace.openingSupport, weight: WrappedTextStyle.body.weight, width: CardSpace.regular, lineHeight: 1.3, color: WrappedColor.ink)
+                DisplayHeadline(copy: card.headline, size: CardSpace.openingHeadline, lineHeight: CardSpace.openingHeadlineLine, tracking: CardSpace.openingHeadlineTracking, color: WrappedColor.ink)
+                CardText(text: card.payload.copy?.note ?? "", size: CardSpace.openingSupport, weight: WrappedTextStyle.body.weight, width: CardSpace.regular, lineHeight: 1.3, color: WrappedColor.ink)
             }
             .allowsHitTesting(false)
             .padding(.horizontal, WrappedSpace.gutter)
@@ -473,7 +444,7 @@ struct CircleCard: View {
 
             VStack {
                 Spacer(minLength: 0).allowsHitTesting(false)
-                CardText(text: MayaCircle.privacy, size: CardSpace.undercutSize, weight: WrappedTextStyle.body.weight, width: CardSpace.regular, color: WrappedColor.ink, alignment: .center)
+                CardText(text: card.payload.copy?.privacy ?? "", size: CardSpace.undercutSize, weight: WrappedTextStyle.body.weight, width: CardSpace.regular, color: WrappedColor.ink, alignment: .center)
                     .allowsHitTesting(false)
                     .padding(.horizontal, WrappedSpace.gutter)
                 PrivatePill()
@@ -489,7 +460,7 @@ struct CircleCard: View {
     private var people: some View {
         let columns = [GridItem(.adaptive(minimum: 98), spacing: 18)]
         return LazyVGrid(columns: columns, spacing: 18) {
-            ForEach(MayaCircle.handles, id: \.self) { handle in
+            ForEach(card.payload.handles ?? [], id: \.self) { handle in
                 Button {
                     enlarged = handle
                 } label: {
@@ -535,6 +506,7 @@ struct CircleCard: View {
 }
 
 struct ThreeAMCard: View {
+    var card: RunCard
     var onShare: () -> Void
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var shown = false
@@ -545,7 +517,7 @@ struct ThreeAMCard: View {
             VStack(alignment: .leading, spacing: 0) {
                 VStack(alignment: .leading, spacing: CardSpace.yearCopyGap) {
                     CardText(text: "YOUR HABITS", size: WrappedTextStyle.eyebrow.size, weight: WrappedTextStyle.eyebrow.weight, width: WrappedTextStyle.eyebrow.width, tracking: WrappedTextStyle.eyebrow.tracking, color: WrappedColor.igYellow)
-                    DisplayHeadline(copy: MayaNight.headline, size: CardSpace.yearHeadline, lineHeight: CardSpace.openingHeadlineLine, tracking: CardSpace.yearHeadlineTracking, color: WrappedColor.igWhite)
+                    DisplayHeadline(copy: card.headline, size: CardSpace.yearHeadline, lineHeight: CardSpace.openingHeadlineLine, tracking: CardSpace.yearHeadlineTracking, color: WrappedColor.igWhite)
                 }
                 .allowsHitTesting(false)
                 .padding(.top, CardSpace.yearCopyTop)
@@ -555,8 +527,8 @@ struct ThreeAMCard: View {
                     .allowsHitTesting(false)
                 VStack(alignment: .leading, spacing: CardSpace.chipGap) {
                     CardText(text: "LATEST SCROLL", size: WrappedTextStyle.caption.size, weight: CardSpace.strong, width: CardSpace.regular, tracking: 1.2, color: WrappedColor.igYellow)
-                    CardText(text: MayaNight.time, size: CardSpace.nightTime, tracking: CardSpace.openingYearTracking, lineHeight: 0.85, color: WrappedColor.igWhite)
-                    CardText(text: MayaNight.note, size: CardSpace.openingSupport, weight: WrappedTextStyle.body.weight, width: CardSpace.regular, color: WrappedColor.onInkSecondary)
+                    CardText(text: card.payload.copy?.time ?? "", size: CardSpace.nightTime, tracking: CardSpace.openingYearTracking, lineHeight: 0.85, color: WrappedColor.igWhite)
+                    CardText(text: card.payload.copy?.note ?? "", size: CardSpace.openingSupport, weight: WrappedTextStyle.body.weight, width: CardSpace.regular, color: WrappedColor.onInkSecondary)
                 }
                 .allowsHitTesting(false)
                 .padding(.top, CardSpace.topicGap)
@@ -587,6 +559,6 @@ struct ThreeAMCard: View {
             Circle().fill(WrappedColor.igYellow).frame(width: 14, height: 14)
         }
         .animation(reduceMotion ? nil : .easeOut(duration: 1.2), value: shown)
-        .accessibilityLabel("A clock showing \(MayaNight.time)")
+        .accessibilityLabel("A clock showing \(card.payload.copy?.time ?? "")")
     }
 }

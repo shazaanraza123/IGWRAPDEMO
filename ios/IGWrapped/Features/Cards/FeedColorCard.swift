@@ -1,9 +1,10 @@
 import SwiftUI
 
 struct FeedColorCard: View {
+    var card: RunCard
     var onShare: () -> Void
 
-    @State private var expanded: MayaSwatch?
+    @State private var expanded: ColorSwatch?
 
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -31,7 +32,7 @@ struct FeedColorCard: View {
                 color: WrappedColor.paletteEyebrow
             )
             DisplayHeadline(
-                copy: MayaFeed.headline,
+                copy: card.headline,
                 size: CardSpace.feedHeadline,
                 lineHeight: CardSpace.openingHeadlineLine,
                 tracking: CardSpace.feedHeadlineTracking,
@@ -65,7 +66,7 @@ struct FeedColorCard: View {
                 color: WrappedColor.igYellow
             )
             CardText(
-                text: MayaFeed.paletteName,
+                text: card.payload.paletteName ?? "",
                 size: CardSpace.stickerName,
                 lineHeight: 1,
                 color: WrappedColor.igWhite,
@@ -84,7 +85,7 @@ struct FeedColorCard: View {
 
     private var swatches: some View {
         HStack(alignment: .top, spacing: CardSpace.swatchGap) {
-            ForEach(Array(MayaFeed.swatches.enumerated()), id: \.element.id) { index, swatch in
+            ForEach(Array((card.payload.swatches ?? []).enumerated()), id: \.element.id) { index, swatch in
                 Button {
                     expanded = expanded == swatch ? nil : swatch
                 } label: {
@@ -97,7 +98,7 @@ struct FeedColorCard: View {
                                     .strokeBorder(WrappedColor.ink.opacity(CardSpace.hairlineOpacity), lineWidth: CardSpace.hairline)
                             }
                         CardText(
-                            text: swatch.percent,
+                            text: "\(swatch.pct)%",
                             size: CardSpace.swatchShare,
                             width: CardSpace.titleWidth,
                             color: WrappedColor.ink
@@ -111,19 +112,19 @@ struct FeedColorCard: View {
                 }
                 .buttonStyle(.plain)
                 .accessibilityIdentifier("swatch-\(index)")
-                .accessibilityLabel("\(swatch.percent), \(swatch.hex)")
+                .accessibilityLabel("\(swatch.pct)%, \(swatch.hex)")
             }
         }
         .padding(.horizontal, WrappedSpace.gutter)
         .padding(.top, CardSpace.feedSwatchTop)
     }
 
-    private func expansion(_ swatch: MayaSwatch) -> some View {
+    private func expansion(_ swatch: ColorSwatch) -> some View {
         VStack(alignment: .leading, spacing: CardSpace.chipGap) {
             CardText(text: swatch.hex, size: CardSpace.swatchShare, width: CardSpace.regular, color: WrappedColor.igWhite)
-            CardText(text: swatch.percent, size: CardSpace.stickerName, color: WrappedColor.igYellow)
+            CardText(text: "\(swatch.pct)%", size: CardSpace.stickerName, color: WrappedColor.igYellow)
             CardText(
-                text: MayaFeed.domination,
+                text: "of liked posts where this color dominates",
                 size: WrappedTextStyle.caption.size,
                 weight: WrappedTextStyle.caption.weight,
                 width: WrappedTextStyle.caption.width,
@@ -136,14 +137,14 @@ struct FeedColorCard: View {
         .padding(.top, CardSpace.feedSwatchTop - WrappedSpace.minHit)
         .accessibilityElement(children: .combine)
         .accessibilityIdentifier("swatch-detail")
-        .accessibilityLabel(MayaFeed.domination)
+        .accessibilityLabel("of liked posts where this color dominates")
     }
 
     private var footnote: some View {
         VStack {
             Spacer(minLength: 0).allowsHitTesting(false)
             HStack(alignment: .center, spacing: CardSpace.blockGap) {
-                Text(MayaFeed.footnote)
+                Text(card.payload.copy?.footnote ?? "")
                     .wrappedType(.caption)
                     .foregroundStyle(WrappedColor.ink)
                     .fixedSize(horizontal: false, vertical: true)

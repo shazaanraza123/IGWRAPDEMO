@@ -24,8 +24,9 @@ final class SessionStore {
     let client: SupabaseClient?
 
     private init() {
-        guard let url = AppConfig.supabaseURL, let key = AppConfig.supabaseAnonKey else {
+        guard Backend.active, let url = AppConfig.supabaseURL, let key = AppConfig.supabaseAnonKey else {
             client = nil
+            print("igwrapped offline: no network client")
             return
         }
         client = SupabaseClient(
@@ -36,11 +37,15 @@ final class SessionStore {
     }
 
     func hasSession() async -> Bool {
-        guard let client else { return false }
-        return (try? await client.auth.session) != nil
+        if Backend.active {
+            guard let client else { return false }
+            return (try? await client.auth.session) != nil
+        }
+        return LocalPersona.current != nil
     }
 
     func signOut() async {
+        LocalPersona.clear()
         try? await client?.auth.signOut()
     }
 }

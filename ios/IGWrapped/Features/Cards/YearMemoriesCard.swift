@@ -1,8 +1,24 @@
 import SwiftUI
 
+struct MonthFace: Identifiable, Equatable {
+    var month: Int
+    var photo: String
+    var chip: String
+    var id: Int { month }
+}
+
 struct YearMemoriesCard: View {
-    var onMonth: (MayaMonth) -> Void
+    var card: RunCard
+    var onMonth: (MonthFace) -> Void
     var onPlay: () -> Void
+
+    private var months: [MonthFace] {
+        (card.payload.months ?? []).map { slot in
+            MonthFace(month: slot.month, photo: slot.photo, chip: MonthLabel.chip(month: slot.month, top: card.payload.topMonth))
+        }
+    }
+
+    private var ready: Bool { MontageGate.ready(card.payload.months ?? []) }
 
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -25,7 +41,7 @@ struct YearMemoriesCard: View {
                 color: WrappedColor.pinkOnDark
             )
             DisplayHeadline(
-                copy: MayaYear.headline,
+                copy: card.headline,
                 size: CardSpace.yearHeadline,
                 lineHeight: CardSpace.openingHeadlineLine,
                 tracking: CardSpace.yearHeadlineTracking,
@@ -38,9 +54,8 @@ struct YearMemoriesCard: View {
 
     private var grid: some View {
         let columns = Array(repeating: GridItem(.flexible(), spacing: WrappedSpace.gridGap), count: 3)
-        let ready = MayaYear.montageReady
         return LazyVGrid(columns: columns, spacing: WrappedSpace.gridGap) {
-            ForEach(MayaYear.months) { month in
+            ForEach(months) { month in
                 Button {
                     onMonth(month)
                 } label: {
@@ -58,13 +73,13 @@ struct YearMemoriesCard: View {
             }
             .buttonStyle(.plain)
             .accessibilityIdentifier("year-play")
-            .accessibilityLabel(ready ? MayaYear.playLabel : MayaYear.playUnavailable)
+            .accessibilityLabel(ready ? (card.payload.copy?.playLabel ?? "") : MontageGate.unavailable)
         }
         .padding(.horizontal, WrappedSpace.gutter)
         .padding(.top, CardSpace.yearGridTop)
     }
 
-    private func monthTile(_ month: MayaMonth) -> some View {
+    private func monthTile(_ month: MonthFace) -> some View {
         Color.clear
             .aspectRatio(1, contentMode: .fit)
             .overlay {
@@ -87,12 +102,12 @@ struct YearMemoriesCard: View {
                 .padding(.vertical, CardSpace.chipPadV)
                 .background(
                     RoundedRectangle(cornerRadius: CardSpace.chipRadius)
-                        .fill(month.isTop ? WrappedColor.igPink : WrappedColor.igWhite)
+                        .fill(month.month == card.payload.topMonth ? WrappedColor.igPink : WrappedColor.igWhite)
                 )
                 .padding(CardSpace.chipInset)
             }
             .overlay {
-                if month.isTop {
+                if month.month == card.payload.topMonth {
                     Rectangle().strokeBorder(WrappedColor.igPink, lineWidth: CardSpace.topMonthRing)
                 }
             }
@@ -109,9 +124,7 @@ struct YearMemoriesCard: View {
             }
             .frame(width: WrappedSpace.minHit, height: WrappedSpace.minHit)
             CardText(
-                text: ready
-                    ? MayaYear.playLabel.replacingOccurrences(of: "PLAY YOUR ", with: "PLAY YOUR\n")
-                    : MayaYear.playUnavailable,
+                text: ready ? (card.payload.copy?.playLabel ?? "") : MontageGate.unavailable,
                 size: CardSpace.playLabel,
                 width: CardSpace.regular,
                 color: WrappedColor.ink,
@@ -127,7 +140,7 @@ struct YearMemoriesCard: View {
 
     private var support: some View {
         CardText(
-            text: MayaYear.support,
+            text: card.support,
             size: CardSpace.yearSupportSize,
             weight: WrappedTextStyle.body.weight,
             width: WrappedTextStyle.body.width,
@@ -140,15 +153,8 @@ struct YearMemoriesCard: View {
     }
 }
 
-extension MayaYear {
-    /// True only when every month photo from m-01 through m-11 is in the bundle.
-    static var montageReady: Bool {
-        months.allSatisfy { BundlePhoto.image(named: $0.photo) != nil }
-    }
-}
-
 struct MonthCover: View {
-    var month: MayaMonth
+    var month: MonthFace
     var onClose: () -> Void
 
     var body: some View {
@@ -176,12 +182,19 @@ struct MonthCover: View {
 }
 
 struct YearMontage: View {
+    var card: RunCard
     var onFinished: () -> Void
 
     @State private var index = 0
 
+    private var months: [MonthFace] {
+        (card.payload.months ?? []).map { slot in
+            MonthFace(month: slot.month, photo: slot.photo, chip: MonthLabel.chip(month: slot.month, top: card.payload.topMonth))
+        }
+    }
+
     var body: some View {
-        let month = MayaYear.months[index]
+        let month = months.indices.contains(index) ? months[index] : MonthFace(month: 1, photo: "", chip: "")
         ZStack {
             MonthTone.gradient(month.month - 1).ignoresSafeArea()
             if let image = BundlePhoto.image(named: month.photo) {
@@ -199,10 +212,11 @@ struct YearMontage: View {
         .contentShape(Rectangle())
         .accessibilityElement(children: .ignore)
         .accessibilityIdentifier("year-montage")
-        .accessibilityLabel(MayaYear.playLabel)
+        .accessibilityLabel(card.payload.copy?.playLabel ?? "")
         .task {
-            let slice = Double(MayaYear.montageSeconds) / Double(MayaYear.months.count)
-            for next in MayaYear.months.indices.dropFirst() {
+            let count = max(months.count, 1)
+            let slice = Double(card.payload.montageSeconds ?? 0) / Double(count)
+            for next in months.indices.dropFirst() {
                 try? await Task.sleep(for: .seconds(slice))
                 if Task.isCancelled { return }
                 index = next

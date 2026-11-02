@@ -66,27 +66,36 @@ enum WrappedRunLookup {
         var tier: String
     }
 
-    static func load() async -> WrappedRunFacts? {
-        guard let client = SessionStore.shared.client, await SessionStore.shared.hasSession() else {
+    static func load() async -> (WrappedRunFacts, RunBundle)? {
+        let persona = LocalPersona.current ?? "maya"
+        let repository: any RunRepository = (Backend.active && AppConfig.supabaseURL != nil)
+            ? SupabaseRunRepository()
+            : BundledRunRepository()
+        guard let bundle = try? await repository.load(persona: persona) else {
             return nil
         }
         var facts = WrappedRunFacts()
-        if let profiles: [ProfileRow] = try? await client.from("profiles")
-            .select("account_type,is_teen")
-            .execute()
-            .value,
-           let profile = profiles.first {
-            facts.accountType = profile.accountType
-            facts.isTeen = profile.isTeen
+        facts.tier = bundle.run.tier
+        facts.isTeen = persona == "teen"
+        facts.accountType = (persona == "emerging" || persona == "established") ? "creator" : "personal"
+        if Backend.active, let client = SessionStore.shared.client, await SessionStore.shared.hasSession() {
+            if let profiles: [ProfileRow] = try? await client.from("profiles")
+                .select("account_type,is_teen")
+                .execute()
+                .value,
+               let profile = profiles.first {
+                facts.accountType = profile.accountType
+                facts.isTeen = profile.isTeen
+            }
+            if let runs: [RunRow] = try? await client.from("wrapped_runs")
+                .select("tier")
+                .execute()
+                .value,
+               let run = runs.first {
+                facts.tier = run.tier
+            }
         }
-        if let runs: [RunRow] = try? await client.from("wrapped_runs")
-            .select("tier")
-            .execute()
-            .value,
-           let run = runs.first {
-            facts.tier = run.tier
-        }
-        return facts
+        return (facts, bundle)
     }
 }
 
@@ -97,6 +106,7 @@ struct WrappedEntryFlow: View {
     @State private var openedAt = Date()
     @State private var openSeconds = ""
     @State private var facts = WrappedRunFacts()
+    @State private var bundle: RunBundle?
     @State private var failed = false
     @State private var ringFilled = false
     @State private var showsHow = false
@@ -114,7 +124,7 @@ struct WrappedEntryFlow: View {
             case .edition:
                 edition
             case .player:
-                StoryPlayer(onExit: onExit, omitted: facts.omittedCards)
+                StoryPlayer(onExit: onExit, bundle: bundle)
                 Color.clear
                     .frame(width: 1, height: 1)
                     .accessibilityIdentifier("entry-open-seconds")
@@ -183,7 +193,7 @@ struct WrappedEntryFlow: View {
                 .wrappedType(.title)
                 .foregroundStyle(WrappedColor.paper)
                 .accessibilityIdentifier("before-we-start")
-            Text("Built from your own posts and Stories, Jan 1 to Nov 15.")
+            Text(bundle?.card(number: 1)?.support ?? "")
                 .wrappedType(.body)
                 .foregroundStyle(WrappedColor.paper)
             entryButton("Start", identifier: "start-wrapped") {
@@ -234,7 +244,7 @@ struct WrappedEntryFlow: View {
                 Text("How Wrapped works")
                     .wrappedType(.title)
                     .foregroundStyle(WrappedColor.paper)
-                Text("Jan 1 to Nov 15.")
+                Text(bundle?.card(number: 1)?.payload.windowLabel ?? "")
                     .wrappedType(.body)
                     .foregroundStyle(WrappedColor.paper)
                 Text("No profile-visitor data. No DM contents.")
@@ -270,13 +280,14 @@ struct WrappedEntryFlow: View {
         }
         async let loaded = WrappedRunLookup.load()
         try? await Task.sleep(for: .seconds(WrappedMotion.buildingMinimum))
-        let facts = await loaded
+        let loadedFacts = await loaded
         guard !Task.isCancelled else { return }
-        guard let facts else {
+        guard let loadedFacts else {
             failed = true
             return
         }
-        self.facts = facts
+        self.facts = loadedFacts.0
+        self.bundle = loadedFacts.1
         let next = WrappedEntryPlan.afterBuilding(introSeen: WrappedIntro.hasSeen())
         if next == .player {
             openSeconds = String(format: "%.2f", Date().timeIntervalSince(openedAt))

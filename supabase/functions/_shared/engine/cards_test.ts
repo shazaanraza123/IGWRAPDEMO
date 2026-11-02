@@ -1,4 +1,5 @@
 import { parsePersona } from "../../../../data/schema.ts";
+import { bundleText } from "../../../../scripts/export-runs.ts";
 import { computeMetrics } from "./metrics.ts";
 import {
   buildPersonalRun,
@@ -25,7 +26,7 @@ const mayaPayloads = [
     photos: ["tile-1", "tile-2", "tile-3", "tile-4", "tile-5"],
     windowLabel: "Jan 1 to Nov 15",
     copy: {
-      headline: "2026 looked good on you.",
+      headline: "2026 LOOKED\nGOOD ON\nYOU.",
       support: "Built from your own posts and Stories, Jan 1 to Nov 15.",
     },
   },
@@ -36,8 +37,9 @@ const mayaPayloads = [
     topMonthStories: 61,
     montageSeconds: 15,
     copy: {
+      headline: "YOU HAD QUITE\nA YEAR.",
       support: "August was your busiest month: 9 posts, 61 Stories.",
-      playLabel: "PLAY YOUR YEAR \u00b7 0:15",
+      playLabel: "PLAY YOUR\nYEAR \u00b7 0:15",
       hubHighlight: "11 months",
       hubDetail: "Play the 15-second recap",
     },
@@ -52,7 +54,10 @@ const mayaPayloads = [
       { hex: "#E9E1D3", pct: 15 },
       { hex: "#4E6B4A", pct: 11 },
     ],
-    copy: { footnote: "% = main color in each of 1,840 liked posts" },
+    copy: {
+      headline: "YOUR FEED\nHAD A COLOR.",
+      footnote: "% = main color in each of 1,840 liked posts",
+    },
   },
   {
     topics: [
@@ -60,7 +65,10 @@ const mayaPayloads = [
       { name: "Film cameras" },
       { name: "Ceramic frogs", isUndercut: true, watched: 63 },
     ],
-    copy: { undercut: "63 watched. No judgment." },
+    copy: {
+      headline: "YOUR ALGORITHM\nTHINKS YOU'RE\nINTO...",
+      undercut: "63 watched. No judgment.",
+    },
   },
   {
     categories: [
@@ -73,6 +81,7 @@ const mayaPayloads = [
     fastestRising: { name: "Ceramics", multiple: 4, since: "June" },
     reelsSent: 1206,
     copy: {
+      headline: "DOWN THE\nRABBIT HOLE.",
       fastestRising: "Ceramics, 4x since June",
       sent: "And you sent 1,206 of them to friends.",
       hubDetail: "4x since June",
@@ -86,6 +95,7 @@ const mayaPayloads = [
     vsAverage: 3,
     postedAt: "2026-07-19",
     copy: {
+      headline: "MAIN CHARACTER\nPOST",
       comments: "418 comments. Unhinged ones.",
       average: "That's 3x your average post.",
       posted: "Measured \u00b7 posted Jul 19",
@@ -100,23 +110,39 @@ const mayaPayloads = [
     replies: 47,
     windowHours: 24,
     postedAt: "2026-03-14",
-    copy: { storyChip: "Story \u00b7 Mar 14" },
+    copy: {
+      headline: "THE STORY THAT\nBROKE THE\nGROUP CHAT.",
+      storyChip: "Story \u00b7 Mar 14",
+    },
   },
-  { handles: ["dee.films", "jules.mp", "nico_k", "sam.wav", "tori.eats"] },
+  {
+    handles: ["dee.films", "jules.mp", "nico_k", "sam.wav", "tori.eats"],
+    copy: {
+      headline: "YOUR CIRCLE.",
+      note: "The five accounts you showed up for most. No ranking, no scores.",
+      privacy: "Want the ranked version? It lives in Privacy, off by default.",
+    },
+  },
   {
     latestLocalTime: "03:42",
     weekday: "Tuesday",
     month: "May",
-    copy: { headline: "Welcome to the 3AM club.", time: "3:42 AM" },
+    copy: {
+      headline: "WELCOME TO\nTHE 3AM CLUB.",
+      time: "3:42 AM",
+      note: "A Tuesday in May. We hope it was worth it.",
+    },
   },
   {
     sentence: "In June you fell into ceramics and never climbed out.",
     category: "Ceramics",
     monthly: [3, 2, 4, 3, 5, 22, 41, 58, 64, 71, 80],
     turnMonth: 6,
+    copy: { headline: "PLOT\nTWIST." },
   },
   {
     copy: {
+      headline: "THREE CLUES. ONE\nPERSONALITY.",
       clues: [
         "You saved 1,214 posts",
         "You posted 38 times all year",
@@ -134,7 +160,12 @@ const mayaPayloads = [
       ["38", "posts all year"],
       ["96%", `of ${friends} Stories watched`],
     ],
-    copy: { primaryMatch: "70% Curator match", secondaryMatch: "30% Ghost match" },
+    copy: {
+      name: "THE\nCURATOR",
+      side: "with a side of The Ghost",
+      primaryMatch: "70% Curator match",
+      secondaryMatch: "30% Ghost match",
+    },
   },
   {
     identity: { archetype: "curator", stat: ["1,214", "posts saved"] },
@@ -143,7 +174,7 @@ const mayaPayloads = [
       stats: [["412", "Stories"], ["38", "Posts"], ["1,206", "Reels sent"], ["1,214", "Saves"]],
       topInterest: "Streetwear",
     },
-    copy: { identityYear: "MY 2026", numbersTitle: "2026 in numbers" },
+    copy: { identityYear: "MY 2026", numbersTitle: "2026 IN NUMBERS" },
   },
 ];
 
@@ -155,6 +186,22 @@ async function load(key: string) {
 function profileOf(persona: { profile: { handle: string; is_teen: boolean } }) {
   return { handle: persona.profile.handle, is_teen: persona.profile.is_teen };
 }
+
+Deno.test("exported bundles match buildRunBundle", async () => {
+  const maya = await load("maya");
+  const jobs: [string, Awaited<ReturnType<typeof load>>, { handle: string; is_teen: boolean }][] = [
+    ["maya", maya, { handle: maya.profile.handle, is_teen: false }],
+    ["maya-teen", maya, { handle: maya.profile.handle, is_teen: true }],
+  ];
+  for (const key of ["ghost", "emerging", "established"]) {
+    const persona = await load(key);
+    jobs.push([key, persona, { handle: persona.profile.handle, is_teen: persona.profile.is_teen }]);
+  }
+  for (const [name, persona, profile] of jobs) {
+    const file = await Deno.readTextFile(new URL(`../../../../ios/IGWrapped/Resources/Runs/${name}.json`, import.meta.url));
+    if (file !== bundleText(persona, profile)) throw new Error(`${name}.json drifted from buildRunBundle`);
+  }
+});
 
 Deno.test("maya payloads match SCHEMA section 5", async () => {
   const maya = await load("maya");

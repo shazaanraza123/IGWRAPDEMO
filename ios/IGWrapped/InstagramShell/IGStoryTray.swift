@@ -26,7 +26,7 @@ struct IGStoryTray: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(alignment: .top, spacing: IGSpace.storyGap) {
                 storyBubble(title: "Your story", ring: .seen) {
-                    PersonAvatar(handle: MayaOpening.handle, photo: PersonAvatar.photoName(for: MayaOpening.handle))
+                    PersonAvatar(handle: "maya.lens", photo: PersonAvatar.photoName(for: "maya.lens"))
                 } badge: {
                     Circle()
                         .fill(WrappedColor.igWhite)

@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct AlgorithmCard: View {
+    var card: RunCard
     var onShare: () -> Void
     var onSaved: () -> Void
 
@@ -42,7 +43,7 @@ struct AlgorithmCard: View {
                 color: WrappedColor.igYellow
             )
             DisplayHeadline(
-                copy: MayaAlgorithm.headline,
+                copy: card.headline,
                 size: CardSpace.algorithmHeadline,
                 lineHeight: CardSpace.algorithmHeadlineLine,
                 tracking: CardSpace.algorithmHeadlineTracking,
@@ -61,7 +62,7 @@ struct AlgorithmCard: View {
                         )
                     }
                 CardText(
-                    text: MayaAlgorithm.note,
+                    text: "Your taps tune Explore. Undo in Settings.",
                     size: WrappedTextStyle.caption.size,
                     weight: WrappedTextStyle.caption.weight,
                     width: WrappedTextStyle.caption.width,
@@ -75,18 +76,22 @@ struct AlgorithmCard: View {
 
     private var topics: some View {
         VStack(alignment: .leading, spacing: CardSpace.topicGap) {
-            ForEach(Array(MayaAlgorithm.topics.enumerated()), id: \.element.id) { offset, topic in
+            ForEach(Array((card.payload.topics ?? []).enumerated()), id: \.element.id) { offset, topic in
                 topicRow(topic, offset: offset)
             }
         }
         .padding(.horizontal, WrappedSpace.gutter)
     }
 
-    private func topicRow(_ topic: MayaTopic, offset: Int) -> some View {
+    private func topicTitle(_ topic: TopicSlot) -> String {
+        topic.isUndercut == true ? "...\(topic.name.lowercased())?" : topic.name
+    }
+
+    private func topicRow(_ topic: TopicSlot, offset: Int) -> some View {
         VStack(alignment: .leading, spacing: CardSpace.topicRowGap) {
             HStack(alignment: .firstTextBaseline, spacing: CardSpace.topicRowGap) {
                 CardText(
-                    text: topic.index,
+                    text: String(format: "%02d", offset + 1),
                     size: CardSpace.topicIndex,
                     weight: CardSpace.strong,
                     width: CardSpace.regular,
@@ -94,11 +99,11 @@ struct AlgorithmCard: View {
                 )
                 .allowsHitTesting(false)
                 CardText(
-                    text: topic.title,
+                    text: topicTitle(topic),
                     size: CardSpace.topicName,
                     width: CardSpace.titleWidth,
                     lineHeight: 1,
-                    color: topic.undercut ? WrappedColor.igYellow : WrappedColor.igWhite,
+                    color: topic.isUndercut == true ? WrappedColor.igYellow : WrappedColor.igWhite,
                     uppercase: true
                 )
                 .allowsHitTesting(false)
@@ -106,10 +111,10 @@ struct AlgorithmCard: View {
                 .minimumScaleFactor(0.7)
             }
             HStack(spacing: CardSpace.chipGap) {
-                if topic.undercut {
+                if topic.isUndercut == true {
                     choice("Guilty", kind: FeedbackKind.guilty, topic: topic, identifier: "feedback-guilty-\(offset)")
                     CardText(
-                        text: MayaAlgorithm.undercut,
+                        text: card.payload.copy?.undercut ?? "",
                         size: CardSpace.undercutSize,
                         weight: WrappedTextStyle.body.weight,
                         width: WrappedTextStyle.body.width,
@@ -125,7 +130,7 @@ struct AlgorithmCard: View {
         }
     }
 
-    private func choice(_ title: String, kind: String, topic: MayaTopic, identifier: String) -> some View {
+    private func choice(_ title: String, kind: String, topic: TopicSlot, identifier: String) -> some View {
         let selected = feedback.selection(for: topic.name) == kind
         return Button {
             Task {

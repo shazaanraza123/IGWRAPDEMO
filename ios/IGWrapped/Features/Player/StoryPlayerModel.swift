@@ -87,11 +87,13 @@ struct StoryPlayerModel {
     var infoOpen = false
     var autoplay = true
     var coverOpen = false
-    /// Cards a teen run does not include. Empty for Maya's full deck.
+    /// Cards a teen run does not include. Empty for the full deck.
     var omitted: Set<Int> = []
+    /// Catalog numbers this deck plays, in order. Defaults to 1...13.
+    var included: [Int] = Array(1 ... cardCount)
 
     var sequence: [Int] {
-        (1 ... Self.cardCount).filter { !omitted.contains($0) }
+        included.filter { !omitted.contains($0) }
     }
 
     var sequenceIndex: Int {

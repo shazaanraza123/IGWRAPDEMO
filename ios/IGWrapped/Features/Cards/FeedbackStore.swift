@@ -40,7 +40,7 @@ final class FeedbackStore {
     }
 
     func loadRemote() async {
-        guard let client = SessionStore.shared.client else { return }
+        guard Backend.active, let client = SessionStore.shared.client else { return }
         do {
             let rows: [FeedbackRead] = try await client
                 .from("card_feedback")
@@ -61,7 +61,9 @@ final class FeedbackStore {
     }
 
     private func write(target: String, kind: String) async -> Bool {
-        guard let client = SessionStore.shared.client else { return false }
+        guard Backend.active, let client = SessionStore.shared.client else {
+            return appendLocal(target: target, kind: kind)
+        }
         do {
             let session = try await client.auth.session
             let cards: [CardRef] = try await client
@@ -74,6 +76,39 @@ final class FeedbackStore {
             guard let card = cards.first else { return false }
             let row = FeedbackInsert(cardId: card.id, userId: session.user.id, kind: kind, target: target)
             try await client.from("card_feedback").insert(row).execute()
+            return true
+        } catch {
+            return false
+        }
+    }
+}
+
+enum FeedbackKind {
+    static let moreOfThis = "more_of_this"
+    static let notMe = "not_me"
+    static let guilty = "guilty"
+}
+
+private struct LocalFeedback: Codable {
+    var target: String
+    var kind: String
+    var createdAt: String
+}
+
+extension FeedbackStore {
+    fileprivate func appendLocal(target: String, kind: String) -> Bool {
+        let base = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
+        guard let folder = base?.appendingPathComponent("IGWrapped", isDirectory: true) else { return false }
+        let file = folder.appendingPathComponent("card-feedback.json")
+        do {
+            try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+            var rows: [LocalFeedback] = []
+            if let data = try? Data(contentsOf: file) {
+                rows = (try? JSONDecoder().decode([LocalFeedback].self, from: data)) ?? []
+            }
+            let stamp = ISO8601DateFormatter().string(from: Date())
+            rows.append(LocalFeedback(target: target, kind: kind, createdAt: stamp))
+            try JSONEncoder().encode(rows).write(to: file, options: .atomic)
             return true
         } catch {
             return false

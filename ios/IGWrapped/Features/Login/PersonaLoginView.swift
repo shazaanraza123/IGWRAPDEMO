@@ -73,6 +73,18 @@ private final class LoginModel {
         if ProcessInfo.processInfo.arguments.contains("--reset-session") {
             await SessionStore.shared.signOut()
         }
+        if !Backend.active {
+            guard let key = LocalPersona.current,
+                  let bundle = try? await BundledRunRepository().load(persona: key) else { return }
+            let persona = DemoPersona.all.first { $0.key == key }
+            ready = ReadySession(
+                name: persona?.name ?? key,
+                handle: persona?.handle ?? key,
+                cards: bundle.cards.count,
+                tier: bundle.run.tier
+            )
+            return
+        }
         guard await SessionStore.shared.hasSession(), let client = SessionStore.shared.client else { return }
         do {
             let profiles: [ProfileSnapshot] = try await client.from("profiles").select("display_name,handle").execute().value
@@ -86,7 +98,21 @@ private final class LoginModel {
     }
 
     func claim(_ persona: DemoPersona) async {
-        guard !isWorking, let client = SessionStore.shared.client else {
+        guard !isWorking else { return }
+        if !Backend.active {
+            isWorking = true
+            message = nil
+            defer { isWorking = false }
+            do {
+                let bundle = try await BundledRunRepository().load(persona: persona.key)
+                LocalPersona.save(persona.key)
+                ready = ReadySession(name: persona.name, handle: persona.handle, cards: bundle.cards.count, tier: bundle.run.tier)
+            } catch {
+                message = "No sample run for this account."
+            }
+            return
+        }
+        guard let client = SessionStore.shared.client else {
             message = "Sample login needs the local Supabase URL."
             return
         }
@@ -101,6 +127,7 @@ private final class LoginModel {
                 "claim-persona",
                 options: FunctionInvokeOptions(body: ClaimBody(personaKey: persona.key))
             )
+            LocalPersona.save(persona.key)
             ready = ReadySession(name: result.displayName, handle: result.handle, cards: result.cards, tier: result.tier)
         } catch {
             message = error.localizedDescription
