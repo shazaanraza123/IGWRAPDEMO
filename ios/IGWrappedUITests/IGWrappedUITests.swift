@@ -254,6 +254,23 @@ final class IGWrappedUITests: XCTestCase {
         XCTAssertEqual(XCTWaiter().wait(for: [gone], timeout: 3), .completed)
     }
 
+    func testHubLinkClearsTheHomeIndicator() {
+        let app = XCUIApplication()
+        app.launchArguments = ["--player", "--player-card", "13", "--player-paused"]
+        app.launch()
+        let hub = app.buttons["go-to-hub"]
+        XCTAssertTrue(hub.waitForExistence(timeout: 5))
+        XCTAssertTrue(hub.isHittable)
+        XCTAssertGreaterThanOrEqual(hub.frame.height, 44)
+        let screen = app.windows.firstMatch.frame
+        let clearance: CGFloat = screen.height >= 800 ? 46 : 12
+        XCTAssertLessThanOrEqual(
+            hub.frame.maxY,
+            screen.maxY - clearance + 1,
+            "hub \(hub.frame) screen \(screen)"
+        )
+    }
+
     func testProgressBarsShareTheSameTopOnCardsOneTwelveAndThirteen() {
         var tops: [CGFloat] = []
         for card in [1, 12, 13] {

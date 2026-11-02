@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 struct MayaBar: Equatable {
     var label: String
@@ -404,6 +405,8 @@ struct ShareCardsCard: View {
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var face: Int
+    @State private var safeBottom: CGFloat = 0
+    @State private var dockReserve: CGFloat = CardSpace.shareDock
 
     init(onShare: @escaping () -> Void, onHub: @escaping () -> Void, startsOnNumbers: Bool = false) {
         self.onShare = onShare
@@ -413,43 +416,67 @@ struct ShareCardsCard: View {
     }
 
     var body: some View {
-        ZStack(alignment: .top) {
-            shareField
-                .ignoresSafeArea()
-                .allowsHitTesting(false)
-            IdentityFace()
-                .opacity(face == 0 ? 1 : 0)
-                .accessibilityElement(children: .ignore)
-                .accessibilityIdentifier("share-identity")
-                .accessibilityHidden(face != 0)
-                .allowsHitTesting(false)
-            NumbersFace()
-                .opacity(face == 1 ? 1 : 0)
-                .accessibilityElement(children: .ignore)
-                .accessibilityIdentifier("share-numbers")
-                .accessibilityHidden(face != 1)
-                .allowsHitTesting(false)
-            VStack(spacing: CardSpace.dockGap) {
-                Spacer(minLength: 0).allowsHitTesting(false)
-                SegmentedToggle(
-                    options: ["Identity card", "Numbers card"],
-                    selection: $face
-                )
-                SharePill(title: "Share", identifier: "share-card", action: onShare)
-                Button(action: onHub) {
-                    Text(MayaShare.hub)
-                        .font(ArchivoFont.font(size: CardSpace.footerLink, weight: CardSpace.strong, width: CardSpace.regular))
-                        .foregroundStyle(face == 0 ? WrappedColor.igWhite : WrappedColor.ink)
-                        .frame(minHeight: WrappedSpace.minHit)
-                }
-                .buttonStyle(.plain)
-                .accessibilityIdentifier("go-to-hub")
+        GeometryReader { geo in
+            ZStack(alignment: .top) {
+                shareField
+                    .ignoresSafeArea()
+                    .allowsHitTesting(false)
+                IdentityFace(bottomReserve: dockReserve)
+                    .opacity(face == 0 ? 1 : 0)
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityIdentifier("share-identity")
+                    .accessibilityHidden(face != 0)
+                    .allowsHitTesting(false)
+                NumbersFace(bottomReserve: dockReserve)
+                    .opacity(face == 1 ? 1 : 0)
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityIdentifier("share-numbers")
+                    .accessibilityHidden(face != 1)
+                    .allowsHitTesting(false)
             }
-            .padding(.horizontal, WrappedSpace.gutter)
-            .padding(.bottom, CardSpace.chipGap)
+            .frame(width: geo.size.width, height: geo.size.height, alignment: .top)
+            .overlay(alignment: .bottom) { dock }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .onPreferenceChange(ShareDockHeightKey.self) { height in
+            if height > 0, abs(height - dockReserve) > 0.5 {
+                dockReserve = height
+            }
+        }
         .animation(crossfade, value: face)
+    }
+
+    private var dock: some View {
+        VStack(spacing: CardSpace.dockGap) {
+            SegmentedToggle(
+                options: ["Identity card", "Numbers card"],
+                selection: $face
+            )
+            SharePill(title: "Share", identifier: "share-card", action: onShare)
+            Button(action: onHub) {
+                Text(MayaShare.hub)
+                    .font(ArchivoFont.font(size: CardSpace.footerLink, weight: CardSpace.strong, width: CardSpace.regular))
+                    .foregroundStyle(face == 0 ? WrappedColor.igWhite : WrappedColor.ink)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: WrappedSpace.minHit)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("go-to-hub")
+        }
+        .padding(.horizontal, WrappedSpace.gutter)
+        .padding(.bottom, safeBottom + CardSpace.dockBottom)
+        .background {
+            WindowSafeBottom { bottom in
+                if abs(bottom - safeBottom) > 0.5 {
+                    safeBottom = bottom
+                }
+            }
+        }
+        .background {
+            GeometryReader { geo in
+                Color.clear.preference(key: ShareDockHeightKey.self, value: geo.size.height)
+            }
+        }
     }
 
     private var shareField: some View {
@@ -471,6 +498,8 @@ struct ShareCardsCard: View {
 }
 
 private struct IdentityFace: View {
+    var bottomReserve: CGFloat
+
     var body: some View {
         identityStack
     }
@@ -544,11 +573,13 @@ private struct IdentityFace: View {
             cardFooter(markBorder: WrappedColor.igMagenta, word: WrappedColor.igWhite)
         }
         .padding(.horizontal, CardSpace.identityInset)
-        .padding(.bottom, CardSpace.shareDock)
+        .padding(.bottom, bottomReserve)
     }
 }
 
 private struct NumbersFace: View {
+    var bottomReserve: CGFloat
+
     var body: some View {
         numbersStack
     }
@@ -639,7 +670,7 @@ private struct NumbersFace: View {
             Spacer(minLength: 0)
             cardFooter(markBorder: WrappedColor.paper, word: WrappedColor.ink)
                 .padding(.horizontal, CardSpace.identityInset)
-                .padding(.bottom, CardSpace.shareDock)
+                .padding(.bottom, bottomReserve)
         }
     }
 
@@ -700,5 +731,52 @@ private func cardFooter(markBorder: Color, word: Color) -> some View {
             ))
             .tracking(CardSpace.footerLinkTracking)
             .foregroundStyle(word)
+    }
+}
+
+private struct ShareDockHeightKey: PreferenceKey {
+    static let defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = max(value, nextValue())
+    }
+}
+
+/// The shell ignores the safe area, so the dock reads the window inset directly.
+private struct WindowSafeBottom: UIViewRepresentable {
+    var onChange: (CGFloat) -> Void
+
+    func makeUIView(context: Context) -> Probe {
+        let view = Probe()
+        view.onChange = onChange
+        return view
+    }
+
+    func updateUIView(_ uiView: Probe, context: Context) {
+        uiView.onChange = onChange
+        uiView.report()
+    }
+
+    final class Probe: UIView {
+        var onChange: (CGFloat) -> Void = { _ in }
+        private var reported = CGFloat.greatestFiniteMagnitude
+
+        override func didMoveToWindow() {
+            super.didMoveToWindow()
+            report()
+        }
+
+        override func safeAreaInsetsDidChange() {
+            super.safeAreaInsetsDidChange()
+            report()
+        }
+
+        func report() {
+            let bottom = window?.safeAreaInsets.bottom ?? safeAreaInsets.bottom
+            guard abs(bottom - reported) > 0.5 else { return }
+            reported = bottom
+            DispatchQueue.main.async { [onChange] in
+                onChange(bottom)
+            }
+        }
     }
 }

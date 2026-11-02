@@ -374,7 +374,8 @@ enum CardSpace {
     static let plotSentenceWidth: CGFloat = 330
     static let reasonGap: CGFloat = 2
     static let dockGap: CGFloat = 2
-    static let dockBottom: CGFloat = 8
+    /// Space between "Go to your Hub" and the bottom safe area.
+    static let dockBottom: CGFloat = 12
     static let numbersColumn: CGFloat = 18
     static let numbersRingBox: CGFloat = 176
     static let numbersPhotoTop: CGFloat = 76
