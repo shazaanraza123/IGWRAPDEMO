@@ -5,17 +5,34 @@ struct StoryPlayer: View {
     var onExit: () -> Void
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @State private var model = StoryPlayerModel()
+    @State private var model: StoryPlayerModel
     @State private var showsInfo = false
     @State private var isMuted = false
     @State private var dismissDrag: CGFloat = 0
     @State private var chapterDrag: CGFloat = 0
+    @State private var openMonth: MayaMonth?
+    @State private var showsMontage = false
+    @State private var toast: String?
     private let audio = AudioService.shared
 
+    init(onExit: @escaping () -> Void) {
+        self.onExit = onExit
+        var model = StoryPlayerModel()
+        let arguments = ProcessInfo.processInfo.arguments
+        if let flag = arguments.firstIndex(of: "--player-card"),
+           flag + 1 < arguments.count,
+           let number = Int(arguments[flag + 1]),
+           (1 ... StoryPlayerModel.cardCount).contains(number) {
+            model.card = number
+        }
+        if arguments.contains("--player-paused") {
+            model.autoplay = false
+        }
+        _model = State(initialValue: model)
+    }
+
     var body: some View {
-        ZStack {
-            cube
-            chrome
+        ZStack(alignment: .top) {
             PlayerGestureSurface(
                 onTap: { fraction in
                     var step = PlayerAdvance.same
@@ -40,6 +57,31 @@ struct StoryPlayer: View {
                 }
             )
             .accessibilityHidden(true)
+            cube
+            chrome
+            if let openMonth {
+                MonthCover(month: openMonth) {
+                    self.openMonth = nil
+                }
+            }
+            if showsMontage {
+                YearMontage {
+                    showsMontage = false
+                }
+            }
+            if let toast {
+                Text(toast)
+                    .wrappedType(.caption)
+                    .foregroundStyle(WrappedColor.ink)
+                    .padding(.horizontal, WrappedSpace.gutter)
+                    .frame(minHeight: WrappedSpace.minHit)
+                    .background(Capsule().fill(WrappedColor.igWhite))
+                    .frame(maxHeight: .infinity, alignment: .bottom)
+                    .padding(.bottom, WrappedSpace.pillBottomInset + WrappedSpace.pillHeight)
+                    .allowsHitTesting(false)
+                    .accessibilityIdentifier("player-toast")
+            }
+            referenceOverlay
         }
         .scaleEffect(dismissScale, anchor: .center)
         .offset(y: dismissDrag)
@@ -64,6 +106,13 @@ struct StoryPlayer: View {
                 audio.resume()
             }
         }
+        .onChange(of: openMonth) { _, _ in
+            syncCover()
+        }
+        .onChange(of: showsMontage) { _, playing in
+            syncCover()
+            audio.setDucked(playing)
+        }
         .task { await runClock() }
         .sheet(isPresented: $showsInfo) {
             CardInfoSheet()
@@ -87,22 +136,81 @@ struct StoryPlayer: View {
     }
 
     private func face(_ card: Int, angle: Double, labeled: Bool = false) -> some View {
-        Chapter.containing(card).field
-            .ignoresSafeArea()
-            .rotation3DEffect(
-                .degrees(reduceMotion ? 0 : angle),
-                axis: (x: 0, y: 1, z: 0),
-                perspective: WrappedMotion.cubePerspective
+        ZStack {
+            cardFill(card)
+                .ignoresSafeArea()
+                .allowsHitTesting(false)
+                .modifier(PlayerCardAccess(
+                    labeled: labeled,
+                    label: "Card \(model.card) of \(StoryPlayerModel.cardCount)",
+                    onNext: { step(model.goForward()) },
+                    onPrevious: { step(model.goBack()) },
+                    onMagicTap: { model.isHolding.toggle() },
+                    onEscape: exit
+                ))
+            cardContent(card)
+        }
+        .modifier(CubeFace(angle: reduceMotion ? 0 : angle))
+    }
+
+    private func cardFill(_ card: Int) -> Color {
+        switch card {
+        case 1: WrappedColor.igPink
+        case 2: WrappedColor.ink
+        case 3: WrappedColor.paper
+        case 4: WrappedColor.igViolet
+        default: Chapter.containing(card).field
+        }
+    }
+
+    @ViewBuilder
+    private func cardContent(_ card: Int) -> some View {
+        switch card {
+        case 1:
+            OpeningCard {
+                withAnimation(cardAnimation) { step(model.goForward()) }
+            }
+        case 2:
+            YearMemoriesCard(
+                onMonth: { openMonth = $0 },
+                onPlay: { showsMontage = true }
             )
+        case 3:
+            FeedColorCard(onShare: { showToast("Not part of this demo") })
+        case 4:
+            AlgorithmCard(
+                onShare: { showToast("Not part of this demo") },
+                onSaved: { showToast("Got it. We'll tune Explore.") }
+            )
+        default:
+            EmptyView()
+        }
+    }
+
+    @ViewBuilder
+    private var referenceOverlay: some View {
+        if let name = referenceName, let image = UIImage(named: name) {
+            GeometryReader { geo in
+                Image(uiImage: image)
+                    .resizable()
+                    .frame(width: geo.size.width, height: geo.size.height)
+                    .opacity(0.5)
+            }
+            .ignoresSafeArea()
             .allowsHitTesting(false)
-            .modifier(PlayerCardAccess(
-                labeled: labeled,
-                label: "Card \(model.card) of \(StoryPlayerModel.cardCount)",
-                onNext: { step(model.goForward()) },
-                onPrevious: { step(model.goBack()) },
-                onMagicTap: { model.isHolding.toggle() },
-                onEscape: exit
-            ))
+            .accessibilityHidden(true)
+        }
+    }
+
+    private var referenceName: String? {
+        guard ProcessInfo.processInfo.arguments.contains("--reference") else { return nil }
+        switch model.card {
+        case 1: return "01-opening"
+        case 2: return "02-year-in-memories"
+        case 3: return "03-feed-color"
+        case 4: return "04-your-algorithm"
+        default: return nil
+        }
     }
 
     private func step(_ advance: PlayerAdvance) {
@@ -112,24 +220,30 @@ struct StoryPlayer: View {
     }
 
     private var chrome: some View {
-        VStack(spacing: WrappedSpace.topRowMinY - WrappedSpace.progressTop - WrappedSpace.progressThickness) {
+        let style = CardChrome.forCard(model.card)
+        return VStack(spacing: CardSpace.chromeGap) {
             StoryProgressBars(
                 count: StoryPlayerModel.cardCount,
                 current: model.card - 1,
-                progress: model.fraction
+                progress: model.fraction,
+                foreground: style.foreground,
+                trackOpacity: style.trackOpacity
             )
             .accessibilityHidden(true)
             WrappedTopRow(
                 showsInfo: model.showsInfoButton,
                 isMuted: isMuted,
+                foreground: style.foreground,
+                mark: style.mark,
+                innerBorder: style.innerBorder,
                 onInfo: { showsInfo = true },
                 onMute: toggleMute,
                 onClose: exit
             )
         }
         .padding(.top, WrappedSpace.progressTop)
-        .padding(.horizontal, WrappedSpace.gutter)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .padding(.leading, CardSpace.chromeLeading)
+        .padding(.trailing, CardSpace.chromeTrailing)
         .opacity(model.isHolding ? 0 : 1)
         .accessibilityHidden(model.isHolding)
         .allowsHitTesting(!model.isHolding)
@@ -224,7 +338,22 @@ struct StoryPlayer: View {
         audio.setMuted(isMuted)
     }
 
+    private func syncCover() {
+        model.coverOpen = openMonth != nil || showsMontage
+    }
+
+    private func showToast(_ message: String) {
+        toast = message
+        Task {
+            try? await Task.sleep(for: .seconds(2))
+            if toast == message {
+                toast = nil
+            }
+        }
+    }
+
     private func exit() {
+        audio.setDucked(false)
         audio.stop()
         PlayerProgressStore.save(PlayerProgress(card: model.card, elapsed: model.elapsed))
         onExit()
@@ -346,6 +475,23 @@ private struct PlayerGestureSurface: UIViewRepresentable {
             } else if gesture.state == .ended || gesture.state == .cancelled {
                 onPanEnded(translation.x, translation.y, velocity.x, velocity.y)
             }
+        }
+    }
+}
+
+private struct CubeFace: ViewModifier {
+    var angle: Double
+
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        if abs(angle) < 0.5 {
+            content
+        } else {
+            content.rotation3DEffect(
+                .degrees(angle),
+                axis: (x: 0, y: 1, z: 0),
+                perspective: WrappedMotion.cubePerspective
+            )
         }
     }
 }

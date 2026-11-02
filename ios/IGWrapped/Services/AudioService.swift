@@ -7,6 +7,7 @@ final class AudioService {
 
     private(set) var chapter: Chapter?
     private(set) var isMuted = false
+    private(set) var isDucked = false
     private(set) var sessionCategory: AVAudioSession.Category = .ambient
 
     private var players: [Chapter: AVAudioPlayer] = [:]
@@ -51,12 +52,18 @@ final class AudioService {
     func setMuted(_ muted: Bool) {
         isMuted = muted
         guard let chapter, let player = players[chapter] else { return }
-        player.volume = muted ? 0 : 1
+        player.volume = muted ? 0 : audibleVolume
         if muted {
             player.pause()
         } else if !player.isPlaying {
             player.play()
         }
+    }
+
+    func setDucked(_ ducked: Bool) {
+        isDucked = ducked
+        guard !isMuted, let chapter, let player = players[chapter] else { return }
+        player.volume = audibleVolume
     }
 
     func stop() {
@@ -71,6 +78,10 @@ final class AudioService {
 
     func isPlaying(_ chapter: Chapter) -> Bool {
         players[chapter]?.isPlaying ?? false
+    }
+
+    private var audibleVolume: Float {
+        isDucked ? WrappedMotion.duckedVolume : 1
     }
 
     private func activateSession() {
@@ -120,12 +131,12 @@ final class AudioService {
                 try? await Task.sleep(for: .seconds(step))
                 if Task.isCancelled { return }
                 let amount = Float(index) / Float(steps)
-                incoming.volume = isMuted ? 0 : amount
-                outgoing?.volume = isMuted ? 0 : (1 - amount)
+                incoming.volume = isMuted ? 0 : amount * audibleVolume
+                outgoing?.volume = isMuted ? 0 : (1 - amount) * audibleVolume
             }
             outgoing?.stop()
             if !isMuted {
-                incoming.volume = 1
+                incoming.volume = audibleVolume
             }
         }
     }

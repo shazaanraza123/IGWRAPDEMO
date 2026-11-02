@@ -76,6 +76,9 @@ import Testing
     model.autoplay = false
     #expect(model.tick(delta: 8) == .same)
     model.autoplay = true
+    model.coverOpen = true
+    #expect(model.tick(delta: 8) == .same)
+    model.coverOpen = false
     #expect(model.tick(delta: 6) == .moved)
     #expect(model.card == 2)
     #expect(model.elapsed == 0)
@@ -122,6 +125,10 @@ import Testing
     #expect(service.volume(for: .interests) > 0.9)
     #expect(service.isPlaying(.memories) == false)
 
+    service.setDucked(true)
+    #expect(service.volume(for: .interests) < 0.5)
+    service.setDucked(false)
+    #expect(service.volume(for: .interests) > 0.9)
     service.setMuted(true)
     #expect(service.isPlaying(.interests) == false)
     service.stop()

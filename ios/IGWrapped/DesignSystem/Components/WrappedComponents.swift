@@ -20,15 +20,17 @@ struct StoryProgressBars: View {
     var count: Int = 13
     var current: Int = 0
     var progress: CGFloat = 0.45
+    var foreground: Color = .white
+    var trackOpacity: Double = 0.3
 
     var body: some View {
         HStack(spacing: WrappedSpace.progressGap) {
             ForEach(0 ..< count, id: \.self) { index in
                 GeometryReader { proxy in
                     Capsule()
-                        .fill(Color.white.opacity(0.35))
+                        .fill(foreground.opacity(trackOpacity))
                     Capsule()
-                        .fill(Color.white)
+                        .fill(foreground)
                         .frame(width: fillWidth(index: index, total: proxy.size.width))
                 }
                 .frame(height: WrappedSpace.progressThickness)
@@ -48,23 +50,21 @@ struct StoryProgressBars: View {
 struct WrappedTopRow: View {
     var showsInfo: Bool = true
     var isMuted: Bool = false
+    var foreground: Color = .white
+    var mark: WrappedMark = .gradient
+    var innerBorder: Color = WrappedColor.ink
     var onInfo: () -> Void = {}
     var onMute: () -> Void = {}
     var onClose: () -> Void = {}
 
     var body: some View {
-        HStack(spacing: 8) {
-            ZStack {
-                Circle().stroke(WrappedColor.storyRing, lineWidth: 2)
-                Text("26")
-                    .wrappedType(.caption)
-                    .foregroundStyle(.white)
-            }
-            .frame(width: WrappedSpace.wrappedMark, height: WrappedSpace.wrappedMark)
-            .accessibilityHidden(true)
+        HStack(spacing: CardSpace.chipGap) {
+            markView
+                .frame(width: WrappedSpace.wrappedMark, height: WrappedSpace.wrappedMark)
+                .accessibilityHidden(true)
             Text("Wrapped")
-                .wrappedType(.caption)
-                .foregroundStyle(.white)
+                .font(ArchivoFont.font(size: CardSpace.markWord, weight: CardSpace.strong, width: CardSpace.regular))
+                .foregroundStyle(foreground)
             Spacer()
             if showsInfo {
                 topButton("Info", systemImage: "info.circle", identifier: "player-info", action: onInfo)
@@ -79,6 +79,37 @@ struct WrappedTopRow: View {
         }
     }
 
+    @ViewBuilder
+    private var markView: some View {
+        switch mark {
+        case .gradient:
+            ZStack {
+                Circle().stroke(WrappedColor.storyRing, lineWidth: CardSpace.ringWidth)
+                Circle().stroke(innerBorder, lineWidth: CardSpace.ringWidth).padding(CardSpace.ringWidth)
+                Text("26")
+                    .font(ArchivoFont.font(size: CardSpace.markDigits, weight: CardSpace.heavy, width: CardSpace.regular))
+                    .foregroundStyle(WrappedColor.igWhite)
+            }
+        case .ink:
+            ZStack {
+                Circle().fill(WrappedColor.ink)
+                Circle().strokeBorder(WrappedColor.igPink, lineWidth: CardSpace.ringWidth)
+                Text("26")
+                    .font(ArchivoFont.font(size: CardSpace.markDigits, weight: CardSpace.heavy, width: CardSpace.regular))
+                    .foregroundStyle(WrappedColor.igWhite)
+            }
+        case .white:
+            ZStack {
+                Circle().fill(WrappedColor.igWhite)
+                Circle().fill(WrappedColor.ink).padding(CardSpace.ringWidth)
+                Circle().stroke(WrappedColor.igViolet, lineWidth: CardSpace.ringWidth).padding(CardSpace.ringWidth)
+                Text("26")
+                    .font(ArchivoFont.font(size: CardSpace.markDigits, weight: CardSpace.heavy, width: CardSpace.regular))
+                    .foregroundStyle(WrappedColor.igWhite)
+            }
+        }
+    }
+
     private func topButton(
         _ label: String,
         systemImage: String,
@@ -87,8 +118,8 @@ struct WrappedTopRow: View {
     ) -> some View {
         Button(action: action) {
             Image(systemName: systemImage)
-                .font(.system(size: 16, weight: .semibold))
-                .foregroundStyle(.white)
+                .font(.system(size: CardSpace.chromeIcon, weight: .semibold))
+                .foregroundStyle(foreground)
                 .frame(width: WrappedSpace.minHit, height: WrappedSpace.minHit)
                 .contentShape(Rectangle())
         }
@@ -408,22 +439,30 @@ struct MatchBar: View {
 
 struct SharePill: View {
     var title: String = "Share"
+    var inverted: Bool = false
+    var identifier: String = "card-share"
     var action: () -> Void = {}
+
+    private var ink: Color { inverted ? WrappedColor.ink : WrappedColor.igWhite }
+    private var fill: Color { inverted ? WrappedColor.igWhite : WrappedColor.ink }
 
     var body: some View {
         Button(action: action) {
-            HStack(spacing: 8) {
+            HStack(spacing: CardSpace.chipGap) {
                 Image(systemName: "paperplane.fill")
-                Text(title).wrappedType(.body)
+                Text(title)
+                    .font(ArchivoFont.font(size: CardSpace.shareSize, weight: CardSpace.strong, width: CardSpace.regular))
             }
-            .foregroundStyle(.white)
-            .padding(.horizontal, 22)
+            .foregroundStyle(ink)
+            .padding(.leading, CardSpace.chipTextPad + CardSpace.chipPadV)
+            .padding(.trailing, WrappedSpace.gutter)
             .frame(height: WrappedSpace.pillHeight)
-            .background(Capsule().fill(WrappedColor.ink))
+            .background(Capsule().fill(fill))
             .contentShape(Capsule())
         }
         .buttonStyle(.plain)
         .accessibilityLabel(title)
+        .accessibilityIdentifier(identifier)
     }
 }
 

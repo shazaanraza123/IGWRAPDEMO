@@ -19,6 +19,18 @@ enum WrappedColor {
     static let sheet = Color(hex: 0x121214)
     /// Ghost mark field. Distinct from `ink`.
     static let ghostInk = Color(hex: 0x26262B)
+    /// Secondary line on the year card, from `P02-Memories.dc.html`.
+    static let onInkSecondary = Color(hex: 0xD4D4D8)
+    /// Feed-color eyebrow, from `P08-Palette.dc.html`.
+    static let paletteEyebrow = Color(hex: 0x6B21A8)
+    static let algorithmTileA = Color(hex: 0x8F5BFF)
+    static let algorithmTileB = Color(hex: 0x5A1FD6)
+    static let algorithmTileC = Color(hex: 0xA77CFF)
+    static let paletteMidnight = Color(hex: 0x1F2A44)
+    static let paletteCamel = Color(hex: 0xC8A27C)
+    static let paletteWine = Color(hex: 0x8B3A3A)
+    static let paletteCream = Color(hex: 0xE9E1D3)
+    static let paletteOlive = Color(hex: 0x4E6B4A)
     /// Instagram shell, measured from `design/reference/instagram/01-home.png`.
     static let igBackground = Color(hex: 0x000000)
     static let igWhite = Color(hex: 0xFFFFFF)
@@ -142,6 +154,208 @@ enum WrappedMotion {
     static let longCardNumbers: Set<Int> = [2, 10, 12]
     static let cubePerspective: CGFloat = 0.6
     static let clockTick: TimeInterval = 1.0 / 30.0
+    /// Music level while a year montage is playing.
+    static let duckedVolume: Float = 0.25
+}
+
+/// Positions from the card HTML. 1 CSS px = 1 pt.
+enum CardSpace {
+    static let chromeLeading: CGFloat = 12
+    static let chromeTrailing: CGFloat = 10
+    static let chromeGap: CGFloat = 10
+    static let chromeIcon: CGFloat = 22
+    static let heavy: CGFloat = 900
+    static let strong: CGFloat = 800
+    static let medium: CGFloat = 700
+    static let support: CGFloat = 500
+    static let condensed: CGFloat = 62
+    static let regular: CGFloat = 100
+    static let titleWidth: CGFloat = 70
+    static let markDigits: CGFloat = 11
+    static let markWord: CGFloat = 14
+    static let kicker: CGFloat = 10
+    static let kickerTracking: CGFloat = 1
+    static let openingGridTop: CGFloat = 132
+    static let openingBadgeLeft: CGFloat = 133
+    static let openingBadgeTop: CGFloat = 125
+    static let openingBadge: CGFloat = 124
+    static let openingBadgeBorder: CGFloat = 5
+    static let openingBadgePad: CGFloat = 10
+    static let openingYearSize: CGFloat = 64
+    static let openingYearTracking: CGFloat = -2
+    static let openingYearLine: CGFloat = 0.8
+    static let openingCopyTop: CGFloat = 392
+    static let openingCopyGap: CGFloat = 14
+    static let openingHandleSize: CGFloat = 20
+    static let openingHeadline: CGFloat = 72
+    static let openingHeadlineTracking: CGFloat = -1.5
+    static let openingHeadlineLine: CGFloat = 0.86
+    static let openingSupport: CGFloat = 16
+    static let openingSupportLine: CGFloat = 1.35
+    static let openingSupportWidth: CGFloat = 270
+    static let openingHintBottom: CGFloat = 40
+    static let openingHint: CGFloat = 15
+    static let hintIcon: CGFloat = 18
+    static let hintPulse: CGFloat = 1.06
+    static let openingOuterRadius: CGFloat = 146
+    static let openingMidRadius: CGFloat = 106
+    static let openingInnerRadius: CGFloat = 86
+    static let openingOuterStroke: CGFloat = 30
+    static let openingMidStroke: CGFloat = 3
+    static let openingInnerStroke: CGFloat = 12
+    static let openingDash: CGFloat = 34
+    static let openingDashGap: CGFloat = 11
+    static let openingRingCenterX: CGFloat = 345
+    static let openingRingCenterY: CGFloat = 829
+    static let yearCopyTop: CGFloat = 128
+    static let yearCopyGap: CGFloat = 10
+    static let yearHeadline: CGFloat = 60
+    static let yearHeadlineTracking: CGFloat = -1.2
+    static let yearGridTop: CGFloat = 280
+    static let yearSupportTop: CGFloat = 756
+    static let yearSupportSize: CGFloat = 15
+    static let playLabel: CGFloat = 12
+    static let playIcon: CGFloat = 18
+    static let chipTracking: CGFloat = 0.6
+    static let chipRadius: CGFloat = 4
+    static let chipInset: CGFloat = 6
+    static let chipPadH: CGFloat = 6
+    static let chipPadV: CGFloat = 3
+    static let topMonthRing: CGFloat = 3
+    static let ringWidth: CGFloat = 2
+    static let blockGap: CGFloat = 12
+    static let feedHeadline: CGFloat = 66
+    static let feedHeadlineTracking: CGFloat = -1.5
+    static let feedGridTop: CGFloat = 286
+    static let feedStickerTop: CGFloat = 590
+    static let feedStickerTrailing: CGFloat = 14
+    static let feedSwatchTop: CGFloat = 650
+    static let stickerTilt: Double = -4
+    static let stickerRadius: CGFloat = 12
+    static let stickerPadV: CGFloat = 9
+    static let stickerPadH: CGFloat = 14
+    static let stickerName: CGFloat = 26
+    static let swatchGap: CGFloat = 6
+    static let swatchHeight: CGFloat = 30
+    static let swatchRadius: CGFloat = 6
+    static let swatchShare: CGFloat = 18
+    static let hexSize: CGFloat = 10
+    static let shareSize: CGFloat = 15
+    static let algorithmHeadline: CGFloat = 50
+    static let algorithmHeadlineLine: CGFloat = 0.88
+    static let algorithmHeadlineTracking: CGFloat = -1
+    static let algorithmTopicsTop: CGFloat = 344
+    static let algorithmMosaicTop: CGFloat = 636
+    static let algorithmMosaicHeight: CGFloat = 116
+    static let mosaicRadius: CGFloat = 3
+    static let topicIndex: CGFloat = 13
+    static let topicName: CGFloat = 36
+    static let topicGap: CGFloat = 22
+    static let topicRowGap: CGFloat = 10
+    static let topicButtonInset: CGFloat = 28
+    static let chipHeight: CGFloat = 36
+    static let chipGap: CGFloat = 8
+    static let chipTextPad: CGFloat = 14
+    static let quietStroke: CGFloat = 0.7
+    static let dashedStroke: CGFloat = 1.5
+    static let undercutSize: CGFloat = 14
+    static let mosaicIcon: CGFloat = 30
+    static let mosaicHeart: CGFloat = 18
+    static let hairline: CGFloat = 1
+    static let hairlineOpacity: Double = 0.12
+    static let stickerShadow: Double = 0.3
+}
+
+enum PaletteInk {
+    static let colors: [Color] = [
+        WrappedColor.paletteMidnight,
+        WrappedColor.paletteCamel,
+        WrappedColor.paletteWine,
+        WrappedColor.paletteCream,
+        WrappedColor.paletteOlive
+    ]
+}
+
+enum WrappedMark: Equatable {
+    case gradient
+    case ink
+    case white
+}
+
+struct CardChrome {
+    var foreground: Color
+    var trackOpacity: Double
+    var mark: WrappedMark
+    var innerBorder: Color
+
+    static func forCard(_ card: Int) -> CardChrome {
+        switch card {
+        case 1:
+            return CardChrome(
+                foreground: WrappedColor.ink,
+                trackOpacity: 0.25,
+                mark: .ink,
+                innerBorder: WrappedColor.igPink
+            )
+        case 3:
+            return CardChrome(
+                foreground: WrappedColor.ink,
+                trackOpacity: 0.2,
+                mark: .gradient,
+                innerBorder: WrappedColor.paper
+            )
+        case 4:
+            return CardChrome(
+                foreground: WrappedColor.igWhite,
+                trackOpacity: 0.3,
+                mark: .white,
+                innerBorder: WrappedColor.igViolet
+            )
+        default:
+            return CardChrome(
+                foreground: WrappedColor.igWhite,
+                trackOpacity: 0.3,
+                mark: .gradient,
+                innerBorder: WrappedColor.ink
+            )
+        }
+    }
+}
+
+enum MonthTone {
+    /// Placeholder gradients from the year-card HTML, January through November.
+    static let pairs: [(UInt32, UInt32)] = [
+        (0x5B7FA6, 0x243447), (0xD8C3A5, 0x8A6F52), (0xC0617A, 0x3B1F3F),
+        (0x6B8A6A, 0x2C3B2B), (0xB4835A, 0x5A3A24), (0x8F7AB8, 0x352A4F),
+        (0xE0A96D, 0x7A4A22), (0xD97A8C, 0x5C2A38), (0x7FA3A0, 0x2C4644),
+        (0xC9B38A, 0x6B5A3A), (0x9A6B5B, 0x3D2620)
+    ]
+
+    static func gradient(_ index: Int) -> LinearGradient {
+        let pair = pairs[min(max(index, 0), pairs.count - 1)]
+        return LinearGradient(
+            colors: [Color(hex: pair.0), Color(hex: pair.1)],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+    }
+}
+
+enum FeedMosaic {
+    static let fills: [(UInt32, UInt32)] = [
+        (0x2B3A5E, 0x141C30), (0xD2B08C, 0x9C7A58), (0x2B3A5E, 0x141C30),
+        (0x9E4545, 0x5E2424), (0xEFE7DA, 0xCFC3AF), (0xD2B08C, 0x9C7A58),
+        (0x5E7D59, 0x33472F), (0x2B3A5E, 0x141C30), (0x9E4545, 0x5E2424)
+    ]
+
+    static func gradient(_ index: Int) -> LinearGradient {
+        let pair = fills[index]
+        return LinearGradient(
+            colors: [Color(hex: pair.0), Color(hex: pair.1)],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+    }
 }
 
 private extension Color {

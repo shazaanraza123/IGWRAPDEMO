@@ -44,6 +44,14 @@ targets:
         buildPhase: resources
       - path: ../design/photos/tile-5.jpg
         buildPhase: resources
+      - path: ../design/screens/01-opening.png
+        buildPhase: resources
+      - path: ../design/screens/02-year-in-memories.png
+        buildPhase: resources
+      - path: ../design/screens/03-feed-color.png
+        buildPhase: resources
+      - path: ../design/screens/04-your-algorithm.png
+        buildPhase: resources
     dependencies:
       - package: Supabase
         product: Supabase

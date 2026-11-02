@@ -65,9 +65,9 @@ final class IGWrappedUITests: XCTestCase {
         let player = app.otherElements["story-player"]
         app.coordinate(withNormalizedOffset: CGVector(dx: 0.8, dy: 0.5)).tap()
         XCTAssertTrue(waitForLabel(player, "Card 2 of 13"))
-        app.coordinate(withNormalizedOffset: CGVector(dx: 0.1, dy: 0.5)).tap()
+        app.coordinate(withNormalizedOffset: CGVector(dx: 0.02, dy: 0.5)).tap()
         XCTAssertTrue(waitForLabel(player, "Card 1 of 13"))
-        app.coordinate(withNormalizedOffset: CGVector(dx: 0.1, dy: 0.5)).tap()
+        app.coordinate(withNormalizedOffset: CGVector(dx: 0.02, dy: 0.5)).tap()
         XCTAssertEqual(player.label, "Card 1 of 13")
     }
 
@@ -116,6 +116,54 @@ final class IGWrappedUITests: XCTestCase {
         let app = launchedPlayer()
         let player = app.otherElements["story-player"]
         XCTAssertTrue(waitForLabel(player, "Card 2 of 13", timeout: 9))
+    }
+
+    func testOpeningAdvancesAndYearPlayOpensMontage() {
+        let app = launchedPlayer()
+        app.buttons["opening-start"].tap()
+        XCTAssertTrue(waitForLabel(app.otherElements["story-player"], "Card 2 of 13"))
+        app.buttons["year-month-8"].tap()
+        let viewer = app.buttons["month-viewer"]
+        XCTAssertTrue(viewer.waitForExistence(timeout: 3))
+        viewer.tap()
+        let closed = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "exists == 0"),
+            object: viewer
+        )
+        XCTAssertEqual(XCTWaiter().wait(for: [closed], timeout: 3), .completed)
+        app.buttons["year-play"].tap()
+        XCTAssertTrue(app.otherElements["year-montage"].waitForExistence(timeout: 3))
+    }
+
+    func testAlgorithmFeedbackWritesARow() {
+        let app = XCUIApplication()
+        app.launchArguments = ["--reset-session"]
+        app.launch()
+        let wrapped = app.buttons["wrapped-bubble"]
+        XCTAssertTrue(wrapped.waitForExistence(timeout: 10))
+        wrapped.tap()
+        let maya = app.buttons["persona-maya"]
+        XCTAssertTrue(maya.waitForExistence(timeout: 10))
+        maya.tap()
+        XCTAssertTrue(app.staticTexts["wrapped-ready"].waitForExistence(timeout: 40))
+
+        app.terminate()
+        app.launchArguments = ["--player", "--player-card", "4", "--player-paused"]
+        app.launch()
+        let more = app.buttons["feedback-more-0"]
+        XCTAssertTrue(more.waitForExistence(timeout: 8))
+        more.tap()
+        XCTAssertTrue(app.staticTexts["Got it. We'll tune Explore."].waitForExistence(timeout: 15))
+        XCTAssertTrue(app.otherElements["feedback-written"].waitForExistence(timeout: 3))
+    }
+
+    func testFeedSwatchExpands() {
+        let app = XCUIApplication()
+        app.launchArguments = ["--player", "--player-card", "3", "--player-paused"]
+        app.launch()
+        XCTAssertTrue(app.otherElements["story-player"].waitForExistence(timeout: 5))
+        app.buttons["swatch-0"].tap()
+        XCTAssertTrue(app.descendants(matching: .any)["swatch-detail"].waitForExistence(timeout: 3))
     }
 
     func testPlayerCloseExits() {

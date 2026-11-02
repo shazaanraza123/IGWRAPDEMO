@@ -48,6 +48,7 @@ struct StoryPlayerModel {
     var isHolding = false
     var infoOpen = false
     var autoplay = true
+    var coverOpen = false
 
     var chapter: Chapter { Chapter.containing(card) }
 
@@ -106,7 +107,7 @@ struct StoryPlayerModel {
     }
 
     mutating func tick(delta: TimeInterval) -> PlayerAdvance {
-        guard autoplay, !isHolding, !infoOpen, delta > 0 else { return .same }
+        guard autoplay, !isHolding, !infoOpen, !coverOpen, delta > 0 else { return .same }
         elapsed += delta
         guard elapsed >= duration else { return .same }
         return goForward()
