@@ -12,6 +12,8 @@ struct StoryPlayer: View {
     @State private var chapterDrag: CGFloat = 0
     @State private var openMonth: MayaMonth?
     @State private var showsMontage = false
+    @State private var showsPost = false
+    @State private var showsStory = false
     @State private var toast: String?
     private let audio = AudioService.shared
 
@@ -27,6 +29,9 @@ struct StoryPlayer: View {
         }
         if arguments.contains("--player-paused") {
             model.autoplay = false
+        }
+        if arguments.contains("--teen") {
+            model.omitted = [8, 9]
         }
         _model = State(initialValue: model)
     }
@@ -68,6 +73,12 @@ struct StoryPlayer: View {
                 YearMontage {
                     showsMontage = false
                 }
+            }
+            if showsPost {
+                PostDetailCover { showsPost = false }
+            }
+            if showsStory {
+                StoryReplayCover { showsStory = false }
             }
             if let toast {
                 Text(toast)
@@ -113,6 +124,8 @@ struct StoryPlayer: View {
             syncCover()
             audio.setDucked(playing)
         }
+        .onChange(of: showsPost) { _, _ in syncCover() }
+        .onChange(of: showsStory) { _, _ in syncCover() }
         .task { await runClock() }
         .sheet(isPresented: $showsInfo) {
             CardInfoSheet()
@@ -142,7 +155,7 @@ struct StoryPlayer: View {
                 .allowsHitTesting(false)
                 .modifier(PlayerCardAccess(
                     labeled: labeled,
-                    label: "Card \(model.card) of \(StoryPlayerModel.cardCount)",
+                    label: "Card \(model.sequenceIndex + 1) of \(model.sequence.count)",
                     onNext: { step(model.goForward()) },
                     onPrevious: { step(model.goBack()) },
                     onMagicTap: { model.isHolding.toggle() },
@@ -159,6 +172,10 @@ struct StoryPlayer: View {
         case 2: WrappedColor.ink
         case 3: WrappedColor.paper
         case 4: WrappedColor.igViolet
+        case 5, 8: WrappedColor.igOrange
+        case 6: WrappedColor.igYellow
+        case 7: WrappedColor.closeGreen
+        case 9: WrappedColor.nightNavy
         default: Chapter.containing(card).field
         }
     }
@@ -182,6 +199,22 @@ struct StoryPlayer: View {
                 onShare: { showToast("Not part of this demo") },
                 onSaved: { showToast("Got it. We'll tune Explore.") }
             )
+        case 5:
+            ReelsCard(onShare: { showToast("Not part of this demo") })
+        case 6:
+            MainCharacterCard(
+                onShare: { showToast("Not part of this demo") },
+                onOpenPost: { showsPost = true }
+            )
+        case 7:
+            GroupChatCard(
+                onShare: { showToast("Not part of this demo") },
+                onOpenStory: { showsStory = true }
+            )
+        case 8:
+            CircleCard()
+        case 9:
+            ThreeAMCard(onShare: { showToast("Not part of this demo") })
         default:
             EmptyView()
         }
@@ -209,6 +242,11 @@ struct StoryPlayer: View {
         case 2: return "02-year-in-memories"
         case 3: return "03-feed-color"
         case 4: return "04-your-algorithm"
+        case 5: return "05-reels-rabbit-hole"
+        case 6: return "06-main-character-post"
+        case 7: return "07-broke-the-group-chat"
+        case 8: return "08-your-circle"
+        case 9: return "09-3am-club"
         default: return nil
         }
     }
@@ -223,8 +261,8 @@ struct StoryPlayer: View {
         let style = CardChrome.forCard(model.card)
         return VStack(spacing: CardSpace.chromeGap) {
             StoryProgressBars(
-                count: StoryPlayerModel.cardCount,
-                current: model.card - 1,
+                count: model.sequence.count,
+                current: model.sequenceIndex,
                 progress: model.fraction,
                 foreground: style.foreground,
                 trackOpacity: style.trackOpacity
@@ -236,6 +274,7 @@ struct StoryPlayer: View {
                 foreground: style.foreground,
                 mark: style.mark,
                 innerBorder: style.innerBorder,
+                outerFill: style.outerFill,
                 onInfo: { showsInfo = true },
                 onMute: toggleMute,
                 onClose: exit
@@ -339,7 +378,7 @@ struct StoryPlayer: View {
     }
 
     private func syncCover() {
-        model.coverOpen = openMonth != nil || showsMontage
+        model.coverOpen = openMonth != nil || showsMontage || showsPost || showsStory
     }
 
     private func showToast(_ message: String) {

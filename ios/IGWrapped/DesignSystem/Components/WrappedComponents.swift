@@ -53,6 +53,7 @@ struct WrappedTopRow: View {
     var foreground: Color = .white
     var mark: WrappedMark = .gradient
     var innerBorder: Color = WrappedColor.ink
+    var outerFill: Color = WrappedColor.ink
     var onInfo: () -> Void = {}
     var onMute: () -> Void = {}
     var onClose: () -> Void = {}
@@ -92,8 +93,8 @@ struct WrappedTopRow: View {
             }
         case .ink:
             ZStack {
-                Circle().fill(WrappedColor.ink)
-                Circle().strokeBorder(WrappedColor.igPink, lineWidth: CardSpace.ringWidth)
+                Circle().fill(outerFill)
+                Circle().strokeBorder(innerBorder, lineWidth: CardSpace.ringWidth)
                 Text("26")
                     .font(ArchivoFont.font(size: CardSpace.markDigits, weight: CardSpace.heavy, width: CardSpace.regular))
                     .foregroundStyle(WrappedColor.igWhite)

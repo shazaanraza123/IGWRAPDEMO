@@ -52,6 +52,18 @@ targets:
         buildPhase: resources
       - path: ../design/screens/04-your-algorithm.png
         buildPhase: resources
+      - path: ../design/screens/05-reels-rabbit-hole.png
+        buildPhase: resources
+      - path: ../design/screens/06-main-character-post.png
+        buildPhase: resources
+      - path: ../design/screens/07-broke-the-group-chat.png
+        buildPhase: resources
+      - path: ../design/screens/08-your-circle.png
+        buildPhase: resources
+      - path: ../design/screens/09-3am-club.png
+        buildPhase: resources
+      - path: ../design/photos/main-character.jpg
+        buildPhase: resources
     dependencies:
       - package: Supabase
         product: Supabase

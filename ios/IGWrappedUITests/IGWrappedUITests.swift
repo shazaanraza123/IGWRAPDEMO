@@ -91,11 +91,11 @@ final class IGWrappedUITests: XCTestCase {
     func testPlayerChapterSwipes() {
         let app = launchedPlayer()
         let player = app.otherElements["story-player"]
-        drag(app, from: CGVector(dx: 0.9, dy: 0.55), to: CGVector(dx: 0.1, dy: 0.55))
+        drag(app, from: CGVector(dx: 0.9, dy: 0.22), to: CGVector(dx: 0.1, dy: 0.22))
         XCTAssertTrue(waitForLabel(player, "Card 3 of 13"))
-        drag(app, from: CGVector(dx: 0.9, dy: 0.55), to: CGVector(dx: 0.1, dy: 0.55))
+        drag(app, from: CGVector(dx: 0.9, dy: 0.22), to: CGVector(dx: 0.1, dy: 0.22))
         XCTAssertTrue(waitForLabel(player, "Card 6 of 13"))
-        drag(app, from: CGVector(dx: 0.1, dy: 0.55), to: CGVector(dx: 0.9, dy: 0.55))
+        drag(app, from: CGVector(dx: 0.1, dy: 0.22), to: CGVector(dx: 0.9, dy: 0.22))
         XCTAssertTrue(waitForLabel(player, "Card 3 of 13"))
     }
 

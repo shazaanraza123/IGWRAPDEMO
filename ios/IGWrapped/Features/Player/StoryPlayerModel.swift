@@ -49,6 +49,16 @@ struct StoryPlayerModel {
     var infoOpen = false
     var autoplay = true
     var coverOpen = false
+    /// Cards a teen run does not include. Empty for Maya's full deck.
+    var omitted: Set<Int> = []
+
+    var sequence: [Int] {
+        (1 ... Self.cardCount).filter { !omitted.contains($0) }
+    }
+
+    var sequenceIndex: Int {
+        sequence.firstIndex(of: card) ?? 0
+    }
 
     var chapter: Chapter { Chapter.containing(card) }
 
@@ -79,31 +89,37 @@ struct StoryPlayerModel {
     }
 
     mutating func goBack() -> PlayerAdvance {
-        if card == 1 {
+        guard let index = sequence.firstIndex(of: card), index > 0 else {
             elapsed = 0
             return .same
         }
-        card -= 1
+        card = sequence[index - 1]
         elapsed = 0
         return .moved
     }
 
     mutating func goForward() -> PlayerAdvance {
-        if card == Self.cardCount {
+        guard let index = sequence.firstIndex(of: card) else { return .finished }
+        if index + 1 >= sequence.count {
             return .finished
         }
-        card += 1
+        card = sequence[index + 1]
         elapsed = 0
         return .moved
     }
 
-    /// Lands on the first card of the neighboring chapter.
+    /// Lands on the first included card of the neighboring chapter, skipping an empty one.
     mutating func jumpChapter(forward: Bool) -> PlayerAdvance {
-        let target = forward ? chapter.next : chapter.previous
-        guard let target else { return .same }
-        card = target.firstCard
-        elapsed = 0
-        return .moved
+        var cursor = chapter
+        while true {
+            guard let target = forward ? cursor.next : cursor.previous else { return .same }
+            if let next = sequence.first(where: { target.cards.contains($0) }) {
+                card = next
+                elapsed = 0
+                return .moved
+            }
+            cursor = target
+        }
     }
 
     mutating func tick(delta: TimeInterval) -> PlayerAdvance {

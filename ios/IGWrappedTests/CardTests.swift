@@ -24,6 +24,18 @@ import Testing
     #expect(CardChrome.forCard(4).mark == .white)
 }
 
+@Test func teenRunSkipsTheCircleAndTheNightCard() {
+    var model = StoryPlayerModel()
+    model.omitted = [8, 9]
+    #expect(model.sequence == [1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 13])
+    model.card = 7
+    #expect(model.goForward() == .moved)
+    #expect(model.card == 10)
+    model.card = 7
+    #expect(model.jumpChapter(forward: true) == .moved)
+    #expect(model.card == 10)
+}
+
 @Test @MainActor func feedbackSelectionPersistsLocally() {
     let name = "feedback-\(UUID().uuidString)"
     let defaults = UserDefaults(suiteName: name)!

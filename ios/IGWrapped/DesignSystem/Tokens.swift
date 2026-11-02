@@ -169,6 +169,7 @@ enum CardSpace {
     static let medium: CGFloat = 700
     static let support: CGFloat = 500
     static let condensed: CGFloat = 62
+    static let semiCondensed: CGFloat = 72
     static let regular: CGFloat = 100
     static let titleWidth: CGFloat = 70
     static let markDigits: CGFloat = 11
@@ -264,6 +265,20 @@ enum CardSpace {
     static let hairline: CGFloat = 1
     static let hairlineOpacity: Double = 0.12
     static let stickerShadow: Double = 0.3
+    static let reelsHeadline: CGFloat = 62
+    static let reelsName: CGFloat = 19
+    static let reelsBar: CGFloat = 18
+    static let postHeadline: CGFloat = 48
+    static let postLikes: CGFloat = 30
+    static let chatHeadline: CGFloat = 56
+    static let chatReplies: CGFloat = 76
+    static let chatCaption: CGFloat = 17
+    static let nightTime: CGFloat = 78
+    static let averageLine: CGFloat = 22
+    static let storyChipSize: CGFloat = 9
+    static let clockHour: Double = 111
+    static let clockMinute: Double = 252
+    static let barTrack: Double = 0.14
 }
 
 enum PaletteInk {
@@ -287,6 +302,7 @@ struct CardChrome {
     var trackOpacity: Double
     var mark: WrappedMark
     var innerBorder: Color
+    var outerFill: Color = WrappedColor.ink
 
     static func forCard(_ card: Int) -> CardChrome {
         switch card {
@@ -310,6 +326,35 @@ struct CardChrome {
                 trackOpacity: 0.3,
                 mark: .white,
                 innerBorder: WrappedColor.igViolet
+            )
+        case 5, 8:
+            return CardChrome(
+                foreground: WrappedColor.ink,
+                trackOpacity: 0.25,
+                mark: .ink,
+                innerBorder: WrappedColor.igOrange
+            )
+        case 6:
+            return CardChrome(
+                foreground: WrappedColor.ink,
+                trackOpacity: 0.22,
+                mark: .ink,
+                innerBorder: WrappedColor.igYellow
+            )
+        case 7:
+            return CardChrome(
+                foreground: WrappedColor.ink,
+                trackOpacity: 0.25,
+                mark: .ink,
+                innerBorder: WrappedColor.closeGreen
+            )
+        case 9:
+            return CardChrome(
+                foreground: WrappedColor.igWhite,
+                trackOpacity: 0.3,
+                mark: .ink,
+                innerBorder: WrappedColor.nightNavy,
+                outerFill: WrappedColor.igYellow
             )
         default:
             return CardChrome(
