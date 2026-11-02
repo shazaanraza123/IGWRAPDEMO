@@ -95,6 +95,22 @@ enum IGSpace {
     static let tabCount: CGFloat = 5
     static let profileDot: CGFloat = 26
     static let tabClearance: CGFloat = 96
+    /// Story viewer chrome from `05-story-viewer.png` (472×1024, scaled onto 390×844).
+    /// Open and close durations from `video-story-open-close.mp4`: the card is full by ~0.30s after the tap, and the swipe release is gone within ~0.18s.
+    static let viewerProgressTop: CGFloat = 66
+    static let viewerProgressHeight: CGFloat = 2
+    static let viewerProgressInset: CGFloat = 8
+    static let viewerHeaderGap: CGFloat = 4
+    static let viewerReplyBottom: CGFloat = 42
+    static let viewerReplyIcon: CGFloat = 36
+    static let viewerReplyStroke: CGFloat = 1
+    static let viewerCardRadius: CGFloat = 20
+    static let viewerDragMinimum: CGFloat = 12
+    static let viewerDismissTravel: CGFloat = 120
+    static let viewerDismissVelocity: CGFloat = 900
+    static let viewerDismissScale: CGFloat = 0.86
+    static let viewerOpen: Double = 0.30
+    static let viewerDismiss: Double = 0.18
 }
 
 enum WrappedSpace {

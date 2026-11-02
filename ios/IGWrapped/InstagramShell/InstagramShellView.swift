@@ -2,9 +2,11 @@ import SwiftUI
 import UIKit
 
 struct InstagramShellView: View {
+    @Namespace private var storyZoom
     @State private var tab = IGTab.home
     @State private var showsLogin = false
     @State private var showsBanner = !ProcessInfo.processInfo.arguments.contains("--reference")
+    @State private var openStory: FriendStory?
     @State private var toast: String?
 
     var body: some View {
@@ -27,6 +29,11 @@ struct InstagramShellView: View {
             if ProcessInfo.processInfo.arguments.contains("--reset-session") {
                 await SessionStore.shared.signOut()
             }
+        }
+        .onAppear {
+            guard ProcessInfo.processInfo.arguments.contains("--friend-story"),
+                  openStory == nil else { return }
+            openStory = FriendStory.samples.first { $0.handle == "jules.mp" }
         }
         .fullScreenCover(isPresented: $showsLogin) {
             PersonaLoginView()
@@ -60,6 +67,14 @@ struct InstagramShellView: View {
                     .frame(maxHeight: .infinity, alignment: .bottom)
                     .padding(.bottom, IGSpace.tabClearance)
             }
+            if let openStory {
+                IGStoryViewer(
+                    story: openStory,
+                    zoom: storyZoom,
+                    onClose: closeStory,
+                    onUnavailable: { showToast() }
+                )
+            }
         }
     }
 
@@ -67,7 +82,12 @@ struct InstagramShellView: View {
         ScrollView {
             VStack(spacing: 0) {
                 Color.clear.frame(height: IGSpace.topBarHeight)
-                IGStoryTray(onWrapped: { showsLogin = true })
+                IGStoryTray(
+                    zoom: storyZoom,
+                    openHandle: openStory?.handle,
+                    onWrapped: { showsLogin = true },
+                    onFriend: open
+                )
                 if showsBanner {
                     WrappedBanner(onOpen: { showsLogin = true }, onDismiss: { showsBanner = false })
                         .padding(.horizontal, IGSpace.bannerInset)
@@ -89,9 +109,22 @@ struct InstagramShellView: View {
     }
 
     private var referenceImage: Image? {
-        guard ProcessInfo.processInfo.arguments.contains("--reference"),
-              let image = UIImage(named: "01-home") else { return nil }
+        guard ProcessInfo.processInfo.arguments.contains("--reference") else { return nil }
+        let name = openStory == nil ? "01-home" : "05-story-viewer"
+        guard let image = UIImage(named: name) else { return nil }
         return Image(uiImage: image)
+    }
+
+    private func open(_ story: FriendStory) {
+        withAnimation(.easeOut(duration: IGSpace.viewerOpen)) {
+            openStory = story
+        }
+    }
+
+    private func closeStory() {
+        withAnimation(.easeIn(duration: IGSpace.viewerDismiss)) {
+            openStory = nil
+        }
     }
 
     private func showToast() {

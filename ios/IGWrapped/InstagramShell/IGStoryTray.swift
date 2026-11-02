@@ -1,7 +1,26 @@
 import SwiftUI
 
+struct FriendStory: Identifiable, Hashable {
+    let handle: String
+    /// Sample photo already in `design/photos`. Friend headshots are not in the repo.
+    let photo: String
+
+    var id: String { handle }
+
+    static let samples: [FriendStory] = [
+        FriendStory(handle: "dee.films", photo: "tile-1"),
+        FriendStory(handle: "jules.mp", photo: "tile-2"),
+        FriendStory(handle: "nico_k", photo: "tile-3"),
+        FriendStory(handle: "sam.wav", photo: "tile-4"),
+        FriendStory(handle: "tori.eats", photo: "tile-5")
+    ]
+}
+
 struct IGStoryTray: View {
+    var zoom: Namespace.ID
+    var openHandle: String?
     var onWrapped: () -> Void
+    var onFriend: (FriendStory) -> Void
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
@@ -32,21 +51,24 @@ struct IGStoryTray: View {
                 }
                 .buttonStyle(.plain)
                 .accessibilityIdentifier("wrapped-bubble")
-                ForEach(friendNames, id: \.self) { name in
-                    storyBubble(title: name, ring: .unseen) {
-                        Circle().fill(WrappedColor.surfaceRaised)
-                    } badge: {
-                        EmptyView()
+                ForEach(FriendStory.samples) { story in
+                    Button {
+                        onFriend(story)
+                    } label: {
+                        storyBubble(title: story.handle, ring: .unseen) {
+                            Circle().fill(WrappedColor.surfaceRaised)
+                        } badge: {
+                            EmptyView()
+                        }
                     }
+                    .buttonStyle(.plain)
+                    .matchedGeometryEffect(id: story.handle, in: zoom, isSource: openHandle != story.handle)
+                    .accessibilityIdentifier("story-\(story.handle)")
                 }
             }
             .padding(.leading, IGSpace.storyLeading)
             .padding(.top, IGSpace.storyTopGap)
         }
-    }
-
-    private var friendNames: [String] {
-        ["dee.films", "jules.mp", "nico_k", "sam.wav", "tori.eats"]
     }
 
     private func storyBubble<Face: View, Badge: View>(

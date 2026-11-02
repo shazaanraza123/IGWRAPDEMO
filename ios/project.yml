@@ -30,7 +30,19 @@ targets:
           - "**/.gitkeep"
       - path: ../design/reference/instagram/01-home.png
         buildPhase: resources
+      - path: ../design/reference/instagram/05-story-viewer.png
+        buildPhase: resources
       - path: ../design/photos/feed-chicago.jpg
+        buildPhase: resources
+      - path: ../design/photos/tile-1.jpg
+        buildPhase: resources
+      - path: ../design/photos/tile-2.jpg
+        buildPhase: resources
+      - path: ../design/photos/tile-3.jpg
+        buildPhase: resources
+      - path: ../design/photos/tile-4.jpg
+        buildPhase: resources
+      - path: ../design/photos/tile-5.jpg
         buildPhase: resources
     dependencies:
       - package: Supabase

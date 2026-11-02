@@ -37,4 +37,26 @@ final class IGWrappedUITests: XCTestCase {
         XCTAssertTrue(ready.waitForExistence(timeout: 15))
         XCTAssertFalse(app.buttons["persona-maya"].exists)
     }
+
+    func testFriendStoryOpensAndCloses() {
+        let app = XCUIApplication()
+        app.launch()
+        let friend = app.buttons["story-jules.mp"]
+        XCTAssertTrue(friend.waitForExistence(timeout: 10))
+        friend.tap()
+        let close = app.buttons["story-close"]
+        XCTAssertTrue(close.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.otherElements["story-viewer"].exists || app.images["story-viewer"].exists)
+        close.tap()
+        XCTAssertTrue(app.buttons["tab-home"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.buttons["story-close"].exists)
+
+        app.buttons["story-dee.films"].tap()
+        XCTAssertTrue(close.waitForExistence(timeout: 5))
+        let top = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.35))
+        let bottom = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.9))
+        top.press(forDuration: 0.05, thenDragTo: bottom)
+        XCTAssertTrue(app.buttons["tab-home"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.buttons["story-close"].exists)
+    }
 }
