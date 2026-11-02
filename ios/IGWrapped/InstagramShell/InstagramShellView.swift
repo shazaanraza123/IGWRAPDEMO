@@ -7,6 +7,7 @@ struct InstagramShellView: View {
     @State private var showsLogin = false
     @State private var showsBanner = !ProcessInfo.processInfo.arguments.contains("--reference")
     @State private var openStory: FriendStory?
+    @State private var showsPlayer = false
     @State private var toast: String?
 
     var body: some View {
@@ -31,9 +32,12 @@ struct InstagramShellView: View {
             }
         }
         .onAppear {
-            guard ProcessInfo.processInfo.arguments.contains("--friend-story"),
-                  openStory == nil else { return }
-            openStory = FriendStory.samples.first { $0.handle == "jules.mp" }
+            if ProcessInfo.processInfo.arguments.contains("--friend-story"), openStory == nil {
+                openStory = FriendStory.samples.first { $0.handle == "jules.mp" }
+            }
+            if ProcessInfo.processInfo.arguments.contains("--player") {
+                showsPlayer = true
+            }
         }
         .fullScreenCover(isPresented: $showsLogin) {
             PersonaLoginView()
@@ -75,6 +79,11 @@ struct InstagramShellView: View {
                     onUnavailable: { showToast() }
                 )
             }
+            if showsPlayer {
+                StoryPlayer {
+                    showsPlayer = false
+                }
+            }
         }
     }
 
@@ -109,7 +118,7 @@ struct InstagramShellView: View {
     }
 
     private var referenceImage: Image? {
-        guard ProcessInfo.processInfo.arguments.contains("--reference") else { return nil }
+        guard ProcessInfo.processInfo.arguments.contains("--reference"), !showsPlayer else { return nil }
         let name = openStory == nil ? "01-home" : "05-story-viewer"
         guard let image = UIImage(named: name) else { return nil }
         return Image(uiImage: image)

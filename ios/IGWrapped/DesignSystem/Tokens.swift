@@ -131,6 +131,19 @@ enum WrappedSpace {
     static let wrappedMark: CGFloat = 30
 }
 
+/// Motion from UIUX §6 and APPFLOW §2. The cube reuses the card-enter spring. Reduce Motion is the 150 ms crossfade.
+enum WrappedMotion {
+    static let cardEnterResponse: Double = 0.45
+    static let cardEnterDamping: Double = 0.85
+    static let reduceMotion: Double = 0.15
+    static let chapterCrossfade: Double = 0.8
+    static let defaultCardDuration: TimeInterval = 6
+    static let longCardDuration: TimeInterval = 9
+    static let longCardNumbers: Set<Int> = [2, 10, 12]
+    static let cubePerspective: CGFloat = 0.6
+    static let clockTick: TimeInterval = 1.0 / 30.0
+}
+
 private extension Color {
     init(hex: UInt32) {
         let red = Double((hex >> 16) & 0xFF) / 255

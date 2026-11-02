@@ -59,4 +59,92 @@ final class IGWrappedUITests: XCTestCase {
         XCTAssertTrue(app.buttons["tab-home"].waitForExistence(timeout: 5))
         XCTAssertFalse(app.buttons["story-close"].exists)
     }
+
+    func testPlayerTapZones() {
+        let app = launchedPlayer()
+        let player = app.otherElements["story-player"]
+        app.coordinate(withNormalizedOffset: CGVector(dx: 0.8, dy: 0.5)).tap()
+        XCTAssertTrue(waitForLabel(player, "Card 2 of 13"))
+        app.coordinate(withNormalizedOffset: CGVector(dx: 0.1, dy: 0.5)).tap()
+        XCTAssertTrue(waitForLabel(player, "Card 1 of 13"))
+        app.coordinate(withNormalizedOffset: CGVector(dx: 0.1, dy: 0.5)).tap()
+        XCTAssertEqual(player.label, "Card 1 of 13")
+    }
+
+    func testPlayerHoldPausesAutoplay() {
+        let app = launchedPlayer()
+        let player = app.otherElements["story-player"]
+        app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).press(forDuration: 8)
+        XCTAssertEqual(player.label, "Card 1 of 13")
+    }
+
+    func testPlayerSwipeDownExits() {
+        let app = launchedPlayer()
+        let player = app.otherElements["story-player"]
+        let top = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.3))
+        let bottom = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.85))
+        top.press(forDuration: 0.05, thenDragTo: bottom)
+        let gone = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == 0"), object: player)
+        XCTAssertEqual(XCTWaiter().wait(for: [gone], timeout: 3), .completed)
+    }
+
+    func testPlayerChapterSwipes() {
+        let app = launchedPlayer()
+        let player = app.otherElements["story-player"]
+        drag(app, from: CGVector(dx: 0.9, dy: 0.55), to: CGVector(dx: 0.1, dy: 0.55))
+        XCTAssertTrue(waitForLabel(player, "Card 3 of 13"))
+        drag(app, from: CGVector(dx: 0.9, dy: 0.55), to: CGVector(dx: 0.1, dy: 0.55))
+        XCTAssertTrue(waitForLabel(player, "Card 6 of 13"))
+        drag(app, from: CGVector(dx: 0.1, dy: 0.55), to: CGVector(dx: 0.9, dy: 0.55))
+        XCTAssertTrue(waitForLabel(player, "Card 3 of 13"))
+    }
+
+    func testPlayerSwipeUpOpensInfo() {
+        let app = launchedPlayer()
+        drag(app, from: CGVector(dx: 0.5, dy: 0.8), to: CGVector(dx: 0.5, dy: 0.2))
+        XCTAssertTrue(app.otherElements["card-info"].waitForExistence(timeout: 3))
+        app.buttons["card-info-close"].tap()
+        let gone = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "exists == 0"),
+            object: app.otherElements["card-info"]
+        )
+        XCTAssertEqual(XCTWaiter().wait(for: [gone], timeout: 3), .completed)
+        XCTAssertEqual(app.otherElements["story-player"].label, "Card 1 of 13")
+    }
+
+    func testPlayerAutoplayAdvances() {
+        let app = launchedPlayer()
+        let player = app.otherElements["story-player"]
+        XCTAssertTrue(waitForLabel(player, "Card 2 of 13", timeout: 9))
+    }
+
+    func testPlayerCloseExits() {
+        let app = launchedPlayer()
+        let player = app.otherElements["story-player"]
+        app.buttons["player-close"].tap()
+        let gone = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == 0"), object: player)
+        XCTAssertEqual(XCTWaiter().wait(for: [gone], timeout: 3), .completed)
+    }
+
+    private func launchedPlayer() -> XCUIApplication {
+        let app = XCUIApplication()
+        app.launchArguments = ["--player"]
+        app.launch()
+        XCTAssertTrue(app.otherElements["story-player"].waitForExistence(timeout: 5))
+        return app
+    }
+
+    private func waitForLabel(_ element: XCUIElement, _ text: String, timeout: TimeInterval = 3) -> Bool {
+        let expectation = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: "label == %@", text),
+            object: element
+        )
+        return XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed
+    }
+
+    private func drag(_ app: XCUIApplication, from start: CGVector, to end: CGVector) {
+        let origin = app.coordinate(withNormalizedOffset: start)
+        let destination = app.coordinate(withNormalizedOffset: end)
+        origin.press(forDuration: 0.05, thenDragTo: destination)
+    }
 }

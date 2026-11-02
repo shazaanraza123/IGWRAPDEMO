@@ -47,6 +47,7 @@ struct StoryProgressBars: View {
 
 struct WrappedTopRow: View {
     var showsInfo: Bool = true
+    var isMuted: Bool = false
     var onInfo: () -> Void = {}
     var onMute: () -> Void = {}
     var onClose: () -> Void = {}
@@ -66,14 +67,24 @@ struct WrappedTopRow: View {
                 .foregroundStyle(.white)
             Spacer()
             if showsInfo {
-                topButton("Info", systemImage: "info.circle", action: onInfo)
+                topButton("Info", systemImage: "info.circle", identifier: "player-info", action: onInfo)
             }
-            topButton("Mute", systemImage: "speaker.wave.2", action: onMute)
-            topButton("Close", systemImage: "xmark", action: onClose)
+            topButton(
+                isMuted ? "Unmute" : "Mute",
+                systemImage: isMuted ? "speaker.slash" : "speaker.wave.2",
+                identifier: "player-mute",
+                action: onMute
+            )
+            topButton("Close", systemImage: "xmark", identifier: "player-close", action: onClose)
         }
     }
 
-    private func topButton(_ label: String, systemImage: String, action: @escaping () -> Void) -> some View {
+    private func topButton(
+        _ label: String,
+        systemImage: String,
+        identifier: String,
+        action: @escaping () -> Void
+    ) -> some View {
         Button(action: action) {
             Image(systemName: systemImage)
                 .font(.system(size: 16, weight: .semibold))
@@ -83,6 +94,7 @@ struct WrappedTopRow: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel(label)
+        .accessibilityIdentifier(identifier)
     }
 }
 

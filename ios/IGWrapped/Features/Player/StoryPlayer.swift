@@ -1,0 +1,394 @@
+import SwiftUI
+import UIKit
+
+struct StoryPlayer: View {
+    var onExit: () -> Void
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var model = StoryPlayerModel()
+    @State private var showsInfo = false
+    @State private var isMuted = false
+    @State private var dismissDrag: CGFloat = 0
+    @State private var chapterDrag: CGFloat = 0
+    private let audio = AudioService.shared
+
+    var body: some View {
+        ZStack {
+            cube
+            chrome
+            PlayerGestureSurface(
+                onTap: { fraction in
+                    var step = PlayerAdvance.same
+                    withAnimation(cardAnimation) {
+                        step = model.tap(xFraction: fraction)
+                    }
+                    if step == .finished {
+                        exit()
+                    }
+                },
+                onHoldBegan: {
+                    model.isHolding = true
+                },
+                onHoldEnded: {
+                    model.isHolding = false
+                },
+                onPanChanged: { dx, dy in
+                    follow(dx: dx, dy: dy)
+                },
+                onPanEnded: { dx, dy, velocityX, velocityY in
+                    resolve(dx: dx, dy: dy, velocityX: velocityX, velocityY: velocityY)
+                }
+            )
+            .accessibilityHidden(true)
+        }
+        .scaleEffect(dismissScale, anchor: .center)
+        .offset(y: dismissDrag)
+        .onAppear {
+            audio.play(model.chapter)
+        }
+        .onChange(of: model.chapter) { _, chapter in
+            audio.play(chapter)
+        }
+        .onChange(of: model.isHolding) { _, holding in
+            if holding {
+                audio.pause()
+            } else if !model.infoOpen {
+                audio.resume()
+            }
+        }
+        .onChange(of: showsInfo) { _, open in
+            model.infoOpen = open
+            if open {
+                audio.pause()
+            } else if !model.isHolding {
+                audio.resume()
+            }
+        }
+        .task { await runClock() }
+        .sheet(isPresented: $showsInfo) {
+            CardInfoSheet()
+        }
+    }
+
+    private var cube: some View {
+        ZStack {
+            if chapterDrag < 0, let next = model.chapter.next {
+                face(next.firstCard, angle: cubeAngle + 90)
+            }
+            if chapterDrag > 0, let previous = model.chapter.previous {
+                face(previous.firstCard, angle: cubeAngle - 90)
+            }
+            face(model.card, angle: cubeAngle, labeled: true)
+        }
+    }
+
+    private var cubeAngle: Double {
+        Double(chapterDrag / WrappedSpace.frameWidth) * 90
+    }
+
+    private func face(_ card: Int, angle: Double, labeled: Bool = false) -> some View {
+        Chapter.containing(card).field
+            .ignoresSafeArea()
+            .rotation3DEffect(
+                .degrees(reduceMotion ? 0 : angle),
+                axis: (x: 0, y: 1, z: 0),
+                perspective: WrappedMotion.cubePerspective
+            )
+            .allowsHitTesting(false)
+            .modifier(PlayerCardAccess(
+                labeled: labeled,
+                label: "Card \(model.card) of \(StoryPlayerModel.cardCount)",
+                onNext: { step(model.goForward()) },
+                onPrevious: { step(model.goBack()) },
+                onMagicTap: { model.isHolding.toggle() },
+                onEscape: exit
+            ))
+    }
+
+    private func step(_ advance: PlayerAdvance) {
+        if advance == .finished {
+            exit()
+        }
+    }
+
+    private var chrome: some View {
+        VStack(spacing: WrappedSpace.topRowMinY - WrappedSpace.progressTop - WrappedSpace.progressThickness) {
+            StoryProgressBars(
+                count: StoryPlayerModel.cardCount,
+                current: model.card - 1,
+                progress: model.fraction
+            )
+            .accessibilityHidden(true)
+            WrappedTopRow(
+                showsInfo: model.showsInfoButton,
+                isMuted: isMuted,
+                onInfo: { showsInfo = true },
+                onMute: toggleMute,
+                onClose: exit
+            )
+        }
+        .padding(.top, WrappedSpace.progressTop)
+        .padding(.horizontal, WrappedSpace.gutter)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .opacity(model.isHolding ? 0 : 1)
+        .accessibilityHidden(model.isHolding)
+        .allowsHitTesting(!model.isHolding)
+        .animation(.easeOut(duration: WrappedMotion.reduceMotion), value: model.isHolding)
+    }
+
+    private var dismissScale: CGFloat {
+        let progress = min(max(dismissDrag, 0) / IGSpace.viewerDismissTravel, 1)
+        return 1 - progress * (1 - IGSpace.viewerDismissScale)
+    }
+
+    private var cardAnimation: Animation {
+        reduceMotion
+            ? .easeOut(duration: WrappedMotion.reduceMotion)
+            : .spring(response: WrappedMotion.cardEnterResponse, dampingFraction: WrappedMotion.cardEnterDamping)
+    }
+
+    private func follow(dx: CGFloat, dy: CGFloat) {
+        guard max(abs(dx), abs(dy)) > IGSpace.viewerDragMinimum else { return }
+        if abs(dx) > abs(dy) {
+            dismissDrag = 0
+            chapterDrag = dx
+        } else if dy > 0 {
+            chapterDrag = 0
+            dismissDrag = dy
+        }
+    }
+
+    private func resolve(dx: CGFloat, dy: CGFloat, velocityX: CGFloat, velocityY: CGFloat) {
+        switch model.dragEnded(dx: dx, dy: dy, velocityX: velocityX, velocityY: velocityY) {
+        case .tap:
+            break
+        case .dismiss:
+            finishDismiss()
+        case .info:
+            cancelDrag()
+            showsInfo = true
+        case .nextChapter:
+            finishChapter(forward: true)
+        case .previousChapter:
+            finishChapter(forward: false)
+        case .cancel:
+            cancelDrag()
+        }
+    }
+
+    private func finishChapter(forward: Bool) {
+        let target = forward ? model.chapter.next : model.chapter.previous
+        guard target != nil else {
+            cancelDrag()
+            return
+        }
+        if reduceMotion {
+            withAnimation(cardAnimation) {
+                _ = model.jumpChapter(forward: forward)
+                chapterDrag = 0
+            }
+            return
+        }
+        let distance = forward ? -WrappedSpace.frameWidth : WrappedSpace.frameWidth
+        withAnimation(.spring(response: WrappedMotion.cardEnterResponse, dampingFraction: WrappedMotion.cardEnterDamping)) {
+            chapterDrag = distance
+        } completion: {
+            var transaction = Transaction()
+            transaction.disablesAnimations = true
+            withTransaction(transaction) {
+                _ = model.jumpChapter(forward: forward)
+                chapterDrag = 0
+            }
+        }
+    }
+
+    private func finishDismiss() {
+        withAnimation(.easeIn(duration: IGSpace.viewerDismiss)) {
+            dismissDrag = WrappedSpace.frameHeight
+        }
+        Task {
+            try? await Task.sleep(for: .seconds(IGSpace.viewerDismiss))
+            exit()
+        }
+    }
+
+    private func cancelDrag() {
+        withAnimation(.easeOut(duration: IGSpace.viewerOpen)) {
+            dismissDrag = 0
+            chapterDrag = 0
+        }
+    }
+
+    private func toggleMute() {
+        isMuted.toggle()
+        audio.setMuted(isMuted)
+    }
+
+    private func exit() {
+        audio.stop()
+        PlayerProgressStore.save(PlayerProgress(card: model.card, elapsed: model.elapsed))
+        onExit()
+    }
+
+    private func runClock() async {
+        var last = Date()
+        while !Task.isCancelled {
+            try? await Task.sleep(for: .seconds(WrappedMotion.clockTick))
+            let now = Date()
+            let delta = now.timeIntervalSince(last)
+            last = now
+            let step = model.tick(delta: delta)
+            if step == .finished {
+                exit()
+                return
+            }
+        }
+    }
+}
+
+private struct PlayerGestureSurface: UIViewRepresentable {
+    var onTap: (CGFloat) -> Void
+    var onHoldBegan: () -> Void
+    var onHoldEnded: () -> Void
+    var onPanChanged: (CGFloat, CGFloat) -> Void
+    var onPanEnded: (CGFloat, CGFloat, CGFloat, CGFloat) -> Void
+
+    func makeUIView(context: Context) -> PlayerGestureView {
+        let view = PlayerGestureView()
+        view.backgroundColor = .clear
+        view.isOpaque = false
+        view.isAccessibilityElement = false
+        let tap = UITapGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.tapped(_:)))
+        let hold = UILongPressGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.held(_:)))
+        hold.minimumPressDuration = 0.2
+        hold.allowableMovement = IGSpace.viewerDragMinimum
+        tap.require(toFail: hold)
+        let pan = UIPanGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.panned(_:)))
+        pan.maximumNumberOfTouches = 1
+        view.addGestureRecognizer(tap)
+        view.addGestureRecognizer(hold)
+        view.addGestureRecognizer(pan)
+        return view
+    }
+
+    func updateUIView(_ uiView: PlayerGestureView, context: Context) {
+        context.coordinator.onTap = onTap
+        context.coordinator.onHoldBegan = onHoldBegan
+        context.coordinator.onHoldEnded = onHoldEnded
+        context.coordinator.onPanChanged = onPanChanged
+        context.coordinator.onPanEnded = onPanEnded
+    }
+
+    func sizeThatFits(_ proposal: ProposedViewSize, uiView: PlayerGestureView, context: Context) -> CGSize? {
+        CGSize(
+            width: proposal.width ?? WrappedSpace.frameWidth,
+            height: proposal.height ?? WrappedSpace.frameHeight
+        )
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(
+            onTap: onTap,
+            onHoldBegan: onHoldBegan,
+            onHoldEnded: onHoldEnded,
+            onPanChanged: onPanChanged,
+            onPanEnded: onPanEnded
+        )
+    }
+
+    @MainActor
+    final class Coordinator: NSObject {
+        var onTap: (CGFloat) -> Void
+        var onHoldBegan: () -> Void
+        var onHoldEnded: () -> Void
+        var onPanChanged: (CGFloat, CGFloat) -> Void
+        var onPanEnded: (CGFloat, CGFloat, CGFloat, CGFloat) -> Void
+        private var holding = false
+
+        init(
+            onTap: @escaping (CGFloat) -> Void,
+            onHoldBegan: @escaping () -> Void,
+            onHoldEnded: @escaping () -> Void,
+            onPanChanged: @escaping (CGFloat, CGFloat) -> Void,
+            onPanEnded: @escaping (CGFloat, CGFloat, CGFloat, CGFloat) -> Void
+        ) {
+            self.onTap = onTap
+            self.onHoldBegan = onHoldBegan
+            self.onHoldEnded = onHoldEnded
+            self.onPanChanged = onPanChanged
+            self.onPanEnded = onPanEnded
+        }
+
+        @objc func tapped(_ gesture: UITapGestureRecognizer) {
+            guard let view = gesture.view, view.bounds.width > 0 else { return }
+            let point = gesture.location(in: view)
+            onTap(point.x / view.bounds.width)
+        }
+
+        @objc func held(_ gesture: UILongPressGestureRecognizer) {
+            if gesture.state == .began {
+                holding = true
+                onHoldBegan()
+            } else if gesture.state == .ended || gesture.state == .cancelled || gesture.state == .failed {
+                if holding {
+                    holding = false
+                    onHoldEnded()
+                }
+            }
+        }
+
+        @objc func panned(_ gesture: UIPanGestureRecognizer) {
+            if holding { return }
+            let translation = gesture.translation(in: gesture.view)
+            let velocity = gesture.velocity(in: gesture.view)
+            if gesture.state == .changed {
+                onPanChanged(translation.x, translation.y)
+            } else if gesture.state == .ended || gesture.state == .cancelled {
+                onPanEnded(translation.x, translation.y, velocity.x, velocity.y)
+            }
+        }
+    }
+}
+
+private struct PlayerCardAccess: ViewModifier {
+    var labeled: Bool
+    var label: String
+    var onNext: () -> Void
+    var onPrevious: () -> Void
+    var onMagicTap: () -> Void
+    var onEscape: () -> Void
+
+    func body(content: Content) -> some View {
+        if labeled {
+            content
+                .accessibilityElement()
+                .accessibilityIdentifier("story-player")
+                .accessibilityLabel(label)
+                .accessibilityAction(named: Text("Next card"), onNext)
+                .accessibilityAction(named: Text("Previous card"), onPrevious)
+                .accessibilityAction(.magicTap, onMagicTap)
+                .accessibilityAction(.escape, onEscape)
+                .accessibilityScrollAction { edge in
+                    switch edge {
+                    case .trailing:
+                        onNext()
+                    case .leading:
+                        onPrevious()
+                    default:
+                        break
+                    }
+                }
+        } else {
+            content.accessibilityHidden(true)
+        }
+    }
+}
+
+private final class PlayerGestureView: UIView {
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        if point.y < WrappedSpace.topRowMaxY {
+            return nil
+        }
+        return super.hitTest(point, with: event)
+    }
+}
