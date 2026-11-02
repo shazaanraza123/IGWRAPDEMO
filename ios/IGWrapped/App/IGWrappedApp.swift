@@ -9,7 +9,7 @@ struct IGWrappedApp: App {
     var body: some Scene {
         WindowGroup {
             #if DEBUG
-            if ProcessInfo.processInfo.arguments.contains("--styleguide") {
+            if ProcessInfo.processInfo.arguments.contains("--styleguide"), !Pitch.active {
                 StyleguideView()
             } else {
                 InstagramShellView()

@@ -292,6 +292,47 @@ final class IGWrappedUITests: XCTestCase {
         XCTAssertEqual(tops[0], tops[2], accuracy: 0.5, "frames \(tops)")
     }
 
+    func testPitchShowsNoDemoToast() {
+        let demo = "Not part of this demo"
+        let app = XCUIApplication()
+        app.launchArguments = ["--pitch", "--player", "--player-paused"]
+        app.launch()
+        XCTAssertTrue(waitForLabel(app.otherElements["story-player"], "Card 1 of 13"))
+
+        app.terminate()
+        app.launchArguments = ["--pitch"]
+        app.launch()
+        XCTAssertTrue(app.buttons["Create"].waitForExistence(timeout: 8))
+        app.buttons["Create"].tap()
+        app.buttons["Activity"].tap()
+        XCTAssertFalse(app.staticTexts[demo].waitForExistence(timeout: 1))
+
+        app.terminate()
+        app.launchArguments = ["--pitch", "--friend-story"]
+        app.launch()
+        let like = app.buttons["Like"]
+        XCTAssertTrue(like.waitForExistence(timeout: 8))
+        like.tap()
+        XCTAssertFalse(app.staticTexts[demo].waitForExistence(timeout: 1))
+
+        app.terminate()
+        app.launchArguments = ["--pitch", "--player", "--player-card", "3", "--player-paused", "--reference"]
+        app.launch()
+        let share = app.buttons["card-share"]
+        XCTAssertTrue(share.waitForExistence(timeout: 8))
+        share.tap()
+        XCTAssertFalse(app.staticTexts[demo].waitForExistence(timeout: 1))
+
+        app.terminate()
+        app.launchArguments = ["--pitch", "--player", "--player-card", "13", "--player-paused"]
+        app.launch()
+        let hub = app.buttons["go-to-hub"]
+        XCTAssertTrue(hub.waitForExistence(timeout: 8))
+        hub.tap()
+        app.buttons["share-card"].tap()
+        XCTAssertFalse(app.staticTexts[demo].waitForExistence(timeout: 1))
+    }
+
     private func launchedPlayer() -> XCUIApplication {
         let app = XCUIApplication()
         app.launchArguments = ["--player"]

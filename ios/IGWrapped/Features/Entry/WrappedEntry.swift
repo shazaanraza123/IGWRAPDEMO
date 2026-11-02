@@ -193,7 +193,7 @@ struct WrappedEntryFlow: View {
                 )
             }
             entryButton("Choose what's included", identifier: "choose-included") {
-                showToast()
+                showUnavailable(.privacy)
             }
             entryButton("How Wrapped works", identifier: "how-wrapped-works") {
                 showsHow = true
@@ -217,7 +217,7 @@ struct WrappedEntryFlow: View {
                 route = .player
             }
             entryButton("Creator", identifier: "edition-creator") {
-                showToast()
+                showUnavailable(.creator)
             }
             entryButton("Watch both", identifier: "edition-both") {
                 route = .player
@@ -284,8 +284,9 @@ struct WrappedEntryFlow: View {
         route = next
     }
 
-    private func showToast() {
-        toast = "Not part of this demo"
+    private func showUnavailable(_ feature: Feature) {
+        guard let message = Feature.toast(for: feature) else { return }
+        toast = message
         Task {
             try? await Task.sleep(for: .seconds(2))
             toast = nil

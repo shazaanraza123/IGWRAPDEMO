@@ -68,6 +68,7 @@ Launch arguments, from `HANDOFF.md`:
 - `--reset-session` signs out and clears the "intro seen" flag
 - `--friend-story` opens Jules's fake story
 - `--styleguide` opens the design-system screen
+- `--pitch` hides unbuilt toasts, the reference overlay, and debug UI, and does not save or resume player progress
 
 ## Tips for driving Cursor
 - Let it finish one step and show you the screenshot before saying "next".

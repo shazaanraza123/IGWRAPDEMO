@@ -1,5 +1,37 @@
 import Foundation
 
+/// Actions the prototype has not built. Pitch mode and the demo toast both read this list.
+enum Feature: Equatable, CaseIterable {
+    case share
+    case hub
+    case create
+    case activity
+    case storyReply
+    case privacy
+    case creator
+
+    static func isBuilt(_ feature: Feature) -> Bool {
+        switch feature {
+        case .share, .hub, .create, .activity, .storyReply, .privacy, .creator:
+            false
+        }
+    }
+
+    static let unavailable = "Not part of this demo"
+
+    /// Nil when the action is built, and nil in pitch mode so the control stays quiet.
+    static func toast(for feature: Feature, pitch: Bool = Pitch.active) -> String? {
+        guard !isBuilt(feature) else { return nil }
+        return pitch ? nil : unavailable
+    }
+}
+
+enum Pitch {
+    static var active: Bool {
+        ProcessInfo.processInfo.arguments.contains("--pitch")
+    }
+}
+
 enum PlayerAdvance: Equatable {
     case same
     case moved
@@ -28,12 +60,14 @@ struct PlayerProgress: Equatable, Codable {
 enum PlayerProgressStore {
     private static let key = "igwrapped.player-progress"
 
-    static func save(_ progress: PlayerProgress, defaults: UserDefaults = .standard) {
+    static func save(_ progress: PlayerProgress, defaults: UserDefaults = .standard, pitch: Bool = Pitch.active) {
+        guard !pitch else { return }
         guard let data = try? JSONEncoder().encode(progress) else { return }
         defaults.set(data, forKey: key)
     }
 
-    static func load(defaults: UserDefaults = .standard) -> PlayerProgress? {
+    static func load(defaults: UserDefaults = .standard, pitch: Bool = Pitch.active) -> PlayerProgress? {
+        guard !pitch else { return nil }
         guard let data = defaults.data(forKey: key) else { return nil }
         return try? JSONDecoder().decode(PlayerProgress.self, from: data)
     }

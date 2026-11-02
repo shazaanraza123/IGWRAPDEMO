@@ -129,8 +129,22 @@ import Testing
     let defaults = UserDefaults(suiteName: "player-progress-test")!
     defaults.removePersistentDomain(forName: "player-progress-test")
     let progress = PlayerProgress(card: 4, elapsed: 1.5)
-    PlayerProgressStore.save(progress, defaults: defaults)
-    #expect(PlayerProgressStore.load(defaults: defaults) == progress)
+    PlayerProgressStore.save(progress, defaults: defaults, pitch: false)
+    #expect(PlayerProgressStore.load(defaults: defaults, pitch: false) == progress)
+}
+
+@Test func pitchKeepsUnbuiltActionsQuietAndDoesNotResume() {
+    for feature in Feature.allCases {
+        #expect(Feature.isBuilt(feature) == false)
+        #expect(Feature.toast(for: feature, pitch: false) == Feature.unavailable)
+        #expect(Feature.toast(for: feature, pitch: true) == nil)
+    }
+    let defaults = UserDefaults(suiteName: "player-progress-pitch")!
+    defaults.removePersistentDomain(forName: "player-progress-pitch")
+    PlayerProgressStore.save(PlayerProgress(card: 4, elapsed: 1.5), defaults: defaults, pitch: true)
+    #expect(PlayerProgressStore.load(defaults: defaults, pitch: false) == nil)
+    PlayerProgressStore.save(PlayerProgress(card: 4, elapsed: 1.5), defaults: defaults, pitch: false)
+    #expect(PlayerProgressStore.load(defaults: defaults, pitch: true) == nil)
 }
 
 @Test @MainActor func musicFollowsChaptersAndRespectsTheSilentSwitch() async throws {

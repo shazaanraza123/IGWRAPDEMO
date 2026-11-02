@@ -205,43 +205,43 @@ struct StoryPlayer: View {
                 }
             )
         case 3:
-            FeedColorCard(onShare: { showToast("Not part of this demo") })
+            FeedColorCard(onShare: { showUnavailable(.share) })
         case 4:
             AlgorithmCard(
-                onShare: { showToast("Not part of this demo") },
+                onShare: { showUnavailable(.share) },
                 onSaved: { showToast("Got it. We'll tune Explore.") }
             )
         case 5:
-            ReelsCard(onShare: { showToast("Not part of this demo") })
+            ReelsCard(onShare: { showUnavailable(.share) })
         case 6:
             MainCharacterCard(
-                onShare: { showToast("Not part of this demo") },
+                onShare: { showUnavailable(.share) },
                 onOpenPost: { showsPost = true }
             )
         case 7:
             GroupChatCard(
-                onShare: { showToast("Not part of this demo") },
+                onShare: { showUnavailable(.share) },
                 onOpenStory: { showsStory = true }
             )
         case 8:
             CircleCard()
         case 9:
-            ThreeAMCard(onShare: { showToast("Not part of this demo") })
+            ThreeAMCard(onShare: { showUnavailable(.share) })
         case 10:
-            PlotTwistCard(onShare: { showToast("Not part of this demo") })
+            PlotTwistCard(onShare: { showUnavailable(.share) })
         case 11:
             PersonalityTeaserCard(onReveal: revealPersonality)
         case 12:
             PersonalityRevealCard(
-                onShare: { showToast("Not part of this demo") },
+                onShare: { showUnavailable(.share) },
                 onShareCards: {
                     withAnimation(cardAnimation) { step(model.goForward()) }
                 }
             )
         case 13:
             ShareCardsCard(
-                onShare: { showToast("Not part of this demo") },
-                onHub: { showToast("Not part of this demo") },
+                onShare: { showUnavailable(.share) },
+                onHub: { showUnavailable(.hub) },
                 startsOnNumbers: startsOnNumbers
             )
         default:
@@ -265,7 +265,7 @@ struct StoryPlayer: View {
     }
 
     private var referenceName: String? {
-        guard ProcessInfo.processInfo.arguments.contains("--reference") else { return nil }
+        guard !Pitch.active, ProcessInfo.processInfo.arguments.contains("--reference") else { return nil }
         switch model.card {
         case 1: return "01-opening"
         case 2: return "02-year-in-memories"
@@ -422,6 +422,11 @@ struct StoryPlayer: View {
 
     private func syncCover() {
         model.coverOpen = openMonth != nil || showsMontage || showsPost || showsStory
+    }
+
+    private func showUnavailable(_ feature: Feature) {
+        guard let message = Feature.toast(for: feature) else { return }
+        showToast(message)
     }
 
     private func showToast(_ message: String) {

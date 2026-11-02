@@ -23,7 +23,7 @@ extension View {
     func referenceOverlay(image: Image?, opacity: Double = 0.5) -> some View {
         #if DEBUG
         overlay {
-            if let image {
+            if let image, !Pitch.active {
                 ReferenceOverlay(image: image, opacity: opacity)
             }
         }

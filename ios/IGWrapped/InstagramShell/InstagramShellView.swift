@@ -60,7 +60,7 @@ struct InstagramShellView: View {
             }
             VStack(spacing: 0) {
                 if tab == .home {
-                    IGTopBar(onCreate: { showToast() }, onActivity: { showToast() })
+                    IGTopBar(onCreate: { showUnavailable(.create) }, onActivity: { showUnavailable(.activity) })
                 }
                 Spacer()
                 IGTabBar(selection: $tab)
@@ -81,7 +81,7 @@ struct InstagramShellView: View {
                     story: openStory,
                     zoom: storyZoom,
                     onClose: closeStory,
-                    onUnavailable: { showToast() }
+                    onUnavailable: { showUnavailable(.storyReply) }
                 )
             }
             if showsPlayer {
@@ -129,7 +129,7 @@ struct InstagramShellView: View {
     }
 
     private var referenceImage: Image? {
-        guard ProcessInfo.processInfo.arguments.contains("--reference"), !showsPlayer else { return nil }
+        guard !Pitch.active, ProcessInfo.processInfo.arguments.contains("--reference"), !showsPlayer else { return nil }
         let name = openStory == nil ? "01-home-2026" : "05-story-viewer"
         guard let image = UIImage(named: name) else { return nil }
         return Image(uiImage: image)
@@ -157,8 +157,9 @@ struct InstagramShellView: View {
         }
     }
 
-    private func showToast() {
-        toast = "Not part of this demo"
+    private func showUnavailable(_ feature: Feature) {
+        guard let message = Feature.toast(for: feature) else { return }
+        toast = message
         Task {
             try? await Task.sleep(for: .seconds(2))
             toast = nil
