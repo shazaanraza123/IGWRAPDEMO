@@ -8,7 +8,7 @@ struct MayaBar: Equatable {
 
 enum MayaPlot {
     static let eyebrow = "One more thing"
-    static let headline = "Plot twist."
+    static let headline = "PLOT\nTWIST."
     static let sentence = "In June you fell into ceramics and never climbed out."
     static let chartTitle = "Ceramics posts you liked and saved, by month"
     static let provenance = "Measured · likes and saves"
@@ -29,7 +29,7 @@ enum MayaPlot {
 
 enum MayaTeaser {
     static let eyebrow = "Before we tell you"
-    static let headline = "Three clues. One personality."
+    static let headline = "THREE CLUES. ONE\nPERSONALITY."
     static let clues: [(index: String, text: String)] = [
         ("01", "You saved 1,214 posts"),
         ("02", "You posted 38 times all year"),
@@ -39,7 +39,7 @@ enum MayaTeaser {
 
 enum MayaReveal {
     static let eyebrow = "Your Instagram personality"
-    static let name = "The\nCurator"
+    static let name = "THE\nCURATOR"
     static let side = "with a side of The Ghost"
     static let primary = PersonalityArchetype.curator
     static let secondary = PersonalityArchetype.ghost
@@ -58,11 +58,11 @@ enum MayaShare {
     static let handle = "@maya.lens"
     static let year = "MY 2026"
     static let eyebrow = "My Instagram personality"
-    static let name = "The\nCurator"
+    static let name = "THE\nCURATOR"
     static let statValue = "1,214"
     static let statLabel = "posts saved"
     static let photo = "year-card"
-    static let numbersTitle = "2026 in numbers"
+    static let numbersTitle = "2026 IN NUMBERS"
     static let stats: [(value: String, label: String)] = [
         ("412", "Stories"),
         ("38", "Posts"),
@@ -94,13 +94,12 @@ struct PlotTwistCard: View {
                     color: WrappedColor.ink,
                     uppercase: true
                 )
-                CardText(
-                    text: MayaPlot.headline,
+                DisplayHeadline(
+                    copy: MayaPlot.headline,
                     size: CardSpace.plotHeadline,
-                    tracking: CardSpace.plotHeadlineTracking,
                     lineHeight: CardSpace.plotHeadlineLine,
-                    color: WrappedColor.ink,
-                    uppercase: true
+                    tracking: CardSpace.plotHeadlineTracking,
+                    color: WrappedColor.ink
                 )
                 CardText(
                     text: MayaPlot.sentence,
@@ -177,13 +176,12 @@ struct PersonalityTeaserCard: View {
             WrappedColor.ink.ignoresSafeArea().allowsHitTesting(false)
             VStack(alignment: .leading, spacing: CardSpace.yearCopyGap) {
                 Eyebrow(text: MayaTeaser.eyebrow)
-                CardText(
-                    text: MayaTeaser.headline,
+                DisplayHeadline(
+                    copy: MayaTeaser.headline,
                     size: CardSpace.teaserHeadline,
-                    tracking: CardSpace.teaserHeadlineTracking,
                     lineHeight: CardSpace.teaserHeadlineLine,
-                    color: WrappedColor.igWhite,
-                    uppercase: true
+                    tracking: CardSpace.teaserHeadlineTracking,
+                    color: WrappedColor.igWhite
                 )
             }
             .allowsHitTesting(false)
@@ -283,18 +281,14 @@ struct PersonalityRevealCard: View {
                     uppercase: true,
                     alignment: .center
                 )
-                CardText(
-                    text: MayaReveal.name,
+                DisplayHeadline(
+                    copy: MayaReveal.name,
                     size: CardSpace.revealName,
-                    tracking: CardSpace.revealNameTracking,
                     lineHeight: CardSpace.revealNameLine,
+                    tracking: CardSpace.revealNameTracking,
                     color: WrappedColor.igWhite,
-                    uppercase: true,
                     alignment: .center
                 )
-                .lineLimit(2)
-                .minimumScaleFactor(0.6)
-                .fixedSize(horizontal: false, vertical: true)
                 .scaleEffect(revealed ? 1 : WrappedMotion.revealStart)
                 CardText(
                     text: MayaReveal.side,
@@ -498,16 +492,14 @@ private struct IdentityFace: View {
                 uppercase: true,
                 alignment: .center
             )
-            CardText(
-                text: MayaShare.name,
+            DisplayHeadline(
+                copy: MayaShare.name,
                 size: CardSpace.identityName,
-                tracking: CardSpace.identityNameTracking,
                 lineHeight: CardSpace.identityNameLine,
+                tracking: CardSpace.identityNameTracking,
                 color: WrappedColor.igWhite,
-                uppercase: true,
                 alignment: .center
             )
-            .minimumScaleFactor(0.7)
             Spacer(minLength: 0)
             HStack(alignment: .firstTextBaseline, spacing: CardSpace.yearCopyGap) {
                 CardText(
@@ -557,13 +549,12 @@ private struct NumbersFace: View {
             .frame(height: CardSpace.numbersHeader, alignment: .top)
             .background(WrappedColor.igPink)
 
-            CardText(
-                text: MayaShare.numbersTitle,
+            DisplayHeadline(
+                copy: MayaShare.numbersTitle,
                 size: CardSpace.numbersTitle,
-                tracking: CardSpace.algorithmHeadlineTracking,
                 lineHeight: CardSpace.numbersTitleLine,
-                color: WrappedColor.ink,
-                uppercase: true
+                tracking: CardSpace.algorithmHeadlineTracking,
+                color: WrappedColor.ink
             )
             .padding(.horizontal, CardSpace.identityInset)
             .padding(.top, CardSpace.identityInset)

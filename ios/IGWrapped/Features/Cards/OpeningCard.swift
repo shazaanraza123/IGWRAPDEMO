@@ -117,13 +117,12 @@ struct OpeningCard: View {
                 width: CardSpace.regular,
                 color: WrappedColor.ink
             )
-            CardText(
-                text: MayaOpening.headline,
+            DisplayHeadline(
+                copy: MayaOpening.headline,
                 size: CardSpace.openingHeadline,
-                tracking: CardSpace.openingHeadlineTracking,
                 lineHeight: CardSpace.openingHeadlineLine,
-                color: WrappedColor.ink,
-                uppercase: true
+                tracking: CardSpace.openingHeadlineTracking,
+                color: WrappedColor.ink
             )
             CardText(
                 text: MayaOpening.support,

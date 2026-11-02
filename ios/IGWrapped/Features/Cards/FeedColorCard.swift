@@ -30,13 +30,12 @@ struct FeedColorCard: View {
                 tracking: WrappedTextStyle.eyebrow.tracking,
                 color: WrappedColor.paletteEyebrow
             )
-            CardText(
-                text: MayaFeed.headline,
+            DisplayHeadline(
+                copy: MayaFeed.headline,
                 size: CardSpace.feedHeadline,
-                tracking: CardSpace.feedHeadlineTracking,
                 lineHeight: CardSpace.openingHeadlineLine,
-                color: WrappedColor.ink,
-                uppercase: true
+                tracking: CardSpace.feedHeadlineTracking,
+                color: WrappedColor.ink
             )
         }
         .padding(.horizontal, WrappedSpace.gutter)

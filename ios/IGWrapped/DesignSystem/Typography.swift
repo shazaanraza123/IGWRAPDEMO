@@ -80,7 +80,7 @@ enum WrappedTextStyle: String, CaseIterable, Identifiable {
         case .igStoryName: "SF Pro 11 semibold"
         case .igUsername: "SF Pro 14 semibold"
         case .igMeta: "SF Pro 12 regular"
-        case .bannerTitle: "Archivo 28 / 0.95 · 900 · wdth 71"
+        case .bannerTitle: "Archivo 44 / 0.88 · 900 · wdth 64 · uppercase · tracking -0.8"
         }
     }
 
@@ -98,7 +98,7 @@ enum WrappedTextStyle: String, CaseIterable, Identifiable {
         case .igStoryName: 11
         case .igUsername: 14
         case .igMeta: 12
-        case .bannerTitle: 28
+        case .bannerTitle: 44
         }
     }
 
@@ -112,7 +112,7 @@ enum WrappedTextStyle: String, CaseIterable, Identifiable {
         case .eyebrow: 1
         case .caption: 1.2
         case .igChrome, .igStoryName, .igUsername, .igMeta: 1.2
-        case .bannerTitle: 0.95
+        case .bannerTitle: 0.88
         }
     }
 
@@ -132,7 +132,7 @@ enum WrappedTextStyle: String, CaseIterable, Identifiable {
         case .hero, .display, .bigNumber: 62
         case .title: 71
         case .body, .eyebrow, .caption, .igChrome, .igStoryName, .igUsername, .igMeta: 100
-        case .bannerTitle: 71
+        case .bannerTitle: 64
         }
     }
 
@@ -140,6 +140,7 @@ enum WrappedTextStyle: String, CaseIterable, Identifiable {
         switch self {
         case .display: -1
         case .eyebrow: 1.4
+        case .bannerTitle: -0.8
         default: 0
         }
     }

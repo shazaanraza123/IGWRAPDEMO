@@ -24,13 +24,12 @@ struct YearMemoriesCard: View {
                 tracking: WrappedTextStyle.eyebrow.tracking,
                 color: WrappedColor.pinkOnDark
             )
-            CardText(
-                text: MayaYear.headline,
+            DisplayHeadline(
+                copy: MayaYear.headline,
                 size: CardSpace.yearHeadline,
-                tracking: CardSpace.yearHeadlineTracking,
                 lineHeight: CardSpace.openingHeadlineLine,
-                color: WrappedColor.igWhite,
-                uppercase: true
+                tracking: CardSpace.yearHeadlineTracking,
+                color: WrappedColor.igWhite
             )
         }
         .padding(.horizontal, WrappedSpace.gutter)

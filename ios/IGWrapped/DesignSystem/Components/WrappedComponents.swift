@@ -155,14 +155,52 @@ struct Eyebrow: View {
     }
 }
 
+/// One tight line box per explicit break in the card copy.
+/// SwiftUI will not compress a paragraph below a line height of 1, so each line is its own text.
 struct DisplayHeadline: View {
-    var text: String
+    var lines: [String]
+    var size: CGFloat
+    var lineHeight: CGFloat
+    var weight: CGFloat
+    var width: CGFloat
+    var tracking: CGFloat
+    var color: Color
+    var alignment: HorizontalAlignment
+
+    init(
+        copy: String,
+        size: CGFloat,
+        lineHeight: CGFloat,
+        weight: CGFloat = CardSpace.heavy,
+        width: CGFloat = CardSpace.condensed,
+        tracking: CGFloat = 0,
+        color: Color,
+        alignment: HorizontalAlignment = .leading
+    ) {
+        lines = copy.components(separatedBy: "\n")
+        self.size = size
+        self.lineHeight = lineHeight
+        self.weight = weight
+        self.width = width
+        self.tracking = tracking
+        self.color = color
+        self.alignment = alignment
+    }
 
     var body: some View {
-        Text(text)
-            .wrappedType(.display)
-            .foregroundStyle(WrappedColor.ink)
-            .frame(maxWidth: .infinity, alignment: .leading)
+        VStack(alignment: alignment, spacing: 0) {
+            ForEach(Array(lines.enumerated()), id: \.offset) { _, line in
+                Text(line)
+                    .font(ArchivoFont.font(size: size, weight: weight, width: width))
+                    .tracking(tracking)
+                    .foregroundStyle(color)
+                    .lineLimit(1)
+                    .fixedSize()
+                    .frame(height: size * lineHeight, alignment: .bottom)
+            }
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(lines.joined(separator: " "))
     }
 }
 

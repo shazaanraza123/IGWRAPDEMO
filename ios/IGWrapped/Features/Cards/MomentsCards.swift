@@ -1,7 +1,7 @@
 import SwiftUI
 
 enum MayaReels {
-    static let headline = "Down the rabbit hole."
+    static let headline = "DOWN THE\nRABBIT HOLE."
     static let fastestRising = "Ceramics, 4x since June"
     static let sent = "And you sent 1,206 of them to friends."
     static let categories: [(name: String, percent: String, width: CGFloat)] = [
@@ -14,7 +14,7 @@ enum MayaReels {
 }
 
 enum MayaPost {
-    static let headline = "Main character post"
+    static let headline = "MAIN CHARACTER\nPOST"
     static let likes = "2,184"
     static let comments = "418 comments. Unhinged ones."
     static let average = "That's 3x your average post."
@@ -24,7 +24,7 @@ enum MayaPost {
 }
 
 enum MayaChat {
-    static let headline = "The Story that broke the group chat."
+    static let headline = "THE STORY THAT\nBROKE THE\nGROUP CHAT."
     static let replies = "47"
     static let repliesCaption = "replies in a day"
     static let storyChip = "Story · Mar 14"
@@ -33,7 +33,7 @@ enum MayaChat {
 }
 
 enum MayaCircle {
-    static let headline = "Your circle."
+    static let headline = "YOUR CIRCLE."
     static let note = "The five accounts you showed up for most. No ranking, no scores."
     static let privacy = "Want the ranked version? It lives in Privacy, off by default."
     static let handles = ["dee.films", "jules.mp", "nico_k", "sam.wav", "tori.eats"]
@@ -49,7 +49,7 @@ enum MayaCircle {
 }
 
 enum MayaNight {
-    static let headline = "Welcome to the 3AM club."
+    static let headline = "WELCOME TO\nTHE 3AM CLUB."
     static let time = "3:42 AM"
     static let note = "A Tuesday in May. We hope it was worth it."
 }
@@ -98,13 +98,12 @@ struct ReelsCard: View {
                 tracking: WrappedTextStyle.eyebrow.tracking,
                 color: WrappedColor.ink
             )
-            CardText(
-                text: MayaReels.headline,
+            DisplayHeadline(
+                copy: MayaReels.headline,
                 size: CardSpace.reelsHeadline,
-                tracking: CardSpace.yearHeadlineTracking,
                 lineHeight: CardSpace.openingHeadlineLine,
-                color: WrappedColor.ink,
-                uppercase: true
+                tracking: CardSpace.yearHeadlineTracking,
+                color: WrappedColor.ink
             )
             CardText(
                 text: "What kept you watching, by share of your Reels time.",
@@ -228,13 +227,12 @@ struct MainCharacterCard: View {
                     tracking: WrappedTextStyle.eyebrow.tracking,
                     color: WrappedColor.ink
                 )
-                CardText(
-                    text: MayaPost.headline,
+                DisplayHeadline(
+                    copy: MayaPost.headline,
                     size: CardSpace.postHeadline,
-                    tracking: CardSpace.algorithmHeadlineTracking,
                     lineHeight: CardSpace.openingHeadlineLine,
-                    color: WrappedColor.ink,
-                    uppercase: true
+                    tracking: CardSpace.algorithmHeadlineTracking,
+                    color: WrappedColor.ink
                 )
             }
             .allowsHitTesting(false)
@@ -373,7 +371,7 @@ struct GroupChatCard: View {
             WrappedColor.closeGreen.ignoresSafeArea().allowsHitTesting(false)
             VStack(alignment: .leading, spacing: CardSpace.yearCopyGap) {
                 CardText(text: "YOUR MOMENTS", size: WrappedTextStyle.eyebrow.size, weight: WrappedTextStyle.eyebrow.weight, width: WrappedTextStyle.eyebrow.width, tracking: WrappedTextStyle.eyebrow.tracking, color: WrappedColor.ink)
-                CardText(text: MayaChat.headline, size: CardSpace.chatHeadline, tracking: CardSpace.algorithmHeadlineTracking, lineHeight: CardSpace.openingHeadlineLine, color: WrappedColor.ink, uppercase: true)
+                DisplayHeadline(copy: MayaChat.headline, size: CardSpace.chatHeadline, lineHeight: CardSpace.openingHeadlineLine, tracking: CardSpace.algorithmHeadlineTracking, color: WrappedColor.ink)
             }
             .allowsHitTesting(false)
             .padding(.horizontal, WrappedSpace.gutter)
@@ -472,7 +470,7 @@ struct CircleCard: View {
             WrappedColor.igOrange.ignoresSafeArea().allowsHitTesting(false)
             VStack(alignment: .leading, spacing: CardSpace.blockGap) {
                 CardText(text: "YOUR PEOPLE", size: WrappedTextStyle.eyebrow.size, weight: WrappedTextStyle.eyebrow.weight, width: WrappedTextStyle.eyebrow.width, tracking: WrappedTextStyle.eyebrow.tracking, color: WrappedColor.ink)
-                CardText(text: MayaCircle.headline, size: CardSpace.openingHeadline, tracking: CardSpace.openingHeadlineTracking, lineHeight: CardSpace.openingHeadlineLine, color: WrappedColor.ink, uppercase: true)
+                DisplayHeadline(copy: MayaCircle.headline, size: CardSpace.openingHeadline, lineHeight: CardSpace.openingHeadlineLine, tracking: CardSpace.openingHeadlineTracking, color: WrappedColor.ink)
                 CardText(text: MayaCircle.note, size: CardSpace.openingSupport, weight: WrappedTextStyle.body.weight, width: CardSpace.regular, lineHeight: 1.3, color: WrappedColor.ink)
             }
             .allowsHitTesting(false)
@@ -558,7 +556,7 @@ struct ThreeAMCard: View {
             VStack(alignment: .leading, spacing: 0) {
                 VStack(alignment: .leading, spacing: CardSpace.yearCopyGap) {
                     CardText(text: "YOUR HABITS", size: WrappedTextStyle.eyebrow.size, weight: WrappedTextStyle.eyebrow.weight, width: WrappedTextStyle.eyebrow.width, tracking: WrappedTextStyle.eyebrow.tracking, color: WrappedColor.igYellow)
-                    CardText(text: MayaNight.headline, size: CardSpace.yearHeadline, tracking: CardSpace.yearHeadlineTracking, lineHeight: CardSpace.openingHeadlineLine, color: WrappedColor.igWhite, uppercase: true)
+                    DisplayHeadline(copy: MayaNight.headline, size: CardSpace.yearHeadline, lineHeight: CardSpace.openingHeadlineLine, tracking: CardSpace.yearHeadlineTracking, color: WrappedColor.igWhite)
                 }
                 .allowsHitTesting(false)
                 .padding(.top, CardSpace.yearCopyTop)

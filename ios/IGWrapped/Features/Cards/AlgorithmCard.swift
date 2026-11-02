@@ -41,13 +41,12 @@ struct AlgorithmCard: View {
                 tracking: WrappedTextStyle.eyebrow.tracking,
                 color: WrappedColor.igYellow
             )
-            CardText(
-                text: MayaAlgorithm.headline,
+            DisplayHeadline(
+                copy: MayaAlgorithm.headline,
                 size: CardSpace.algorithmHeadline,
-                tracking: CardSpace.algorithmHeadlineTracking,
                 lineHeight: CardSpace.algorithmHeadlineLine,
-                color: WrappedColor.igWhite,
-                uppercase: true
+                tracking: CardSpace.algorithmHeadlineTracking,
+                color: WrappedColor.igWhite
             )
             HStack(spacing: CardSpace.chipGap) {
                 Text("Inferred")

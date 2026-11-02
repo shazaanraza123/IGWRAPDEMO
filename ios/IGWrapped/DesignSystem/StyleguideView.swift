@@ -181,7 +181,15 @@ struct StyleguideView: View {
             }
             labeled("Eyebrow") { Eyebrow(text: "Your habits") }
             labeled("DisplayHeadline") {
-                DisplayHeadline(text: "Plot twist.")
+                DisplayHeadline(
+                    copy: "PLOT\nTWIST.",
+                    size: WrappedTextStyle.display.size,
+                    lineHeight: WrappedTextStyle.display.lineHeight,
+                    weight: WrappedTextStyle.display.weight,
+                    width: WrappedTextStyle.display.width,
+                    tracking: WrappedTextStyle.display.tracking,
+                    color: WrappedColor.ink
+                )
                     .padding(12)
                     .background(WrappedColor.paper)
             }

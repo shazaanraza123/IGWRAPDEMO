@@ -4,7 +4,7 @@ import Foundation
 enum MayaOpening {
     static let handle = "maya.lens"
     static let photos = ["tile-1", "tile-2", "tile-3", "tile-4", "tile-5"]
-    static let headline = "2026 looked good on you."
+    static let headline = "2026 LOOKED\nGOOD ON\nYOU."
     static let support = "Built from your own posts and Stories, Jan 1 to Nov 15."
 }
 
@@ -19,7 +19,7 @@ struct MayaMonth: Identifiable, Equatable {
 }
 
 enum MayaYear {
-    static let headline = "You had quite a year."
+    static let headline = "YOU HAD QUITE\nA YEAR."
     static let support = "August was your busiest month: 9 posts, 61 Stories."
     static let playLabel = "PLAY YOUR YEAR · 0:15"
     static let topMonth = 8
@@ -46,7 +46,7 @@ struct MayaSwatch: Identifiable, Equatable {
 }
 
 enum MayaFeed {
-    static let headline = "Your feed had a color."
+    static let headline = "YOUR FEED\nHAD A COLOR."
     static let paletteName = "Midnight Camel"
     static let footnote = "% = main color in each of 1,840 liked posts"
     static let domination = "of liked posts where this color dominates"
@@ -68,7 +68,7 @@ struct MayaTopic: Identifiable, Equatable {
 }
 
 enum MayaAlgorithm {
-    static let headline = "Your algorithm thinks you're into..."
+    static let headline = "YOUR ALGORITHM\nTHINKS YOU'RE\nINTO..."
     static let note = "Your taps tune Explore. Undo in Settings."
     static let undercut = "63 watched. No judgment."
     static let topics: [MayaTopic] = [

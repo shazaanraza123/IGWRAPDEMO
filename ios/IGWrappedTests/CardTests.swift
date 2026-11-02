@@ -3,7 +3,11 @@ import Testing
 @testable import IGWrapped
 
 @Test func mayaCardCopyMatchesTheSchema() {
-    #expect(MayaOpening.headline == "2026 looked good on you.")
+    #expect(MayaOpening.headline == "2026 LOOKED\nGOOD ON\nYOU.")
+    #expect(MayaYear.headline == "YOU HAD QUITE\nA YEAR.")
+    #expect(MayaFeed.headline == "YOUR FEED\nHAD A COLOR.")
+    #expect(MayaChat.headline == "THE STORY THAT\nBROKE THE\nGROUP CHAT.")
+    #expect(MayaReveal.name == "THE\nCURATOR")
     #expect(MayaOpening.support == "Built from your own posts and Stories, Jan 1 to Nov 15.")
     #expect(MayaYear.support == "August was your busiest month: 9 posts, 61 Stories.")
     #expect(MayaYear.playLabel == "PLAY YOUR YEAR · 0:15")

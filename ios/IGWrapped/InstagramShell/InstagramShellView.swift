@@ -176,10 +176,15 @@ private struct WrappedBanner: View {
                     Text("NEW · ONLY ON YOUR ACCOUNT")
                         .wrappedType(.caption)
                         .foregroundStyle(WrappedColor.ink)
-                    Text("Your 2026 Wrapped is here")
-                        .wrappedType(.bannerTitle)
-                        .foregroundStyle(WrappedColor.ink)
-                        .multilineTextAlignment(.leading)
+                    DisplayHeadline(
+                        copy: "YOUR 2026\nWRAPPED IS HERE",
+                        size: WrappedTextStyle.bannerTitle.size,
+                        lineHeight: WrappedTextStyle.bannerTitle.lineHeight,
+                        weight: WrappedTextStyle.bannerTitle.weight,
+                        width: WrappedTextStyle.bannerTitle.width,
+                        tracking: WrappedTextStyle.bannerTitle.tracking,
+                        color: WrappedColor.ink
+                    )
                     HStack(spacing: IGSpace.bannerGap) {
                         Text("Open your Wrapped")
                             .wrappedType(.igUsername)
