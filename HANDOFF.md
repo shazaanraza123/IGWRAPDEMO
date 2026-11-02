@@ -128,21 +128,12 @@ Photos that are bundled: `tile-1`…`tile-5`, `feed-chicago.jpg`, `main-characte
 
 ## Fixes worth doing before calling the pitch ready
 
-In pitch order, not in the order they are fun:
-
-1. Step 16 on a physical iPhone, after a real Facebook App ID is in `Config.xcconfig`. This is the shot the pitch video cannot fake.
-2. Step 15, so the image that lands in the Story composer is the real card, with the same numbers in every style.
-3. Step 14, so (i) and swipe-up show provenance, window, and method, and Hide actually removes the card. The Reels method line must be exactly: “Top 5 categories by share of your Reels watch time. Other categories: 8%.” The “This looks wrong” reason list is **not specified** in the docs. Do not invent the reasons.
-4. Point the Swift cards at the engine payload instead of the hardcoded `Maya*` strings, or add a test that the strings still equal `docs/05-BACKEND-SCHEMA.md` section 5. Right now only the Deno tests lock the numbers.
-5. Shell pass against shots 02, 03, and 04, and card 6 against `08-post-detail.png`, once the wordmark file exists.
-6. Step 18 Hub only after the share loop, because the plan says not to cut the share loop.
-
-Do not cut, if time gets short: shell (7–8), player (9), cards 12–13, share loop (15–17). Cut order from the plan: Remix (20), then Creator (22), then Phase 2 (23).
+Replaced by `docs/UPDATE-01.md` section 3 (decision D19). Work that list in order: Batch A (F0–F8), then Step 13.5, Step 14, Step 15, Step 16. Step 17 waits until Step 16 is confirmed on a physical iPhone.
 
 ## Questions that were not guessed
 
-- What are the “This looks wrong” reason options? The schema has a `reason` column. No screen lists the choices.
-- Should 301 days active appear on a card? Nothing in the card copy shows it.
+- “This looks wrong” reasons are decided in D13: `number_off`, `not_me`, `dont_remember`, `other`. No free text.
+- `days_active` (301) stays a metric and is not shown on a card (D14).
 - Facebook App ID, and whose Meta app it is.
 - A physical iPhone for the Story handoff. The build Mac cannot prove step 16.
 - Wordmark, glyph, month photos, story-0314, friend headshots, and audio. The user said to add those files later.

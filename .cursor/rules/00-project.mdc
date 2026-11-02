@@ -9,10 +9,10 @@ You are building a native SwiftUI iPhone prototype of "Instagram Wrapped", a con
 
 ## Source of truth, in priority order
 1. `docs/DECISIONS.md`: wins over every other doc, the HTML, and the PNGs.
-2. `docs/06-IMPLEMENTATION-PLAN.md`: what to build now. Work one step at a time.
-3. `design/screens/*.png` + `design/source/*.dc.html`: how Wrapped cards look (1 CSS px = 1 pt; read exact colors, sizes, offsets from the HTML). Navigation follows `docs/03-APPFLOW.md`, not the HTML `href`s.
-4. `design/reference/instagram/*.png`: how the Instagram shell looks. Screenshots beat any number in the docs. If a shell screenshot is missing, stop and ask.
-5. `docs/01-PRD.md` … `docs/05-BACKEND-SCHEMA.md`: behavior, data and rules.
+2. `docs/UPDATE-01.md`: the current work order. One item at a time. Wait for "next" after each item.
+3. `docs/01-PRD.md` … `docs/06-IMPLEMENTATION-PLAN.md`: behavior, data, and the original step list.
+4. `design/screens/*.png` + `design/source/*.dc.html`: how Wrapped cards look (1 CSS px = 1 pt; read exact colors, sizes, offsets from the HTML). Navigation follows `docs/03-APPFLOW.md`, not the HTML `href`s.
+5. `design/reference/instagram/*.png`: how the Instagram shell looks. Screenshots beat any number in the docs. If a shell screenshot is missing, stop and ask.
 6. `data/personas/maya.json`: every number shown for the demo persona. Photo ids in that file are canonical.
 
 ## Working agreement

@@ -1,7 +1,8 @@
 # Decisions
 
-> This file wins. If it disagrees with `docs/01-PRD.md` through `docs/06-IMPLEMENTATION-PLAN.md`, `data/personas/maya.json`, `design/source/*.dc.html`, or a PNG, follow this file.
-> Recorded 2026-10-17 from the review of the kit.
+> This file wins. If it disagrees with `docs/UPDATE-01.md`, `docs/01-PRD.md` through `docs/06-IMPLEMENTATION-PLAN.md`, `data/personas/maya.json`, `design/source/*.dc.html`, or a PNG, follow this file.
+> `docs/UPDATE-01.md` is the next source after this file. Its section 3 is the work order.
+> Recorded 2026-10-17 from the review of the kit. D12–D19 were appended from `docs/UPDATE-01.md` on 2026-11-02. Where D12–D19 disagree with an earlier section, D12–D19 win.
 
 ## 1. Chapters
 
@@ -108,3 +109,34 @@ Only the Bold remix skin (the current designs) is required until Step 20.
 - Install XcodeGen, the Supabase CLI, Deno, and Node if they are missing. Hosted Supabase and the Facebook App ID wait for the steps that use them.
 - There is no iPhone 16 simulator. Use the newest installed 6.1" non-Pro iPhone simulator and name it in the step report. Do not download simulator runtimes without asking.
 - If Docker is not installed, stop and say so. Do not install Docker or OrbStack.
+
+## 13. Update 01
+
+**D12. Offline is the default data source.** The app ships engine output as bundled JSON and needs no network for the demo. Supabase is used only when `SUPABASE_URL` is set in `Config.xcconfig` **and** the app is launched with `--backend`. Instagram itself still needs network for Step 16; our app does not.
+
+**D13. "This looks wrong" reasons**, in this order, stored as `card_feedback.reason` keys. No free text.
+
+| Key | Label |
+| --- | --- |
+| `number_off` | The number seems off |
+| `not_me` | That's not me |
+| `dont_remember` | I don't remember this |
+| `other` | Something else |
+
+**D14. `days_active` (301)** stays a metric. No card shows it. Don't add it anywhere.
+
+**D15. Step 16 scope.** Ship "Your story", "Save" and "Send" (image only). "Copy link" and the See yours link are disabled until Step 17, with the toast "Links come with the web page".
+
+**D16. Missing-asset fallbacks never produce dead air or wrong subjects.**
+
+- Missing person photo (Maya or a friend): initials on a solid token color inside the normal ring.
+- Missing month photo: the gradient tile from the design (already done) on card 2; the montage doesn't play (F6).
+- Missing Story photo: the gradient tile (already done).
+- Missing wordmark: reserve its exact frame from `01-home.png`, draw nothing. Never draw or approximate the wordmark or glyph.
+- Never substitute a tile/place photo for a person.
+
+**D17. Headline line breaks are content.** Every display/hero headline in the card payload `copy` carries explicit `\n` breaks that match the HTML in `design/source/`. Views never decide where a headline wraps.
+
+**D18. Pitch mode.** Launch argument `--pitch` hides every action that isn't built (no "Not part of this demo" toasts; the control is omitted or inert with no visual change), hides `ReferenceOverlay` and debug UI, and turns off progress save/resume so every take starts at card 1. Default (no flag) keeps today's behavior for development.
+
+**D19. Order of work** is section 3 of `docs/UPDATE-01.md`. It replaces "Fixes worth doing" in `HANDOFF.md`. The P1 fix (offline bundles, Step 13.5) moves ahead of Step 14 because it blocks the physical-device test.
