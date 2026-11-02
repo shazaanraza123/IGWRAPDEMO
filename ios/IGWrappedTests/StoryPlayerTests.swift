@@ -70,6 +70,28 @@ import Testing
     #expect(model.showsInfoButton)
 }
 
+@Test func toastClearsWhenTheCardAdvances() {
+    var model = StoryPlayerModel()
+    model.card = 4
+    let generation = model.showToast("Got it. We'll tune Explore.")
+    #expect(model.toast == "Got it. We'll tune Explore.")
+    #expect(model.goForward() == .moved)
+    #expect(model.card == 5)
+    #expect(model.toast == nil)
+    model.expireToast(generation: generation)
+    #expect(model.toast == nil)
+
+    model.showToast("Got it. We'll tune Explore.")
+    #expect(model.goBack() == .moved)
+    #expect(model.card == 4)
+    #expect(model.toast == nil)
+
+    model.showToast("Got it. We'll tune Explore.")
+    #expect(model.jumpChapter(forward: true) == .moved)
+    #expect(model.card == 6)
+    #expect(model.toast == nil)
+}
+
 @Test func holdAndInfoPauseTheClock() {
     var model = StoryPlayerModel()
     model.isHolding = true

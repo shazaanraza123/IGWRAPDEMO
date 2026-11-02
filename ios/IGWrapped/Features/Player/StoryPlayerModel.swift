@@ -43,8 +43,12 @@ struct StoryPlayerModel {
     static let cardCount = 13
     static let backZone: CGFloat = 1.0 / 3.0
 
+    static let toastLifetime: TimeInterval = 2
+
     var card = 1
     var elapsed: TimeInterval = 0
+    var toast: String?
+    private var toastGeneration = 0
     var isHolding = false
     var infoOpen = false
     var autoplay = true
@@ -81,6 +85,22 @@ struct StoryPlayerModel {
         reduceMotion ? .crossfade : .cube
     }
 
+    mutating func showToast(_ message: String) -> Int {
+        toastGeneration += 1
+        toast = message
+        return toastGeneration
+    }
+
+    mutating func clearToast() {
+        toast = nil
+    }
+
+    /// Drops the toast only if this is still the one `showToast` returned.
+    mutating func expireToast(generation: Int) {
+        guard toastGeneration == generation else { return }
+        toast = nil
+    }
+
     mutating func tap(xFraction: CGFloat) -> PlayerAdvance {
         if xFraction < Self.backZone {
             return goBack()
@@ -89,6 +109,7 @@ struct StoryPlayerModel {
     }
 
     mutating func goBack() -> PlayerAdvance {
+        clearToast()
         guard let index = sequence.firstIndex(of: card), index > 0 else {
             elapsed = 0
             return .same
@@ -99,6 +120,7 @@ struct StoryPlayerModel {
     }
 
     mutating func goForward() -> PlayerAdvance {
+        clearToast()
         guard let index = sequence.firstIndex(of: card) else { return .finished }
         if index + 1 >= sequence.count {
             return .finished
@@ -110,6 +132,7 @@ struct StoryPlayerModel {
 
     /// Lands on the first included card of the neighboring chapter, skipping an empty one.
     mutating func jumpChapter(forward: Bool) -> PlayerAdvance {
+        clearToast()
         var cursor = chapter
         while true {
             guard let target = forward ? cursor.next : cursor.previous else { return .same }

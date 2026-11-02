@@ -156,6 +156,26 @@ final class IGWrappedUITests: XCTestCase {
         XCTAssertTrue(app.otherElements["feedback-written"].waitForExistence(timeout: 3))
     }
 
+    func testToastIsGoneAfterLeavingTheCard() {
+        let app = XCUIApplication()
+        app.launchArguments = ["--player", "--player-card", "4", "--player-paused"]
+        app.launch()
+        let more = app.buttons["feedback-more-0"]
+        XCTAssertTrue(more.waitForExistence(timeout: 8))
+        more.tap()
+        let toast = app.staticTexts["Got it. We'll tune Explore."]
+        XCTAssertTrue(toast.waitForExistence(timeout: 5))
+        let next = app.buttons["Next card"]
+        if next.exists {
+            next.tap()
+        } else {
+            app.coordinate(withNormalizedOffset: CGVector(dx: 0.92, dy: 0.5)).tap()
+        }
+        let gone = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"), object: toast)
+        XCTAssertEqual(XCTWaiter().wait(for: [gone], timeout: 2), .completed)
+        XCTAssertTrue(waitForLabel(app.otherElements["story-player"], "Card 5 of 13"))
+    }
+
     func testFeedSwatchExpands() {
         let app = XCUIApplication()
         app.launchArguments = ["--player", "--player-card", "3", "--player-paused"]

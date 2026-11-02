@@ -14,7 +14,6 @@ struct StoryPlayer: View {
     @State private var showsMontage = false
     @State private var showsPost = false
     @State private var showsStory = false
-    @State private var toast: String?
     @State private var revealPulse = 0
     private let startsOnNumbers: Bool
     private let audio = AudioService.shared
@@ -55,6 +54,7 @@ struct StoryPlayer: View {
                 },
                 onHoldBegan: {
                     model.isHolding = true
+                    model.clearToast()
                 },
                 onHoldEnded: {
                     model.isHolding = false
@@ -85,7 +85,7 @@ struct StoryPlayer: View {
             if showsStory {
                 StoryReplayCover { showsStory = false }
             }
-            if let toast {
+            if let toast = model.toast {
                 Text(toast)
                     .wrappedType(.caption)
                     .foregroundStyle(WrappedColor.ink)
@@ -117,6 +117,7 @@ struct StoryPlayer: View {
         .onChange(of: showsInfo) { _, open in
             model.infoOpen = open
             if open {
+                model.clearToast()
                 audio.pause()
             } else if !model.isHolding {
                 audio.resume()
@@ -394,6 +395,7 @@ struct StoryPlayer: View {
     }
 
     private func finishDismiss() {
+        model.clearToast()
         withAnimation(.easeIn(duration: IGSpace.viewerDismiss)) {
             dismissDrag = WrappedSpace.frameHeight
         }
@@ -420,12 +422,10 @@ struct StoryPlayer: View {
     }
 
     private func showToast(_ message: String) {
-        toast = message
+        let generation = model.showToast(message)
         Task {
-            try? await Task.sleep(for: .seconds(2))
-            if toast == message {
-                toast = nil
-            }
+            try? await Task.sleep(for: .seconds(StoryPlayerModel.toastLifetime))
+            model.expireToast(generation: generation)
         }
     }
 
