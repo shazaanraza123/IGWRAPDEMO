@@ -1,6 +1,13 @@
+import { existsSync } from "node:fs"
+import path from "node:path"
 import { loadSnapshot } from "../../../lib/snapshot.js"
 
 export const dynamic = "force-dynamic"
+
+function wordmarkSrc() {
+  const file = path.join(process.cwd(), "public/brand/instagram-wordmark.svg")
+  return existsSync(file) ? "/brand/instagram-wordmark.svg" : null
+}
 
 export async function generateMetadata({ params }) {
   const { slug } = await params
@@ -14,9 +21,10 @@ export async function generateMetadata({ params }) {
 export default async function ShareSnapshotPage({ params }) {
   const { slug } = await params
   const snapshot = await loadSnapshot(slug)
+  const wordmark = wordmarkSrc()
 
   return (
-    <main className="landing">
+    <main className={wordmark ? "landing has-mark" : "landing"}>
       <style>{`
         .landing {
           min-height: 100vh;
@@ -30,11 +38,19 @@ export default async function ShareSnapshotPage({ params }) {
           color: #FFFFFF;
           font-family: system-ui, sans-serif;
         }
-        .landing img {
+        .wordmark {
+          height: 25.5px;
+          width: auto;
+          filter: brightness(0) invert(1);
+        }
+        .card {
           max-width: min(100%, 420px);
           max-height: calc(100vh - 160px);
           height: auto;
           object-fit: contain;
+        }
+        .has-mark .card {
+          max-height: calc(100vh - 205.5px);
         }
         .pill {
           display: inline-flex;
@@ -68,9 +84,10 @@ export default async function ShareSnapshotPage({ params }) {
           font-size: 16px;
         }
       `}</style>
+      {wordmark ? <img className="wordmark" src={wordmark} alt="" /> : null}
       {snapshot ? (
         <>
-          <img src={snapshot.imageUrl} alt={snapshot.altText} />
+          <img className="card" src={snapshot.imageUrl} alt={snapshot.altText} />
           <a className="pill" href="#testflight">See yours</a>
           <a className="text-link" href="#about">What&apos;s Instagram Wrapped?</a>
           <section id="testflight">

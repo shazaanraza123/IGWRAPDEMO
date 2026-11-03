@@ -19,6 +19,7 @@ supabase/.env
 web/node_modules/
 web/.next/
 web/.env.local
+web/public/brand/
 
 # OS
 .DS_Store
