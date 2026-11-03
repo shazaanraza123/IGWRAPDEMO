@@ -733,7 +733,7 @@ struct ShareExport: View {
                 Text(year)
             }
         }
-        .font(ArchivoFont.font(size: measure.px(CardSpace.shareSize), weight: CardSpace.strong, width: CardSpace.regular))
+        .font(CardTypeface.font(size: measure.px(CardSpace.shareSize), weight: CardSpace.strong, width: CardSpace.regular))
         .foregroundStyle(color)
     }
 
@@ -774,17 +774,17 @@ private struct ShareFooter: View {
                     Circle().fill(WrappedColor.ink).padding(measure.px(CardSpace.footerRingPad))
                     Circle().stroke(markBorder, lineWidth: measure.px(CardSpace.ringWidth)).padding(measure.px(CardSpace.footerRingPad))
                     Text("26")
-                        .font(ArchivoFont.font(size: measure.px(CardSpace.markDigits), weight: CardSpace.heavy, width: CardSpace.regular))
+                        .font(CardTypeface.font(size: measure.px(CardSpace.markDigits), weight: CardSpace.heavy, width: CardSpace.regular))
                         .foregroundStyle(WrappedColor.igWhite)
                 }
                 .frame(width: measure.px(CardSpace.footerMark), height: measure.px(CardSpace.footerMark))
                 Text("Wrapped")
-                    .font(ArchivoFont.font(size: measure.px(CardSpace.footerWord), weight: CardSpace.heavy, width: CardSpace.regular))
+                    .font(CardTypeface.font(size: measure.px(CardSpace.footerWord), weight: CardSpace.heavy, width: CardSpace.regular))
                     .foregroundStyle(word)
             }
             Spacer(minLength: 0)
             Text("INSTAGRAM.COM/WRAPPED")
-                .font(ArchivoFont.font(size: measure.px(CardSpace.footerLink), weight: CardSpace.strong, width: CardSpace.regular))
+                .font(CardTypeface.font(size: measure.px(CardSpace.footerLink), weight: CardSpace.strong, width: CardSpace.regular))
                 .tracking(measure.px(CardSpace.footerLinkTracking))
                 .foregroundStyle(word)
         }

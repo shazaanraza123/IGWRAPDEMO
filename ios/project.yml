@@ -107,6 +107,10 @@ targets:
           if [ -d "$brand" ]; then
             find "$brand" -type f \( -name '*.pdf' -o -name '*.png' \) -exec cp {} "$dest/" \;
           fi
+          fonts="${SRCROOT}/../design/fonts"
+          if [ -d "$fonts" ]; then
+            find "$fonts" -type f \( -name 'InstagramSans*' -o -name 'InstagramMono*' \) -exec cp {} "$dest/" \;
+          fi
   IGWrappedTests:
     type: bundle.unit-test
     platform: iOS

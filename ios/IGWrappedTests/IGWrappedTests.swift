@@ -43,6 +43,17 @@ import UIKit
     #expect(WrappedTextStyle.igChrome.uiFont.familyName.contains("Archivo") == false)
 }
 
+@Test func cardFaceFallsBackToArchivoAndMonoCaptionUsesSFMono() {
+    #expect(CardTypeface.resolvedFace == "Archivo")
+    #expect(MonoCaption.resolvedFace == "SF Mono")
+    let mono = MonoCaption.uiFont(size: 13)
+    let system = UIFont.monospacedSystemFont(ofSize: 13, weight: .semibold)
+    #expect(mono.fontName == system.fontName)
+    #expect(WrappedTextStyle.display.uiFont.familyName.contains("Archivo"))
+    #expect(WrappedTextStyle.body.uiFont.familyName.contains("Archivo"))
+    #expect(WrappedTextStyle.igUsername.uiFont.familyName.contains("Archivo") == false)
+}
+
 @Test func archivoWidthAxisCondenses() {
     let narrow = ArchivoFont.uiFont(size: 72, weight: 900, width: 62)
     let wide = ArchivoFont.uiFont(size: 72, weight: 900, width: 125)

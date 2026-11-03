@@ -147,6 +147,12 @@ struct StyleguideView: View {
     private var typeSection: some View {
         VStack(alignment: .leading, spacing: 14) {
             sectionTitle("Type")
+            resolvedFace("Card display / body", CardTypeface.resolvedFace, "type-face-card")
+            resolvedFace("monoCaption", MonoCaption.resolvedFace, "type-face-mono")
+            resolvedFace("Chrome", "SF Pro", "type-face-chrome")
+            Text("Counted directly from your activity.")
+                .monoCaption()
+                .foregroundStyle(WrappedColor.paper)
             ForEach(WrappedTextStyle.allCases) { style in
                 VStack(alignment: .leading, spacing: 4) {
                     Text(style.rawValue)
@@ -253,7 +259,7 @@ struct StyleguideView: View {
                     VStack(alignment: .leading, spacing: 8) {
                         PersonalityMark(archetype: archetype, size: 72)
                         Text(archetype.title)
-                            .font(ArchivoFont.font(size: 14, weight: 900, width: 62))
+                            .font(CardTypeface.font(size: 14, weight: 900, width: 62))
                             .foregroundStyle(archetype.foreground)
                             .textCase(.uppercase)
                     }
@@ -289,6 +295,13 @@ struct StyleguideView: View {
             .frame(height: 280)
             .clipShape(RoundedRectangle(cornerRadius: 12))
         }
+    }
+
+    private func resolvedFace(_ token: String, _ face: String, _ identifier: String) -> some View {
+        Text("\(token): \(face)")
+            .wrappedType(.caption)
+            .foregroundStyle(WrappedColor.igWhite)
+            .accessibilityIdentifier(identifier)
     }
 
     private func sectionTitle(_ text: String) -> some View {

@@ -678,7 +678,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "brand=\"${SRCROOT}/IGWrapped/Resources/Brand\"\ndest=\"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}\"\nmkdir -p \"$dest\"\nif [ -d \"$brand\" ]; then\n  find \"$brand\" -type f \\( -name '*.pdf' -o -name '*.png' \\) -exec cp {} \"$dest/\" \\;\nfi\n";
+			shellScript = "brand=\"${SRCROOT}/IGWrapped/Resources/Brand\"\ndest=\"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}\"\nmkdir -p \"$dest\"\nif [ -d \"$brand\" ]; then\n  find \"$brand\" -type f \\( -name '*.pdf' -o -name '*.png' \\) -exec cp {} \"$dest/\" \\;\nfi\nfonts=\"${SRCROOT}/../design/fonts\"\nif [ -d \"$fonts\" ]; then\n  find \"$fonts\" -type f \\( -name 'InstagramSans*' -o -name 'InstagramMono*' \\) -exec cp {} \"$dest/\" \\;\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

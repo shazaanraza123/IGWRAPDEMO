@@ -18,7 +18,7 @@ struct CardText: View {
     }
 
     private var styled: AttributedString {
-        let font = ArchivoFont.uiFont(size: size, weight: weight, width: width)
+        let font = CardTypeface.uiFont(size: size, weight: weight, width: width)
         let paragraph = NSMutableParagraphStyle()
         switch alignment {
         case .center: paragraph.alignment = .center

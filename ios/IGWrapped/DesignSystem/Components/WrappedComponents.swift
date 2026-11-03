@@ -65,7 +65,7 @@ struct WrappedTopRow: View {
                 .frame(width: WrappedSpace.wrappedMark, height: WrappedSpace.wrappedMark)
                 .accessibilityHidden(true)
             Text("Wrapped")
-                .font(ArchivoFont.font(size: CardSpace.markWord, weight: CardSpace.strong, width: CardSpace.regular))
+                .font(CardTypeface.font(size: CardSpace.markWord, weight: CardSpace.strong, width: CardSpace.regular))
                 .foregroundStyle(foreground)
             Spacer()
             if showsInfo {
@@ -89,7 +89,7 @@ struct WrappedTopRow: View {
                 Circle().stroke(WrappedColor.storyRing, lineWidth: CardSpace.ringWidth)
                 Circle().stroke(innerBorder, lineWidth: CardSpace.ringWidth).padding(CardSpace.ringWidth)
                 Text("26")
-                    .font(ArchivoFont.font(size: CardSpace.markDigits, weight: CardSpace.heavy, width: CardSpace.regular))
+                    .font(CardTypeface.font(size: CardSpace.markDigits, weight: CardSpace.heavy, width: CardSpace.regular))
                     .foregroundStyle(WrappedColor.igWhite)
             }
         case .ink:
@@ -97,7 +97,7 @@ struct WrappedTopRow: View {
                 Circle().fill(outerFill)
                 Circle().strokeBorder(innerBorder, lineWidth: CardSpace.ringWidth)
                 Text("26")
-                    .font(ArchivoFont.font(size: CardSpace.markDigits, weight: CardSpace.heavy, width: CardSpace.regular))
+                    .font(CardTypeface.font(size: CardSpace.markDigits, weight: CardSpace.heavy, width: CardSpace.regular))
                     .foregroundStyle(WrappedColor.igWhite)
             }
         case .white:
@@ -106,7 +106,7 @@ struct WrappedTopRow: View {
                 Circle().fill(WrappedColor.ink).padding(CardSpace.ringWidth)
                 Circle().stroke(innerBorder, lineWidth: CardSpace.ringWidth).padding(CardSpace.ringWidth)
                 Text("26")
-                    .font(ArchivoFont.font(size: CardSpace.markDigits, weight: CardSpace.heavy, width: CardSpace.regular))
+                    .font(CardTypeface.font(size: CardSpace.markDigits, weight: CardSpace.heavy, width: CardSpace.regular))
                     .foregroundStyle(WrappedColor.igWhite)
             }
         }
@@ -192,7 +192,7 @@ struct DisplayHeadline: View {
         VStack(alignment: alignment, spacing: 0) {
             ForEach(Array(lines.enumerated()), id: \.offset) { _, line in
                 Text(line)
-                    .font(ArchivoFont.font(size: size, weight: weight, width: width))
+                    .font(CardTypeface.font(size: size, weight: weight, width: width))
                     .tracking(tracking)
                     .foregroundStyle(color)
                     .lineLimit(1)
@@ -227,7 +227,7 @@ struct PhotoTile: View {
                 endPoint: .bottom
             )
             Text(month)
-                .font(ArchivoFont.font(size: 11, weight: 800, width: 100))
+                .font(CardTypeface.font(size: 11, weight: 800, width: 100))
                 .foregroundStyle(WrappedColor.ink)
                 .padding(.horizontal, 6)
                 .padding(.vertical, 3)
@@ -313,11 +313,11 @@ struct StickerChip: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text(eyebrow)
-                .font(ArchivoFont.font(size: 10, weight: 800, width: 70))
+                .font(CardTypeface.font(size: 10, weight: 800, width: 70))
                 .foregroundStyle(WrappedColor.igYellow)
                 .textCase(.uppercase)
             Text(title)
-                .font(ArchivoFont.font(size: 16, weight: 900, width: 62))
+                .font(CardTypeface.font(size: 16, weight: 900, width: 62))
                 .foregroundStyle(.white)
                 .textCase(.uppercase)
         }
@@ -494,7 +494,7 @@ struct SharePill: View {
             HStack(spacing: CardSpace.chipGap) {
                 Image(systemName: "paperplane.fill")
                 Text(title)
-                    .font(ArchivoFont.font(size: CardSpace.shareSize, weight: CardSpace.strong, width: CardSpace.regular))
+                    .font(CardTypeface.font(size: CardSpace.shareSize, weight: CardSpace.strong, width: CardSpace.regular))
             }
             .foregroundStyle(ink)
             .padding(.leading, CardSpace.chipTextPad + CardSpace.chipPadV)
@@ -530,7 +530,7 @@ struct ProvenanceBadge: View {
 
     var body: some View {
         Text(provenance.title)
-            .wrappedType(.caption)
+            .monoCaption()
             .foregroundStyle(.white)
             .padding(.horizontal, 10)
             .padding(.vertical, 4)
@@ -621,7 +621,7 @@ struct HubTile: View {
         VStack(alignment: .leading, spacing: 4) {
             Text(index).wrappedType(.caption).foregroundStyle(color == WrappedColor.igYellow ? WrappedColor.ink : .white)
             Text(title)
-                .font(ArchivoFont.font(size: 13, weight: 900, width: 62))
+                .font(CardTypeface.font(size: 13, weight: 900, width: 62))
                 .foregroundStyle(color == WrappedColor.igYellow ? WrappedColor.ink : .white)
                 .textCase(.uppercase)
         }

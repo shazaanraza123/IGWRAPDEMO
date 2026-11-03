@@ -79,13 +79,13 @@ struct CardInfoSheet: View {
         VStack(alignment: .leading, spacing: CardSpace.chipGap) {
             provenanceBadge(metric.provenance)
             Text(meaning(metric.provenance))
-                .wrappedType(.caption)
+                .monoCaption()
                 .foregroundStyle(WrappedColor.paper)
             Text(metric.windowLabel)
                 .wrappedType(.caption)
                 .foregroundStyle(WrappedColor.paper)
             Text(metric.method)
-                .wrappedType(.caption)
+                .monoCaption()
                 .foregroundStyle(WrappedColor.igWhite)
                 .fixedSize(horizontal: false, vertical: true)
         }
@@ -97,7 +97,7 @@ struct CardInfoSheet: View {
 
     private func provenanceBadge(_ provenance: String) -> some View {
         Text(badgeTitle(provenance))
-            .wrappedType(.caption)
+            .monoCaption()
             .foregroundStyle(provenance == "measured" ? WrappedColor.ink : WrappedColor.igWhite)
             .padding(.horizontal, CardSpace.chipPadH)
             .padding(.vertical, CardSpace.chipPadV)

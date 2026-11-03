@@ -51,7 +51,7 @@ struct AlgorithmCard: View {
             )
             HStack(spacing: CardSpace.chipGap) {
                 Text("Inferred")
-                    .font(ArchivoFont.font(size: WrappedTextStyle.caption.size, weight: WrappedTextStyle.caption.weight, width: CardSpace.regular))
+                    .font(CardTypeface.font(size: WrappedTextStyle.caption.size, weight: WrappedTextStyle.caption.weight, width: CardSpace.regular))
                     .foregroundStyle(WrappedColor.igWhite)
                     .padding(.horizontal, CardSpace.openingBadgePad)
                     .padding(.vertical, CardSpace.chipPadV)
@@ -145,7 +145,7 @@ struct AlgorithmCard: View {
                         .font(.system(size: CardSpace.topicIndex, weight: .bold))
                 }
                 Text(title)
-                    .font(ArchivoFont.font(
+                    .font(CardTypeface.font(
                         size: WrappedTextStyle.caption.size,
                         weight: selected ? CardSpace.strong : CardSpace.medium,
                         width: CardSpace.regular

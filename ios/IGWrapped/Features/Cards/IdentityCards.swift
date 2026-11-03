@@ -86,7 +86,7 @@ struct PlotTwistCard: View {
     private var chart: some View {
         VStack(alignment: .leading, spacing: CardSpace.chipGap) {
             Text(chartTitle)
-                .font(ArchivoFont.font(size: CardSpace.plotChartTitle, weight: CardSpace.medium, width: CardSpace.regular))
+                .font(CardTypeface.font(size: CardSpace.plotChartTitle, weight: CardSpace.medium, width: CardSpace.regular))
                 .foregroundStyle(WrappedColor.ink)
             HStack(alignment: .bottom, spacing: CardSpace.plotBarGap) {
                 ForEach(Array(bars.enumerated()), id: \.offset) { _, bar in
@@ -99,7 +99,7 @@ struct PlotTwistCard: View {
             HStack(spacing: CardSpace.plotBarGap) {
                 ForEach(Array(bars.enumerated()), id: \.offset) { _, bar in
                     Text(bar.label)
-                        .font(ArchivoFont.font(size: CardSpace.plotLabel, weight: CardSpace.strong, width: CardSpace.regular))
+                        .font(CardTypeface.font(size: CardSpace.plotLabel, weight: CardSpace.strong, width: CardSpace.regular))
                         .foregroundStyle(WrappedColor.ink)
                         .frame(maxWidth: .infinity)
                 }
@@ -155,7 +155,7 @@ struct PersonalityTeaserCard: View {
                 Button(action: onReveal) {
                     HStack(spacing: CardSpace.yearCopyGap) {
                         Text("Reveal my personality")
-                            .font(ArchivoFont.font(size: CardSpace.revealLabel, weight: CardSpace.heavy, width: CardSpace.regular))
+                            .font(CardTypeface.font(size: CardSpace.revealLabel, weight: CardSpace.heavy, width: CardSpace.regular))
                         Image(systemName: "arrow.right")
                             .font(.system(size: CardSpace.hintIcon, weight: .bold))
                     }
@@ -265,7 +265,7 @@ struct PersonalityRevealCard: View {
                         Spacer(minLength: 0)
                         Text(card.payload.copy?.secondaryMatch ?? "")
                     }
-                    .font(ArchivoFont.font(size: CardSpace.plotChartTitle, weight: CardSpace.medium, width: CardSpace.regular))
+                    .font(CardTypeface.font(size: CardSpace.plotChartTitle, weight: CardSpace.medium, width: CardSpace.regular))
                     .foregroundStyle(WrappedColor.igWhite)
                 }
                 .padding(.top, CardSpace.chipGap)
@@ -311,7 +311,7 @@ struct PersonalityRevealCard: View {
                     .frame(maxWidth: .infinity)
                 Button(action: onShareCards) {
                     Text("See your share cards")
-                        .font(ArchivoFont.font(size: CardSpace.footerLink, weight: CardSpace.medium, width: CardSpace.regular))
+                        .font(CardTypeface.font(size: CardSpace.footerLink, weight: CardSpace.medium, width: CardSpace.regular))
                         .foregroundStyle(WrappedColor.igWhite)
                         .frame(maxWidth: .infinity)
                         .frame(minHeight: WrappedSpace.minHit)
@@ -419,7 +419,7 @@ struct ShareCardsCard: View {
             SharePill(title: "Share", identifier: "share-card") { onShare(face == 1) }
             Button(action: onHub) {
                 Text("Go to your Hub")
-                    .font(ArchivoFont.font(size: CardSpace.footerLink, weight: CardSpace.strong, width: CardSpace.regular))
+                    .font(CardTypeface.font(size: CardSpace.footerLink, weight: CardSpace.strong, width: CardSpace.regular))
                     .foregroundStyle(face == 0 ? WrappedColor.igWhite : WrappedColor.ink)
                     .frame(maxWidth: .infinity)
                     .frame(height: WrappedSpace.minHit)
@@ -483,7 +483,7 @@ struct IdentityFace: View {
                 Spacer(minLength: 0)
                 Text(card.payload.copy?.identityYear ?? "")
             }
-            .font(ArchivoFont.font(size: CardSpace.shareSize, weight: CardSpace.strong, width: CardSpace.regular))
+            .font(CardTypeface.font(size: CardSpace.shareSize, weight: CardSpace.strong, width: CardSpace.regular))
             .foregroundStyle(WrappedColor.igWhite)
             .padding(.top, WrappedSpace.contentTop)
 
@@ -566,7 +566,7 @@ private struct NumbersFace: View {
                     Spacer(minLength: 0)
                     Text(card.payload.copy?.identityYear ?? "")
                 }
-                .font(ArchivoFont.font(size: CardSpace.shareSize, weight: CardSpace.strong, width: CardSpace.regular))
+                .font(CardTypeface.font(size: CardSpace.shareSize, weight: CardSpace.strong, width: CardSpace.regular))
                 .foregroundStyle(WrappedColor.igWhite)
                 .padding(.top, WrappedSpace.topRowMaxY)
                 photo
@@ -688,17 +688,17 @@ private func cardFooter(markBorder: Color, word: Color) -> some View {
                 Circle().fill(WrappedColor.ink).padding(CardSpace.footerRingPad)
                 Circle().stroke(markBorder, lineWidth: CardSpace.ringWidth).padding(CardSpace.footerRingPad)
                 Text("26")
-                    .font(ArchivoFont.font(size: CardSpace.markDigits, weight: CardSpace.heavy, width: CardSpace.regular))
+                    .font(CardTypeface.font(size: CardSpace.markDigits, weight: CardSpace.heavy, width: CardSpace.regular))
                     .foregroundStyle(WrappedColor.igWhite)
             }
             .frame(width: CardSpace.footerMark, height: CardSpace.footerMark)
             Text("Wrapped")
-                .font(ArchivoFont.font(size: CardSpace.footerWord, weight: CardSpace.heavy, width: CardSpace.regular))
+                .font(CardTypeface.font(size: CardSpace.footerWord, weight: CardSpace.heavy, width: CardSpace.regular))
                 .foregroundStyle(word)
         }
         Spacer(minLength: 0)
         Text("INSTAGRAM.COM/WRAPPED")
-            .font(ArchivoFont.font(
+            .font(CardTypeface.font(
                 size: CardSpace.footerLink,
                 weight: CardSpace.strong,
                 width: CardSpace.regular
