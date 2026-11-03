@@ -216,6 +216,75 @@ private final class RunBundleProbe: NSObject {}
     }
 }
 
+@Test func yourStoryStopsWhenTheAppIDIsMissing() {
+    var pasted = false
+    var opened = false
+    let client = StoryShareClient(
+        appID: " ",
+        canOpen: { _ in true },
+        open: { _ in opened = true },
+        paste: { _, _, _ in pasted = true }
+    )
+    let result = StoryShare.yourStory(png: Data([1]), top: WrappedHex.igMagenta, bottom: WrappedHex.igMagenta, client: client)
+    #expect(result == .needsAppID)
+    #expect(pasted == false)
+    #expect(opened == false)
+}
+
+@Test func yourStoryStopsWhenInstagramIsMissing() {
+    var pasted = false
+    var opened = false
+    let client = StoryShareClient(
+        appID: "123",
+        canOpen: { _ in false },
+        open: { _ in opened = true },
+        paste: { _, _, _ in pasted = true }
+    )
+    let result = StoryShare.yourStory(png: Data([1]), top: WrappedHex.igMagenta, bottom: WrappedHex.igMagenta, client: client)
+    #expect(result == .instagramMissing)
+    #expect(pasted == false)
+    #expect(opened == false)
+    #expect(StoryShare.missingInstagram == "Instagram isn't installed")
+}
+
+@Test func yourStoryPastesTheCardColorAndOpensInstagram() {
+    var pasted = ""
+    var opened = ""
+    let client = StoryShareClient(
+        appID: "123",
+        canOpen: { $0.absoluteString.hasPrefix("instagram-stories://share") },
+        open: { opened = $0.absoluteString },
+        paste: { _, top, bottom in pasted = "\(top) \(bottom)" }
+    )
+    let result = StoryShare.yourStory(png: Data([1]), top: WrappedHex.igMagenta, bottom: WrappedHex.igMagenta, client: client)
+    #expect(result == .opened)
+    #expect(pasted == "#D300C5 #D300C5")
+    #expect(opened == "instagram-stories://share?source_application=123")
+}
+
+@Test func shareEventsAppendLocally() {
+    let file = FileManager.default.temporaryDirectory.appendingPathComponent("events-\(UUID().uuidString).json")
+    #expect(ShareLog.append(ShareLog.story, file: file))
+    #expect(ShareLog.append(ShareLog.save, file: file))
+    #expect(ShareLog.append(ShareLog.send, file: file))
+    #expect(ShareLog.rows(file: file).map(\.destination) == [ShareLog.story, ShareLog.save, ShareLog.send])
+}
+
+@Test func shareSheetChoicesFollowTheCard() {
+    #expect(ShareChoice.choices(openedFrom: 13).map(\.title) == ["Identity card", "Numbers card"])
+    #expect(ShareChoice.choices(openedFrom: 5).map(\.title) == ["Reels", "Identity card", "Numbers card"])
+    #expect(ShareChoice.choices(openedFrom: 8).isEmpty)
+}
+
+@Test func hidingOneStatLeavesTheOthers() throws {
+    let bundle = try mayaBundle()
+    var toggles = ShareToggles()
+    toggles.omittedStats = ["Stories"]
+    let script = try ShareScript.make(bundle: bundle, target: .numbers, format: .story, toggles: toggles)
+    #expect(script.lines.contains("Stories") == false)
+    #expect(script.lines.contains("Posts"))
+}
+
 private func mayaBundle() throws -> RunBundle {
     let url = try #require(Bundle(for: RunBundleProbe.self).url(forResource: "maya", withExtension: "json"))
     return try JSONDecoder().decode(RunBundle.self, from: Data(contentsOf: url))

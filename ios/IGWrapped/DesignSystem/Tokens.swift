@@ -17,6 +17,9 @@ enum WrappedColor {
     static let surfaceRaised = Color(hex: 0x1E1E22)
     static let muted = Color(hex: 0xA1A1AA)
     static let sheet = Color(hex: 0x121214)
+    /// Grabber and format outline on the share sheet, from S10.
+    static let sheetLine = Color(hex: 0x3F3F46)
+    static let sheetDash = Color(hex: 0x52525B)
     /// Ghost mark field. Distinct from `ink`.
     static let ghostInk = Color(hex: 0x26262B)
     /// Secondary line on the year card, from `P02-Memories.dc.html`.
@@ -162,6 +165,53 @@ enum ShareSpace {
     static let square: CGFloat = 1080
     static let storySafeTop: CGFloat = 250
     static let storySafeBottom: CGFloat = 340
+}
+
+/// S10 share sheet, measured from `S10-ShareSheet.dc.html`.
+enum ShareSheetSpace {
+    static let title: CGFloat = 22
+    static let titleWidth: CGFloat = 80
+    static let previewWidth: CGFloat = 112
+    static let previewHeight: CGFloat = 242
+    static let previewRadius: CGFloat = 10
+    static let formatHeight: CGFloat = 44
+    static let formatRadius: CGFloat = 10
+    static let styleHeight: CGFloat = 44
+    static let styleRadius: CGFloat = 8
+    static let action: CGFloat = 58
+    static let grabberWidth: CGFloat = 40
+    static let grabberHeight: CGFloat = 5
+    static let sectionGap: CGFloat = 14
+    static let rowGap: CGFloat = 8
+    static let sheetTop: CGFloat = 10
+    static let sheetBottom: CGFloat = 28
+    static let detent: CGFloat = 0.9
+}
+
+/// Pasteboard colors for Sharing to Stories. Same values as `WrappedColor`.
+enum WrappedHex {
+    static let ink = "#0B0B0D"
+    static let paper = "#F7F3EC"
+    static let igYellow = "#FFD600"
+    static let igOrange = "#FF7A00"
+    static let igPink = "#FF0069"
+    static let igMagenta = "#D300C5"
+    static let igViolet = "#7638FA"
+    static let closeGreen = "#27C866"
+    static let nightNavy = "#141B4D"
+
+    static func field(_ number: Int) -> String {
+        switch number {
+        case 3: paper
+        case 4: igViolet
+        case 5: igOrange
+        case 6, 10: igYellow
+        case 7: closeGreen
+        case 9: nightNavy
+        case 12: igMagenta
+        default: ink
+        }
+    }
 }
 
 /// Motion from UIUX §6 and APPFLOW §2. The cube reuses the card-enter spring. Reduce Motion is the 150 ms crossfade.

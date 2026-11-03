@@ -355,7 +355,7 @@ struct ShareCardsCard: View {
     var card: RunCard
     var reveal: RunCard
     var handle: String
-    var onShare: () -> Void
+    var onShare: (Bool) -> Void
     var onHub: () -> Void
     var startsOnNumbers: Bool
 
@@ -364,7 +364,7 @@ struct ShareCardsCard: View {
     @State private var safeBottom: CGFloat = 0
     @State private var dockReserve: CGFloat = CardSpace.shareDock
 
-    init(card: RunCard, reveal: RunCard, handle: String, onShare: @escaping () -> Void, onHub: @escaping () -> Void, startsOnNumbers: Bool = false) {
+    init(card: RunCard, reveal: RunCard, handle: String, onShare: @escaping (Bool) -> Void, onHub: @escaping () -> Void, startsOnNumbers: Bool = false) {
         self.card = card
         self.reveal = reveal
         self.handle = handle
@@ -410,7 +410,7 @@ struct ShareCardsCard: View {
                 options: ["Identity card", "Numbers card"],
                 selection: $face
             )
-            SharePill(title: "Share", identifier: "share-card", action: onShare)
+            SharePill(title: "Share", identifier: "share-card") { onShare(face == 1) }
             Button(action: onHub) {
                 Text("Go to your Hub")
                     .font(ArchivoFont.font(size: CardSpace.footerLink, weight: CardSpace.strong, width: CardSpace.regular))

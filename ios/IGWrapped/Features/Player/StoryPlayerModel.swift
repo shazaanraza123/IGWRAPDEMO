@@ -12,7 +12,9 @@ enum Feature: Equatable, CaseIterable {
 
     static func isBuilt(_ feature: Feature) -> Bool {
         switch feature {
-        case .share, .hub, .create, .activity, .storyReply, .privacy, .creator:
+        case .share:
+            true
+        case .hub, .create, .activity, .storyReply, .privacy, .creator:
             false
         }
     }
@@ -85,6 +87,7 @@ struct StoryPlayerModel {
     private var toastGeneration = 0
     var isHolding = false
     var infoOpen = false
+    var shareOpen = false
     var autoplay = true
     var coverOpen = false
     /// Cards a teen run does not include. Empty for the full deck.
@@ -188,7 +191,7 @@ struct StoryPlayerModel {
     }
 
     mutating func tick(delta: TimeInterval) -> PlayerAdvance {
-        guard autoplay, !isHolding, !infoOpen, !coverOpen, delta > 0 else { return .same }
+        guard autoplay, !isHolding, !infoOpen, !shareOpen, !coverOpen, delta > 0 else { return .same }
         guard card != 11 else { return .same }
         elapsed += delta
         guard elapsed >= duration else { return .same }

@@ -33,8 +33,15 @@ enum ShareTarget: Equatable {
 struct ShareToggles: Equatable {
     var handle = true
     var stats = true
+    var omittedStats: Set<String> = []
     var secondPersonality = false
     var coverPhoto = true
+
+    static let interestID = "top-interest"
+
+    static func id(for stat: TextPair) -> String {
+        stat.label.isEmpty ? stat.value : stat.label
+    }
 }
 
 enum ShareError: Error, Equatable {
@@ -92,17 +99,24 @@ struct ShareScript: Equatable {
         format: ShareFormat,
         toggles: ShareToggles
     ) throws -> ShareScript {
+        var script: ShareScript
         switch target {
         case .identity:
-            return try identity(bundle, format: format, toggles: toggles)
+            script = try identity(bundle, format: format, toggles: toggles)
         case .numbers:
-            return try numbers(bundle, format: format, toggles: toggles)
+            script = try numbers(bundle, format: format, toggles: toggles)
         case .journey(let number):
             guard ShareTarget.journeyNumbers.contains(number) else { throw ShareError.notShareable }
             guard format == .story else { throw ShareError.formatUnavailable }
             guard bundle.card(number: number)?.shareable == true else { throw ShareError.notShareable }
-            return try journey(bundle, number: number, toggles: toggles)
+            script = try journey(bundle, number: number, toggles: toggles)
         }
+        script.stats.removeAll { toggles.omittedStats.contains(ShareToggles.id(for: $0)) }
+        if toggles.omittedStats.contains(ShareToggles.interestID) {
+            script.interestTitle = nil
+            script.interest = nil
+        }
+        return script
     }
 
     private static func identity(_ bundle: RunBundle, format: ShareFormat, toggles: ShareToggles) throws -> ShareScript {
@@ -317,7 +331,7 @@ enum ShareRenderer {
     }
 }
 
-private struct ShareExport: View {
+struct ShareExport: View {
     var script: ShareScript
     var measure: ShareMeasure
 

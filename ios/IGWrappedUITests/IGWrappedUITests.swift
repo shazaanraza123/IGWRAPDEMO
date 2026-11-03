@@ -333,6 +333,36 @@ final class IGWrappedUITests: XCTestCase {
         XCTAssertFalse(app.staticTexts[demo].waitForExistence(timeout: 1))
     }
 
+    func testShareSheetRunsYourStorySaveAndSend() {
+        let app = XCUIApplication()
+        app.launchArguments = ["--reset-session", "--player", "--player-paused", "--player-card", "13"]
+        app.launch()
+        XCTAssertTrue(app.buttons["share-card"].waitForExistence(timeout: 8))
+        app.buttons["share-card"].tap()
+        XCTAssertTrue(app.otherElements["share-sheet"].waitForExistence(timeout: 4))
+        XCTAssertTrue(app.buttons["share-your-story"].waitForExistence(timeout: 3))
+        XCTAssertTrue(app.buttons["share-send"].exists)
+        XCTAssertTrue(app.buttons["share-save"].exists)
+        XCTAssertTrue(app.buttons["share-copy-link"].exists)
+        app.buttons["share-your-story"].tap()
+        let missingID = app.staticTexts["Add a Facebook App ID in Config.xcconfig"].firstMatch
+        XCTAssertTrue(missingID.waitForExistence(timeout: 3))
+        app.buttons["share-copy-link"].tap()
+        XCTAssertTrue(app.staticTexts["Links come with the web page"].firstMatch.waitForExistence(timeout: 3))
+        app.buttons["share-choice-numbers"].tap()
+        app.buttons["share-format-post"].tap()
+        app.buttons["share-save"].tap()
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        let allow = springboard.buttons["Allow"]
+        if allow.waitForExistence(timeout: 4) {
+            allow.tap()
+        }
+        XCTAssertTrue(app.staticTexts["Saved to Photos"].firstMatch.waitForExistence(timeout: 6))
+        XCTAssertTrue(app.buttons["share-send"].waitForExistence(timeout: 3))
+        app.buttons["share-send"].tap()
+        XCTAssertTrue(app.otherElements["ActivityListView"].waitForExistence(timeout: 4))
+    }
+
     func testInfoSheetOpensWithTheCardsMethod() {
         let methods = [
             2: "Posts you shared in this month.",

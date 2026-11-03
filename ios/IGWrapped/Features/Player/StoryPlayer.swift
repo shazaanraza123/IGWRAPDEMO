@@ -7,6 +7,9 @@ struct StoryPlayer: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var model: StoryPlayerModel
     @State private var showsInfo = false
+    @State private var showsShare = false
+    @State private var shareCard = 13
+    @State private var shareNumbers = false
     @State private var isMuted = false
     @State private var dismissDrag: CGFloat = 0
     @State private var chapterDrag: CGFloat = 0
@@ -136,7 +139,16 @@ struct StoryPlayer: View {
             if open {
                 model.clearToast()
                 audio.pause()
-            } else if !model.isHolding {
+            } else if !model.isHolding && !model.shareOpen {
+                audio.resume()
+            }
+        }
+        .onChange(of: showsShare) { _, open in
+            model.shareOpen = open
+            if open {
+                model.clearToast()
+                audio.pause()
+            } else if !model.isHolding && !model.infoOpen {
                 audio.resume()
             }
         }
@@ -167,6 +179,11 @@ struct StoryPlayer: View {
                     hideCurrentCard()
                 }
             )
+        }
+        .sheet(isPresented: $showsShare) {
+            ShareSheet(bundle: deck, openedFrom: shareCard, preferNumbers: shareNumbers) { message in
+                showToast(message)
+            }
         }
     }
 
@@ -247,40 +264,40 @@ struct StoryPlayer: View {
                 }
             )
         case 3:
-            FeedColorCard(card: faceCard(3), onShare: { showUnavailable(.share) })
+            FeedColorCard(card: faceCard(3), onShare: { openShare(from: 3) })
         case 4:
             AlgorithmCard(
                 card: faceCard(4),
-                onShare: { showUnavailable(.share) },
+                onShare: { openShare(from: 4) },
                 onSaved: { showToast("Got it. We'll tune Explore.") }
             )
         case 5:
-            ReelsCard(card: faceCard(5), onShare: { showUnavailable(.share) })
+            ReelsCard(card: faceCard(5), onShare: { openShare(from: 5) })
         case 6:
             MainCharacterCard(
                 card: faceCard(6),
                 handle: deck.card(number: 1)?.payload.handle ?? "",
-                onShare: { showUnavailable(.share) },
+                onShare: { openShare(from: 6) },
                 onOpenPost: { showsPost = true }
             )
         case 7:
             GroupChatCard(
                 card: faceCard(7),
-                onShare: { showUnavailable(.share) },
+                onShare: { openShare(from: 7) },
                 onOpenStory: { showsStory = true }
             )
         case 8:
             CircleCard(card: faceCard(8))
         case 9:
-            ThreeAMCard(card: faceCard(9), onShare: { showUnavailable(.share) })
+            ThreeAMCard(card: faceCard(9), onShare: { openShare(from: 9) })
         case 10:
-            PlotTwistCard(card: faceCard(10), onShare: { showUnavailable(.share) })
+            PlotTwistCard(card: faceCard(10), onShare: { openShare(from: 10) })
         case 11:
             PersonalityTeaserCard(card: faceCard(11), onReveal: revealPersonality)
         case 12:
             PersonalityRevealCard(
                 card: faceCard(12),
-                onShare: { showUnavailable(.share) },
+                onShare: { openShare(from: 12) },
                 onShareCards: {
                     withAnimation(cardAnimation) { step(model.goForward()) }
                 }
@@ -290,7 +307,7 @@ struct StoryPlayer: View {
                 card: faceCard(13),
                 reveal: faceCard(12),
                 handle: deck.card(number: 1)?.payload.handle ?? "",
-                onShare: { showUnavailable(.share) },
+                onShare: { numbers in openShare(from: 13, numbers: numbers) },
                 onHub: { showUnavailable(.hub) },
                 startsOnNumbers: startsOnNumbers
             )
@@ -472,6 +489,12 @@ struct StoryPlayer: View {
 
     private func syncCover() {
         model.coverOpen = openMonth != nil || showsMontage || showsPost || showsStory
+    }
+
+    private func openShare(from card: Int, numbers: Bool = false) {
+        shareCard = card
+        shareNumbers = numbers
+        showsShare = true
     }
 
     private func showUnavailable(_ feature: Feature) {

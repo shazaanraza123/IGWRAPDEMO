@@ -134,7 +134,10 @@ import Testing
 }
 
 @Test func pitchKeepsUnbuiltActionsQuietAndDoesNotResume() {
-    for feature in Feature.allCases {
+    #expect(Feature.isBuilt(.share))
+    #expect(Feature.toast(for: .share, pitch: false) == nil)
+    #expect(Feature.toast(for: .share, pitch: true) == nil)
+    for feature in Feature.allCases where feature != .share {
         #expect(Feature.isBuilt(feature) == false)
         #expect(Feature.toast(for: feature, pitch: false) == Feature.unavailable)
         #expect(Feature.toast(for: feature, pitch: true) == nil)

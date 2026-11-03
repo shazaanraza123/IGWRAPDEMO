@@ -16,6 +16,7 @@
 		17E290638A162AE1F4411EDA /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = F9702545FEEDCC1E6AEA35E8 /* Supabase */; };
 		18B6B84A765E425D1A976D13 /* 05-story-viewer.png in Resources */ = {isa = PBXBuildFile; fileRef = 417E848B1799E0BC0EE891E3 /* 05-story-viewer.png */; };
 		1C4BB2F17408E9DBC77FEA6C /* AlgorithmCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29122D0D98E04E1A67965B77 /* AlgorithmCard.swift */; };
+		258E0EA6EA3D5AECD325B28F /* StoryShare.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE8FB9BBA4DB7583B542D371 /* StoryShare.swift */; };
 		26919AA8EF3AA87C8D460C1B /* IGStoryViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD00FDA49354774D93706CD /* IGStoryViewer.swift */; };
 		2A2821886746F46D6537634A /* PersonaLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668D250A3653DD5899DC59A0 /* PersonaLoginView.swift */; };
 		2DD2BE21CB1F4A0D0C8F8B6E /* maya.json in Resources */ = {isa = PBXBuildFile; fileRef = 26AF709B2AE7B6ED61D9D6C0 /* maya.json */; };
@@ -66,6 +67,7 @@
 		B66F37D67EC1C7C57AE761E5 /* StoryPlayerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C9FA248A81126EF45943F5 /* StoryPlayerTests.swift */; };
 		BB2F0C0465F8EBC7648361D0 /* IGWrappedUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A80BF457CA1AB35CA46A981 /* IGWrappedUITests.swift */; };
 		BE6C557923F31CF096AC5D45 /* MomentsCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9642D40E49AEBE8D9E3C8FFF /* MomentsCards.swift */; };
+		BFE3757D81C99CF94472329F /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF25E83855C309EBCD952B31 /* ShareSheet.swift */; };
 		C7153039AE6A249EBC673067 /* Tokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1A0AC45FCF014B523E7AFC /* Tokens.swift */; };
 		CB96341AEA97E255EFD976F1 /* PersonalityMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EED43EE6FD952D381A7946 /* PersonalityMark.swift */; };
 		D035684C33C5674A99CDC9BE /* 01-opening.png in Resources */ = {isa = PBXBuildFile; fileRef = 8709DC26C37CE21302DE2A4A /* 01-opening.png */; };
@@ -173,8 +175,10 @@
 		E5970C8F5126BFD2A338B738 /* main-character.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "main-character.jpg"; sourceTree = "<group>"; };
 		EC24C8009FFC4D14100617A3 /* Chapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chapter.swift; sourceTree = "<group>"; };
 		EDA977D6DA92307A10A856E6 /* CardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTests.swift; sourceTree = "<group>"; };
+		EE8FB9BBA4DB7583B542D371 /* StoryShare.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryShare.swift; sourceTree = "<group>"; };
 		F9C9FA248A81126EF45943F5 /* StoryPlayerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryPlayerTests.swift; sourceTree = "<group>"; };
 		FDFC38B7A529CC45665B968B /* 08-your-circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "08-your-circle.png"; sourceTree = "<group>"; };
+		FF25E83855C309EBCD952B31 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 		"TEMP_FE0CFAFD-9B11-4DC9-9D02-095B7C6189C8" /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -380,6 +384,8 @@
 			isa = PBXGroup;
 			children = (
 				739001D3008DADC966E50580 /* ShareRenderer.swift */,
+				FF25E83855C309EBCD952B31 /* ShareSheet.swift */,
+				EE8FB9BBA4DB7583B542D371 /* StoryShare.swift */,
 			);
 			path = Share;
 			sourceTree = "<group>";
@@ -693,8 +699,10 @@
 				90074C287C19C975A40E1340 /* ReferenceOverlay.swift in Sources */,
 				0F65BB03D7B468E05661FFEF /* RunBundle.swift in Sources */,
 				5FCC09ECCA6F6B3D9D95B7E3 /* ShareRenderer.swift in Sources */,
+				BFE3757D81C99CF94472329F /* ShareSheet.swift in Sources */,
 				7271AFCB68AD3C99378F4D30 /* StoryPlayer.swift in Sources */,
 				153A3E48C1D3B5B952C8DCFD /* StoryPlayerModel.swift in Sources */,
+				258E0EA6EA3D5AECD325B28F /* StoryShare.swift in Sources */,
 				0AB7355D422402D306783C84 /* StyleguideView.swift in Sources */,
 				58FB8419CF70808DFAAF24A5 /* SupabaseService.swift in Sources */,
 				C7153039AE6A249EBC673067 /* Tokens.swift in Sources */,
