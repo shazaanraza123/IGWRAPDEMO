@@ -316,6 +316,36 @@ private final class RunBundleProbe: NSObject {}
     #expect(script.lines.contains("Posts"))
 }
 
+@Test func hubUsesTheRunCopyAndDropsAHiddenCard() throws {
+    let bundle = try mayaBundle()
+    let highlights = HubBoard.highlights(in: bundle, hidden: [])
+    #expect(highlights.map(\.title) == ["11 months", "2,184 likes", "Ceramics", "THE CURATOR"])
+    #expect(highlights.map(\.detail) == [
+        "Play the 15-second recap",
+        "Jul 19, 3x your average",
+        "4x since June",
+        "with a side of The Ghost"
+    ])
+    let tiles = HubBoard.tiles(in: bundle, hidden: [6])
+    #expect(tiles.count == 12)
+    #expect(tiles.contains { $0.card == 6 } == false)
+    #expect(HubBoard.highlights(in: bundle, hidden: [6]).contains { $0.card == 6 } == false)
+    #expect(tiles.first { $0.card == 8 }?.locked == true)
+    #expect(tiles.first { $0.card == 3 }?.title == "Midnight Camel")
+    #expect(tiles.first { $0.card == 4 }?.title == "Ceramic frogs")
+    #expect(bundle.run.copy.summary == "13 cards. Replay them, remix them, share the ones you like.")
+    #expect(HubBoard.viewAllTitle(count: tiles.count) == "View all 12")
+}
+
+@Test func teenHubOmitsTheCircleAndTheNightCard() throws {
+    let url = try #require(Bundle(for: RunBundleProbe.self).url(forResource: "maya-teen", withExtension: "json"))
+    let bundle = try JSONDecoder().decode(RunBundle.self, from: Data(contentsOf: url))
+    let tiles = HubBoard.tiles(in: bundle, hidden: [])
+    #expect(tiles.map(\.card) == [1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 13])
+    #expect(HubBoard.viewAllTitle(count: tiles.count) == "View all 11")
+    #expect(bundle.run.copy.summary == "11 cards. Replay them, remix them, share the ones you like.")
+}
+
 private final class ShareCallCount: @unchecked Sendable {
     private let lock = NSLock()
     private var count = 0

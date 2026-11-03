@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		004FFD6F489872B4E25D46DF /* WrappedHub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B523D8324846F50D22BF5C /* WrappedHub.swift */; };
 		00CAFBC1F94E57FF100F07A6 /* 08-your-circle.png in Resources */ = {isa = PBXBuildFile; fileRef = FDFC38B7A529CC45665B968B /* 08-your-circle.png */; };
 		02895DB4F65B601B26496AFB /* 12-personality-reveal.png in Resources */ = {isa = PBXBuildFile; fileRef = 4939CE9035BA6490C168C887 /* 12-personality-reveal.png */; };
 		084AF281B98DA7239D406FFA /* 01-home-2026.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C19BF9FD65D5474A25827EF /* 01-home-2026.png */; };
@@ -111,6 +112,7 @@
 		059B36E2FE8F4EB9306B0786 /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
 		098EAB535D91D44A4D058772 /* tile-5.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "tile-5.jpg"; sourceTree = "<group>"; };
 		156C680CC84C61B157E0EE6F /* IGWrappedApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGWrappedApp.swift; sourceTree = "<group>"; };
+		16B523D8324846F50D22BF5C /* WrappedHub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrappedHub.swift; sourceTree = "<group>"; };
 		19BF533B6E75BF6657F681EB /* ReferenceOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferenceOverlay.swift; sourceTree = "<group>"; };
 		1C3AD1E8AD215A6396364E48 /* CardText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardText.swift; sourceTree = "<group>"; };
 		1D05C9FEC50EC5E4AF5ABA5D /* 09-3am-club.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "09-3am-club.png"; sourceTree = "<group>"; };
@@ -281,6 +283,14 @@
 			path = Cards;
 			sourceTree = "<group>";
 		};
+		60AEB99FAE4C7147FBDF393A /* Hub */ = {
+			isa = PBXGroup;
+			children = (
+				16B523D8324846F50D22BF5C /* WrappedHub.swift */,
+			);
+			path = Hub;
+			sourceTree = "<group>";
+		};
 		65ABEF2C691948C459AADBE0 /* Player */ = {
 			isa = PBXGroup;
 			children = (
@@ -296,6 +306,7 @@
 			children = (
 				5A1F278B40CFDF993F87A76F /* Cards */,
 				BB6A964BB216E830A2652CD4 /* Entry */,
+				60AEB99FAE4C7147FBDF393A /* Hub */,
 				87EDC58ECEC6ECB65AE42186 /* Login */,
 				65ABEF2C691948C459AADBE0 /* Player */,
 				B85DEEE23A6A6FB99AB560C2 /* Share */,
@@ -709,6 +720,7 @@
 				85D828341254F2BF8C5DE5CB /* Typography.swift in Sources */,
 				D9C999A53A3FD80CD23B0958 /* WrappedComponents.swift in Sources */,
 				9E190CAA70FDA443759B7F64 /* WrappedEntry.swift in Sources */,
+				004FFD6F489872B4E25D46DF /* WrappedHub.swift in Sources */,
 				34E5F2CB76B722692854FF07 /* YearMemoriesCard.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

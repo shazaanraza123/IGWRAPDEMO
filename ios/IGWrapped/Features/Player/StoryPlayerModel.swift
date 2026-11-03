@@ -9,12 +9,16 @@ enum Feature: Equatable, CaseIterable {
     case storyReply
     case privacy
     case creator
+    case remix
+    case together
+    case quiz
+    case pastYears
 
     static func isBuilt(_ feature: Feature) -> Bool {
         switch feature {
-        case .share:
+        case .share, .hub:
             true
-        case .hub, .create, .activity, .storyReply, .privacy, .creator:
+        case .create, .activity, .storyReply, .privacy, .creator, .remix, .together, .quiz, .pastYears:
             false
         }
     }

@@ -258,6 +258,30 @@ final class IGWrappedUITests: XCTestCase {
         app.buttons["player-close"].tap()
         let gone = XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == 0"), object: player)
         XCTAssertEqual(XCTWaiter().wait(for: [gone], timeout: 3), .completed)
+        XCTAssertTrue(app.otherElements["wrapped-hub"].waitForExistence(timeout: 2))
+    }
+
+    func testHubOpensACardAndBackLeavesWrapped() {
+        let app = XCUIApplication()
+        app.launchArguments = ["--reset-session", "--player", "--player-paused", "--player-card", "13"]
+        app.launch()
+        XCTAssertTrue(app.buttons["go-to-hub"].waitForExistence(timeout: 8))
+        app.buttons["go-to-hub"].tap()
+        XCTAssertTrue(app.otherElements["wrapped-hub"].waitForExistence(timeout: 3))
+        XCTAssertTrue(app.staticTexts["13 cards. Replay them, remix them, share the ones you like."].waitForExistence(timeout: 2))
+        let tile = app.buttons["hub-tile-5"]
+        var swipes = 0
+        while !tile.exists && swipes < 4 {
+            app.swipeUp()
+            swipes += 1
+        }
+        XCTAssertTrue(tile.waitForExistence(timeout: 2))
+        tile.tap()
+        XCTAssertTrue(waitForLabel(app.otherElements["story-player"], "Card 5 of 13"))
+        app.buttons["player-close"].tap()
+        XCTAssertTrue(app.buttons["hub-back"].waitForExistence(timeout: 3))
+        app.buttons["hub-back"].tap()
+        XCTAssertTrue(app.buttons["wrapped-bubble"].waitForExistence(timeout: 3))
     }
 
     func testHubLinkClearsTheHomeIndicator() {
@@ -329,7 +353,8 @@ final class IGWrappedUITests: XCTestCase {
         let hub = app.buttons["go-to-hub"]
         XCTAssertTrue(hub.waitForExistence(timeout: 8))
         hub.tap()
-        app.buttons["share-card"].tap()
+        XCTAssertTrue(app.otherElements["wrapped-hub"].waitForExistence(timeout: 3))
+        app.buttons["hub-share"].tap()
         XCTAssertFalse(app.staticTexts[demo].waitForExistence(timeout: 1))
     }
 

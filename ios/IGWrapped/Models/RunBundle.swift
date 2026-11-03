@@ -33,6 +33,12 @@ struct RunBundle: Codable, Equatable {
         )
     }
 
+    /// The demo deck for this launch. Teen uses the teen bundle.
+    static func launched() -> RunBundle {
+        let name = ProcessInfo.processInfo.arguments.contains("--teen") ? "maya-teen" : "maya"
+        return (try? load(named: name)) ?? .empty
+    }
+
     static func load(named name: String) throws -> RunBundle {
         guard let url = Bundle.main.url(forResource: name, withExtension: "json") else {
             throw RunLoadError.missing(name)

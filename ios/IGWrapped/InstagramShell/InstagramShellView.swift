@@ -8,6 +8,8 @@ struct InstagramShellView: View {
     @State private var showsBanner = !ProcessInfo.processInfo.arguments.contains("--reference")
     @State private var openStory: FriendStory?
     @State private var showsPlayer = false
+    @State private var showsHub = false
+    @State private var playerCard: Int?
     @State private var showsEntry = false
     @State private var toast: String?
 
@@ -85,9 +87,21 @@ struct InstagramShellView: View {
                 )
             }
             if showsPlayer {
-                StoryPlayer {
+                StoryPlayer(onHub: {
                     showsPlayer = false
-                }
+                    showsHub = true
+                }, startCard: playerCard)
+                .frame(width: size.width, height: size.height, alignment: .top)
+            }
+            if showsHub {
+                WrappedHub(bundle: RunBundle.launched(), onBack: {
+                    showsHub = false
+                    playerCard = nil
+                }, onOpen: { card in
+                    playerCard = card
+                    showsHub = false
+                    showsPlayer = true
+                })
                 .frame(width: size.width, height: size.height, alignment: .top)
             }
             if showsEntry {

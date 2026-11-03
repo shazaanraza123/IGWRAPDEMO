@@ -2,7 +2,7 @@ import SwiftUI
 import UIKit
 
 struct StoryPlayer: View {
-    var onExit: () -> Void
+    var onHub: () -> Void
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var model: StoryPlayerModel
@@ -22,8 +22,8 @@ struct StoryPlayer: View {
     private let deck: RunBundle
     private let audio = AudioService.shared
 
-    init(onExit: @escaping () -> Void, bundle: RunBundle? = nil, omitted: Set<Int> = []) {
-        self.onExit = onExit
+    init(onHub: @escaping () -> Void, bundle: RunBundle? = nil, omitted: Set<Int> = [], startCard: Int? = nil) {
+        self.onHub = onHub
         let arguments = ProcessInfo.processInfo.arguments
         let resolved: RunBundle
         if let bundle {
@@ -43,6 +43,9 @@ struct StoryPlayer: View {
            let number = Int(arguments[flag + 1]),
            (1 ... StoryPlayerModel.cardCount).contains(number) {
             model.card = number
+        }
+        if let startCard, (1 ... StoryPlayerModel.cardCount).contains(startCard) {
+            model.card = startCard
         }
         if arguments.contains("--player-paused") {
             model.autoplay = false
@@ -308,7 +311,7 @@ struct StoryPlayer: View {
                 reveal: faceCard(12),
                 handle: deck.card(number: 1)?.payload.handle ?? "",
                 onShare: { numbers in openShare(from: 13, numbers: numbers) },
-                onHub: { showUnavailable(.hub) },
+                onHub: { exit() },
                 startsOnNumbers: startsOnNumbers
             )
         default:
@@ -527,7 +530,7 @@ struct StoryPlayer: View {
         audio.setDucked(false)
         audio.stop()
         PlayerProgressStore.save(PlayerProgress(card: model.card, elapsed: model.elapsed))
-        onExit()
+        onHub()
     }
 
     private func runClock() async {

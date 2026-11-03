@@ -456,7 +456,7 @@ struct ShareCardsCard: View {
     }
 }
 
-private struct IdentityFace: View {
+struct IdentityFace: View {
     var card: RunCard
     var reveal: RunCard
     var handle: String

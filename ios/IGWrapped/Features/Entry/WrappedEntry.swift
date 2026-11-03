@@ -6,6 +6,7 @@ enum WrappedRoute: Equatable {
     case beforeWeStart
     case edition
     case player
+    case hub
 }
 
 enum WrappedEntryPlan {
@@ -111,6 +112,7 @@ struct WrappedEntryFlow: View {
     @State private var ringFilled = false
     @State private var showsHow = false
     @State private var toast: String?
+    @State private var hubCard: Int?
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
@@ -124,11 +126,18 @@ struct WrappedEntryFlow: View {
             case .edition:
                 edition
             case .player:
-                StoryPlayer(onExit: onExit, bundle: bundle)
+                StoryPlayer(onHub: { route = .hub }, bundle: bundle, startCard: hubCard)
                 Color.clear
                     .frame(width: 1, height: 1)
                     .accessibilityIdentifier("entry-open-seconds")
                     .accessibilityLabel(openSeconds)
+            case .hub:
+                if let bundle {
+                    WrappedHub(bundle: bundle, onBack: onExit, onOpen: { card in
+                        hubCard = card
+                        route = .player
+                    })
+                }
             }
             if let toast {
                 Text(toast)

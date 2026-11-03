@@ -24,6 +24,8 @@ enum WrappedColor {
     static let ghostInk = Color(hex: 0x26262B)
     /// Secondary line on the year card, from `P02-Memories.dc.html`.
     static let onInkSecondary = Color(hex: 0xD4D4D8)
+    /// Tool chevron on the Hub, from `S08-Hub.dc.html`.
+    static let chevron = Color(hex: 0x71717A)
     /// Feed-color eyebrow, from `P08-Palette.dc.html`.
     static let paletteEyebrow = Color(hex: 0x6B21A8)
     static let algorithmTileA = Color(hex: 0x8F5BFF)
@@ -66,6 +68,7 @@ enum WrappedColor {
         ("muted", muted),
         ("sheet", sheet),
         ("ghostInk", ghostInk),
+        ("chevron", chevron),
         ("igBackground", igBackground),
         ("igWhite", igWhite),
         ("igTabBar", igTabBar),
@@ -168,6 +171,57 @@ enum ShareSpace {
 }
 
 /// S10 share sheet, measured from `S10-ShareSheet.dc.html`.
+/// S08 Hub, measured from `S08-Hub.dc.html`. 1 CSS px = 1 pt.
+enum HubSpace {
+    static let top: CGFloat = 50
+    static let horizontal: CGFloat = 16
+    static let bottom: CGFloat = 36
+    static let sectionGap: CGFloat = 22
+    static let mark: CGFloat = 26
+    static let word: CGFloat = 16
+    static let toggleHeight: CGFloat = 40
+    static let toggleRadius: CGFloat = 12
+    static let toggleInset: CGFloat = 4
+    static let toggleButtonRadius: CGFloat = 9
+    static let previewWidth: CGFloat = 148
+    static let previewHeight: CGFloat = 320
+    static let previewRadius: CGFloat = 12
+    static let headline: CGFloat = 46
+    static let summary: CGFloat = 14
+    static let actionHeight: CGFloat = 46
+    static let actionText: CGFloat = 15
+    static let sectionTitle: CGFloat = 20
+    static let highlightHeight: CGFloat = 130
+    static let highlightRadius: CGFloat = 14
+    static let highlightKicker: CGFloat = 11
+    static let highlightKickerTracking: CGFloat = 0.8
+    static let highlightBig: CGFloat = 30
+    static let highlightDetail: CGFloat = 13
+    static let tileHeight: CGFloat = 84
+    static let tileRadius: CGFloat = 10
+    static let tileIndex: CGFloat = 10
+    static let tileTitle: CGFloat = 16
+    static let toolHeight: CGFloat = 64
+    static let toolRadius: CGFloat = 16
+    static let toolDot: CGFloat = 10
+    static let toolDotRadius: CGFloat = 3
+    static let footer: CGFloat = 12
+    static let heroGap: CGFloat = 16
+    static let highlightGap: CGFloat = 8
+    static let tileGap: CGFloat = 6
+    static let windowSize: CGFloat = 11
+    static let windowTracking: CGFloat = 1.2
+    static let headlineTracking: CGFloat = -1
+    static let highlightPad: CGFloat = 12
+    static let tilePad: CGFloat = 9
+    static let toolGap: CGFloat = 14
+    static let toolLine: CGFloat = 2
+    static let stroke: CGFloat = 1.5
+    static let hairline: CGFloat = 1
+    static let lock: CGFloat = 12
+    static let chevron: CGFloat = 18
+}
+
 enum ShareSheetSpace {
     static let title: CGFloat = 22
     static let titleWidth: CGFloat = 80
@@ -244,6 +298,7 @@ enum CardSpace {
     static let heavy: CGFloat = 900
     static let strong: CGFloat = 800
     static let medium: CGFloat = 700
+    static let semi: CGFloat = 600
     static let support: CGFloat = 500
     static let condensed: CGFloat = 62
     static let semiCondensed: CGFloat = 72
