@@ -232,6 +232,53 @@ extension RunBundle {
     }
 }
 
+enum CardVoice {
+    /// One spoken summary per card, built only from that card's copy.
+    static func summary(bundle: RunBundle, card number: Int) -> String {
+        guard let card = bundle.card(number: number) else { return "" }
+        let copy = card.payload.copy
+        let parts: [String?]
+        switch number {
+        case 1, 2:
+            parts = [flat(copy?.headline), flat(copy?.support)]
+        case 3:
+            parts = [flat(copy?.headline), card.payload.paletteName, flat(copy?.footnote)]
+        case 4:
+            parts = [flat(copy?.headline), flat(copy?.undercut)]
+        case 5:
+            parts = [flat(copy?.headline), flat(copy?.fastestRising), flat(copy?.sent)]
+        case 6:
+            parts = [flat(copy?.headline), flat(copy?.hubHighlight), flat(copy?.comments), flat(copy?.average)]
+        case 7:
+            parts = [flat(copy?.headline), flat(copy?.storyChip)]
+        case 8:
+            parts = [flat(copy?.headline), flat(copy?.note), (card.payload.handles ?? []).joined(separator: ", ")]
+        case 9:
+            parts = [flat(copy?.headline), flat(copy?.time), flat(copy?.note)]
+        case 10:
+            parts = [flat(copy?.headline), card.payload.sentence]
+        case 11:
+            parts = [flat(copy?.headline)] + (copy?.clues ?? [])
+        case 12:
+            parts = [flat(copy?.name), flat(copy?.side), flat(copy?.primaryMatch), flat(copy?.secondaryMatch)]
+        case 13:
+            parts = [flat(copy?.identityYear), flat(bundle.card(number: 12)?.payload.copy?.name), flat(copy?.numbersTitle)]
+        default:
+            parts = [flat(copy?.headline)]
+        }
+        return parts.compactMap { $0 }.filter { !$0.isEmpty }.joined(separator: " ")
+    }
+
+    private static func flat(_ text: String?) -> String? {
+        guard let text else { return nil }
+        let value = text
+            .replacingOccurrences(of: "\n", with: " ")
+            .replacingOccurrences(of: "  ", with: " ")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+        return value.isEmpty ? nil : value
+    }
+}
+
 extension RunCard {
     static func placeholder(type: String, number: Int) -> RunCard {
         RunCard(

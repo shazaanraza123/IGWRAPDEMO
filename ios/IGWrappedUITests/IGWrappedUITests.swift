@@ -252,6 +252,18 @@ final class IGWrappedUITests: XCTestCase {
         XCTAssertTrue(app.otherElements["story-player"].waitForExistence(timeout: 5))
     }
 
+    func testVoiceOverReadsTheOpeningSummary() {
+        let app = XCUIApplication()
+        app.launchArguments = ["--player", "--player-paused", "--player-card", "1"]
+        app.launch()
+        let player = app.otherElements["story-player"]
+        XCTAssertTrue(player.waitForExistence(timeout: 5))
+        XCTAssertEqual(player.label, "Card 1 of 13")
+        let spoken = player.value as? String ?? ""
+        XCTAssertTrue(spoken.contains("2026 LOOKED GOOD ON YOU."))
+        XCTAssertTrue(spoken.contains("Built from your own posts and Stories, Jan 1 to Nov 15."))
+    }
+
     func testPlayerCloseExits() {
         let app = launchedPlayer()
         let player = app.otherElements["story-player"]

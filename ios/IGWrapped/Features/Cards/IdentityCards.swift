@@ -243,7 +243,7 @@ struct PersonalityRevealCard: View {
                     color: WrappedColor.igWhite,
                     alignment: .center
                 )
-                .scaleEffect(revealed ? 1 : WrappedMotion.revealStart)
+                .scaleEffect(reduceMotion || revealed ? 1 : WrappedMotion.revealStart)
                 CardText(
                     text: card.payload.copy?.side ?? "",
                     size: CardSpace.revealSide,
@@ -253,7 +253,13 @@ struct PersonalityRevealCard: View {
                     alignment: .center
                 )
                 VStack(spacing: CardSpace.chipGap) {
-                    MatchBar(primary: CardSpace.primaryWidth)
+                    MatchBar(
+                        primary: CardSpace.primaryWidth,
+                        label: [card.payload.copy?.primaryMatch, card.payload.copy?.secondaryMatch]
+                            .compactMap { $0 }
+                            .filter { !$0.isEmpty }
+                            .joined(separator: ", ")
+                    )
                     HStack {
                         Text(card.payload.copy?.primaryMatch ?? "")
                         Spacer(minLength: 0)
@@ -339,7 +345,7 @@ struct PersonalityRevealCard: View {
                     )
                 )
                 .frame(width: CardSpace.revealMark, height: CardSpace.revealMark)
-                .rotationEffect(.degrees(revealed ? 360 : 0))
+                .rotationEffect(.degrees(reduceMotion ? 0 : (revealed ? 360 : 0)))
             Circle()
                 .fill(WrappedColor.ink)
                 .frame(width: CardSpace.revealInner, height: CardSpace.revealInner)

@@ -316,6 +316,32 @@ private final class RunBundleProbe: NSObject {}
     #expect(script.lines.contains("Posts"))
 }
 
+@Test func voiceOverSummariesUseEachCardsCopy() throws {
+    let bundle = try mayaBundle()
+    let summaries = (1...13).map { CardVoice.summary(bundle: bundle, card: $0) }
+    #expect(summaries.allSatisfy { !$0.isEmpty })
+    #expect(summaries[0].contains("2026 LOOKED GOOD ON YOU."))
+    #expect(summaries[0].contains("Built from your own posts and Stories, Jan 1 to Nov 15."))
+    #expect(summaries[1].contains("9 posts, 61 Stories."))
+    #expect(summaries[2].contains("Midnight Camel"))
+    #expect(summaries[2].contains("1,840 liked posts"))
+    #expect(summaries[3].contains("63 watched. No judgment."))
+    #expect(summaries[4].contains("Ceramics, 4x since June"))
+    #expect(summaries[4].contains("1,206"))
+    #expect(summaries[5].contains("2,184 likes"))
+    #expect(summaries[5].contains("418 comments. Unhinged ones."))
+    #expect(summaries[6].contains("Story · Mar 14"))
+    #expect(summaries[7].contains("No ranking, no scores."))
+    #expect(summaries[7].contains("dee.films, jules.mp, nico_k, sam.wav, tori.eats"))
+    #expect(summaries[8].contains("3:42 AM"))
+    #expect(summaries[9].contains("In June you fell into ceramics and never climbed out."))
+    #expect(summaries[10].contains("You saved 1,214 posts"))
+    #expect(summaries[11].contains("70% Curator match"))
+    #expect(summaries[11].contains("30% Ghost match"))
+    #expect(summaries[12].contains("MY 2026"))
+    #expect(summaries[12].contains("2026 IN NUMBERS"))
+}
+
 @Test func hubUsesTheRunCopyAndDropsAHiddenCard() throws {
     let bundle = try mayaBundle()
     let highlights = HubBoard.highlights(in: bundle, hidden: [])

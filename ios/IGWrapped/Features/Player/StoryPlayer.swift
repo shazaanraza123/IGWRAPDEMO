@@ -224,6 +224,7 @@ struct StoryPlayer: View {
                 .modifier(PlayerCardAccess(
                     labeled: labeled,
                     label: "Card \(model.sequenceIndex + 1) of \(model.sequence.count)",
+                    summary: CardVoice.summary(bundle: deck, card: card),
                     onNext: { step(model.goForward()) },
                     onPrevious: { step(model.goBack()) },
                     onMagicTap: { model.isHolding.toggle() },
@@ -402,6 +403,7 @@ struct StoryPlayer: View {
     }
 
     private var dismissScale: CGFloat {
+        if reduceMotion { return 1 }
         let progress = min(max(dismissDrag, 0) / IGSpace.viewerDismissTravel, 1)
         return 1 - progress * (1 - IGSpace.viewerDismissScale)
     }
@@ -469,11 +471,12 @@ struct StoryPlayer: View {
 
     private func finishDismiss() {
         model.clearToast()
-        withAnimation(.easeIn(duration: IGSpace.viewerDismiss)) {
+        let duration = reduceMotion ? WrappedMotion.reduceMotion : IGSpace.viewerDismiss
+        withAnimation(.easeIn(duration: duration)) {
             dismissDrag = WrappedSpace.frameHeight
         }
         Task {
-            try? await Task.sleep(for: .seconds(IGSpace.viewerDismiss))
+            try? await Task.sleep(for: .seconds(duration))
             exit()
         }
     }
@@ -673,6 +676,7 @@ private struct CubeFace: ViewModifier {
 private struct PlayerCardAccess: ViewModifier {
     var labeled: Bool
     var label: String
+    var summary: String
     var onNext: () -> Void
     var onPrevious: () -> Void
     var onMagicTap: () -> Void
@@ -684,6 +688,7 @@ private struct PlayerCardAccess: ViewModifier {
                 .accessibilityElement()
                 .accessibilityIdentifier("story-player")
                 .accessibilityLabel(label)
+                .accessibilityValue(summary)
                 .accessibilityAction(named: Text("Next card"), onNext)
                 .accessibilityAction(named: Text("Previous card"), onPrevious)
                 .accessibilityAction(.magicTap, onMagicTap)

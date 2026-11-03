@@ -464,6 +464,7 @@ struct ClueRow: View {
 
 struct MatchBar: View {
     var primary: CGFloat = 0.7
+    var label: String = ""
 
     var body: some View {
         GeometryReader { proxy in
@@ -473,7 +474,8 @@ struct MatchBar: View {
                 .frame(width: proxy.size.width * primary)
         }
         .frame(height: 8)
-        .accessibilityLabel("70 percent Curator match, 30 percent Ghost match")
+        .accessibilityLabel(label)
+        .accessibilityHidden(label.isEmpty)
     }
 }
 
