@@ -348,7 +348,7 @@ final class IGWrappedUITests: XCTestCase {
         let missingID = app.staticTexts["Add a Facebook App ID in Config.xcconfig"].firstMatch
         XCTAssertTrue(missingID.waitForExistence(timeout: 3))
         app.buttons["share-copy-link"].tap()
-        XCTAssertTrue(app.staticTexts["Links come with the web page"].firstMatch.waitForExistence(timeout: 3))
+        XCTAssertFalse(app.staticTexts["Link copied. Add it with the link sticker."].firstMatch.waitForExistence(timeout: 2))
         app.buttons["share-choice-numbers"].tap()
         app.buttons["share-format-post"].tap()
         app.buttons["share-save"].tap()

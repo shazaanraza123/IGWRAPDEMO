@@ -20,6 +20,14 @@ enum ShareFormat: Equatable {
 
     var safeTop: CGFloat { self == .story ? ShareSpace.storySafeTop : 0 }
     var safeBottom: CGFloat { self == .story ? ShareSpace.storySafeBottom : 0 }
+
+    var storageName: String {
+        switch self {
+        case .story: return "story"
+        case .post: return "post"
+        case .square: return "square"
+        }
+    }
 }
 
 enum ShareTarget: Equatable {

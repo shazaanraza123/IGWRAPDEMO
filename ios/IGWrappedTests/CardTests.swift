@@ -276,6 +276,37 @@ private final class RunBundleProbe: NSObject {}
     #expect(ShareChoice.choices(openedFrom: 8).isEmpty)
 }
 
+@Test func copyLinkStopsWhenOffline() async {
+    let calls = ShareCallCount()
+    let client = ShareLinkClient(online: false, baseURL: "http://127.0.0.1:3000") { _, _, _, _ in
+        calls.add()
+        return "abc"
+    }
+    let result = await ShareLink.copy(png: Data([1]), cardType: "shareCards", format: "story", alt: "MY 2026", client: client)
+    #expect(result == .offline)
+    #expect(calls.value == 0)
+}
+
+@Test func copyLinkStopsWhenTheBaseURLIsMissing() async {
+    let client = ShareLinkClient(online: true, baseURL: " ") { _, _, _, _ in "abc" }
+    let result = await ShareLink.copy(png: Data([1]), cardType: "shareCards", format: "story", alt: "MY 2026", client: client)
+    #expect(result == .unavailable)
+}
+
+@Test func copyLinkReturnsTheLandingURL() async {
+    let client = ShareLinkClient(online: true, baseURL: "http://127.0.0.1:3000") { _, cardType, format, alt in
+        #expect(cardType == "shareCards")
+        #expect(format == "story")
+        #expect(alt == "MY 2026")
+        return "maya2026card"
+    }
+    let result = await ShareLink.copy(png: Data([1]), cardType: "shareCards", format: "story", alt: "MY 2026", client: client)
+    #expect(result == .copied("http://127.0.0.1:3000/s/maya2026card"))
+    #expect(ShareLink.copied == "Link copied. Add it with the link sticker.")
+    #expect(ShareLink.cardType(for: .journey(5)) == "reelsRabbitHole")
+    #expect(ShareLink.cardType(for: .numbers) == "shareCards")
+}
+
 @Test func hidingOneStatLeavesTheOthers() throws {
     let bundle = try mayaBundle()
     var toggles = ShareToggles()
@@ -283,6 +314,23 @@ private final class RunBundleProbe: NSObject {}
     let script = try ShareScript.make(bundle: bundle, target: .numbers, format: .story, toggles: toggles)
     #expect(script.lines.contains("Stories") == false)
     #expect(script.lines.contains("Posts"))
+}
+
+private final class ShareCallCount: @unchecked Sendable {
+    private let lock = NSLock()
+    private var count = 0
+
+    func add() {
+        lock.lock()
+        count += 1
+        lock.unlock()
+    }
+
+    var value: Int {
+        lock.lock()
+        defer { lock.unlock() }
+        return count
+    }
 }
 
 private func mayaBundle() throws -> RunBundle {

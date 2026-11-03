@@ -1,4 +1,7 @@
+import Network
+import os
 import Photos
+import Supabase
 import UIKit
 
 enum StoryShareResult: Equatable {
@@ -20,7 +23,6 @@ struct StoryShareClient {
 enum StoryShare {
     static let missingInstagram = "Instagram isn't installed"
     static let missingAppID = "Add a Facebook App ID in Config.xcconfig"
-    static let linksLater = "Links come with the web page"
     static let photoDenied = "Photo access is off. Open Settings"
     static let saved = "Saved to Photos"
 
@@ -116,6 +118,157 @@ enum StoryShare {
     }
 }
 
+enum ShareLinkResult: Equatable {
+    case copied(String)
+    case offline
+    case unavailable
+}
+
+struct ShareLinkClient: Sendable {
+    var online: Bool
+    var baseURL: String
+    var publish: @Sendable (Data, String, String, String) async -> String?
+}
+
+enum ShareLink {
+    static let copied = "Link copied. Add it with the link sticker."
+
+    static func cardType(for target: ShareTarget) -> String {
+        switch target {
+        case .identity, .numbers:
+            return "shareCards"
+        case .journey(let number):
+            switch number {
+            case 3: return "feedColor"
+            case 4: return "yourAlgorithm"
+            case 5: return "reelsRabbitHole"
+            case 6: return "mainCharacterPost"
+            case 7: return "brokeTheGroupChat"
+            case 9: return "threeAmClub"
+            case 10: return "plotTwist"
+            case 12: return "personalityReveal"
+            default: return "shareCards"
+            }
+        }
+    }
+
+    static func url(base: String, slug: String) -> String? {
+        let trimmed = base.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty, !slug.isEmpty, let root = URL(string: trimmed) else { return nil }
+        return root.appending(path: "s").appending(path: slug).absoluteString
+    }
+
+    /// Uploads only when `online` is true. An empty base URL or a failed publish copies nothing.
+    static func copy(
+        png: Data,
+        cardType: String,
+        format: String,
+        alt: String,
+        client: ShareLinkClient
+    ) async -> ShareLinkResult {
+        guard client.online else { return .offline }
+        guard url(base: client.baseURL, slug: "pending") != nil else { return .unavailable }
+        guard let slug = await client.publish(png, cardType, format, alt), !slug.isEmpty else { return .unavailable }
+        guard let link = url(base: client.baseURL, slug: slug) else { return .unavailable }
+        return .copied(link)
+    }
+
+    @MainActor
+    static func liveClient() async -> ShareLinkClient {
+        let base = (Bundle.main.object(forInfoDictionaryKey: "SHARE_BASE_URL") as? String) ?? ""
+        let online = await isOnline()
+        return ShareLinkClient(online: online, baseURL: base) { png, cardType, format, alt in
+            await publish(png: png, cardType: cardType, format: format, alt: alt)
+        }
+    }
+
+    @MainActor
+    private static func publish(png: Data, cardType: String, format: String, alt: String) async -> String? {
+        guard Backend.active, let client = SessionStore.shared.client else { return nil }
+        let allowed = ["story", "post", "square"]
+        guard allowed.contains(format) else { return nil }
+        let text = alt.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !text.isEmpty else { return nil }
+        do {
+            let session = try await client.auth.session
+            let cards: [ShareCardRef] = try await client
+                .from("cards")
+                .select("id")
+                .eq("type", value: cardType)
+                .limit(1)
+                .execute()
+                .value
+            guard let card = cards.first else { return nil }
+            let slug = makeSlug()
+            let path = "\(session.user.id.uuidString.lowercased())/\(slug).png"
+            try await client.storage
+                .from("shares")
+                .upload(path, data: png, options: FileOptions(contentType: "image/png"))
+            let row = SnapshotInsert(
+                slug: slug,
+                cardId: card.id,
+                ownerId: session.user.id,
+                format: format,
+                style: "bold",
+                imagePath: path,
+                altText: text
+            )
+            try await client.from("share_snapshots").insert(row).execute()
+            return slug
+        } catch {
+            return nil
+        }
+    }
+
+    private static func makeSlug() -> String {
+        let alphabet = Array("abcdefghijklmnopqrstuvwxyz0123456789")
+        var generator = SystemRandomNumberGenerator()
+        return String((0..<12).map { _ in alphabet.randomElement(using: &generator)! })
+    }
+
+    private static func isOnline() async -> Bool {
+        await withCheckedContinuation { continuation in
+            let monitor = NWPathMonitor()
+            let resumed = OSAllocatedUnfairLock(initialState: false)
+            monitor.pathUpdateHandler = { path in
+                let first = resumed.withLock { value -> Bool in
+                    if value { return false }
+                    value = true
+                    return true
+                }
+                guard first else { return }
+                monitor.cancel()
+                continuation.resume(returning: path.status == .satisfied)
+            }
+            monitor.start(queue: DispatchQueue(label: "igwrapped.reachability"))
+        }
+    }
+}
+
+private struct ShareCardRef: Decodable {
+    let id: UUID
+}
+
+private struct SnapshotInsert: Encodable {
+    let slug: String
+    let cardId: UUID
+    let ownerId: UUID
+    let format: String
+    let style: String
+    let imagePath: String
+    let altText: String
+
+    enum CodingKeys: String, CodingKey {
+        case slug
+        case cardId = "card_id"
+        case ownerId = "owner_id"
+        case format
+        case style
+        case imagePath = "image_path"
+        case altText = "alt_text"
+    }
+}
+
 enum ShareLog {
     struct Row: Codable, Equatable {
         var destination: String
@@ -125,6 +278,7 @@ enum ShareLog {
     static let story = "story"
     static let save = "save"
     static let send = "send"
+    static let link = "link"
 
     static var localFile: URL? {
         FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first?

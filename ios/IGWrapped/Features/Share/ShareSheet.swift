@@ -319,8 +319,34 @@ struct ShareSheet: View {
     }
 
     private func copyLink() {
-        guard !Pitch.active else { return }
-        show(StoryShare.linksLater)
+        guard let png = rendered() else { return }
+        let cardType = ShareLink.cardType(for: choice.target)
+        let formatName = format.storageName
+        let alt = shareAlt()
+        Task {
+            let result = await ShareLink.copy(
+                png: png,
+                cardType: cardType,
+                format: formatName,
+                alt: alt,
+                client: await ShareLink.liveClient()
+            )
+            guard case .copied(let link) = result else { return }
+            UIPasteboard.general.string = link
+            _ = ShareLog.append(ShareLog.link)
+            show(ShareLink.copied)
+        }
+    }
+
+    private func shareAlt() -> String {
+        let headline = (try? ShareScript.make(
+            bundle: bundle,
+            target: choice.target,
+            format: format,
+            toggles: toggles
+        ))?.headline.trimmingCharacters(in: .whitespacesAndNewlines)
+        if let headline, !headline.isEmpty { return headline }
+        return choice.title
     }
 
     private func show(_ text: String, settings: Bool = false) {
