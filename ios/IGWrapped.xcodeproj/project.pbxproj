@@ -31,6 +31,7 @@
 		4FA2E069594720A90A52EDF3 /* 01-home.png in Resources */ = {isa = PBXBuildFile; fileRef = 951A649D32C747B2A6914F15 /* 01-home.png */; };
 		5079B6E70849D8668B782129 /* year-card.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0154EB6F59E34E866A125944 /* year-card.jpg */; };
 		58FB8419CF70808DFAAF24A5 /* SupabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E7E4A8D019DB5AF8DCAFBF /* SupabaseService.swift */; };
+		5FCC09ECCA6F6B3D9D95B7E3 /* ShareRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739001D3008DADC966E50580 /* ShareRenderer.swift */; };
 		63B0D9EC53B54D08AEBC80C1 /* 07-broke-the-group-chat.png in Resources */ = {isa = PBXBuildFile; fileRef = AF868806C4DFC575F0944BF2 /* 07-broke-the-group-chat.png */; };
 		6577293BFAB6C14B217CB3BD /* CardInfoSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51BD947C3E9AF4AF83961D97 /* CardInfoSheet.swift */; };
 		68378F1BDACDE45CA00CA4C1 /* 13a-identity-card.png in Resources */ = {isa = PBXBuildFile; fileRef = 02A2074AA408D8A31DA5C1B6 /* 13a-identity-card.png */; };
@@ -139,6 +140,7 @@
 		6216EF1459D8BF69C5F33C2A /* 11-personality-teaser.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "11-personality-teaser.png"; sourceTree = "<group>"; };
 		668D250A3653DD5899DC59A0 /* PersonaLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonaLoginView.swift; sourceTree = "<group>"; };
 		6C79F874D722B702FB11D909 /* Archivo.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Archivo.ttf; sourceTree = "<group>"; };
+		739001D3008DADC966E50580 /* ShareRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareRenderer.swift; sourceTree = "<group>"; };
 		73E7E4A8D019DB5AF8DCAFBF /* SupabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseService.swift; sourceTree = "<group>"; };
 		76E40B39EC8622A447807BB7 /* ARCHIVO-LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "ARCHIVO-LICENSE.txt"; sourceTree = "<group>"; };
 		831BA412E59C9BAF58FA0131 /* 03-feed-color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "03-feed-color.png"; sourceTree = "<group>"; };
@@ -292,6 +294,7 @@
 				BB6A964BB216E830A2652CD4 /* Entry */,
 				87EDC58ECEC6ECB65AE42186 /* Login */,
 				65ABEF2C691948C459AADBE0 /* Player */,
+				B85DEEE23A6A6FB99AB560C2 /* Share */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -371,6 +374,14 @@
 				2BCFAC903645148F0B5D09FB /* IGWrappedUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		B85DEEE23A6A6FB99AB560C2 /* Share */ = {
+			isa = PBXGroup;
+			children = (
+				739001D3008DADC966E50580 /* ShareRenderer.swift */,
+			);
+			path = Share;
 			sourceTree = "<group>";
 		};
 		BB6A964BB216E830A2652CD4 /* Entry */ = {
@@ -681,6 +692,7 @@
 				CB96341AEA97E255EFD976F1 /* PersonalityMark.swift in Sources */,
 				90074C287C19C975A40E1340 /* ReferenceOverlay.swift in Sources */,
 				0F65BB03D7B468E05661FFEF /* RunBundle.swift in Sources */,
+				5FCC09ECCA6F6B3D9D95B7E3 /* ShareRenderer.swift in Sources */,
 				7271AFCB68AD3C99378F4D30 /* StoryPlayer.swift in Sources */,
 				153A3E48C1D3B5B952C8DCFD /* StoryPlayerModel.swift in Sources */,
 				0AB7355D422402D306783C84 /* StyleguideView.swift in Sources */,

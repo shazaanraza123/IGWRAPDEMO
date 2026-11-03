@@ -1,5 +1,6 @@
 import Foundation
 import Testing
+import UIKit
 @testable import IGWrapped
 
 private final class RunBundleProbe: NSObject {}
@@ -114,4 +115,108 @@ private final class RunBundleProbe: NSObject {}
         #expect(swatch.usesInk == (swatch == .green || swatch == .yellow))
     }
     #expect(PersonSwatch.forHandle("dee.films") != PersonSwatch.forHandle("jules.mp"))
+}
+
+@Test func storyExportKeepsTheSafeZone() {
+    let story = ShareMeasure(format: .story)
+    #expect(story.canvas == CGSize(width: 1080, height: 1920))
+    #expect(story.safeTop == 250)
+    #expect(story.safeBottom == 340)
+    #expect(story.content.height == 1330)
+    let post = ShareMeasure(format: .post)
+    #expect(post.canvas == CGSize(width: 1080, height: 1350))
+    #expect(ShareMeasure(format: .square).canvas == CGSize(width: 1080, height: 1080))
+}
+
+@Test func shareCopyMatchesTheCard() throws {
+    let bundle = try mayaBundle()
+    let reveal = try #require(bundle.card(number: 12))
+    let share = try #require(bundle.card(number: 13))
+    let identity = try ShareScript.make(bundle: bundle, target: .identity, format: .story, toggles: ShareToggles())
+    #expect(identity.lines.contains(reveal.payload.copy?.name ?? ""))
+    #expect(identity.lines.contains(share.payload.copy?.identityYear ?? ""))
+    #expect(identity.lines.contains(share.payload.identity?.stat.value ?? ""))
+    #expect(identity.lines.contains(share.payload.identity?.stat.label ?? ""))
+    #expect(identity.lines.contains("@maya.lens"))
+    #expect(!identity.lines.contains(reveal.payload.copy?.side ?? ""))
+
+    var sideOn = ShareToggles()
+    sideOn.secondPersonality = true
+    let withSide = try ShareScript.make(bundle: bundle, target: .identity, format: .story, toggles: sideOn)
+    #expect(withSide.lines.contains(reveal.payload.copy?.side ?? ""))
+
+    var statsOff = ShareToggles()
+    statsOff.stats = false
+    let quiet = try ShareScript.make(bundle: bundle, target: .identity, format: .story, toggles: statsOff)
+    #expect(!quiet.lines.contains(share.payload.identity?.stat.value ?? ""))
+
+    var handleOff = ShareToggles()
+    handleOff.handle = false
+    let unnamed = try ShareScript.make(bundle: bundle, target: .identity, format: .story, toggles: handleOff)
+    #expect(!unnamed.lines.contains("@maya.lens"))
+
+    let numbers = try ShareScript.make(bundle: bundle, target: .numbers, format: .story, toggles: ShareToggles())
+    #expect(numbers.lines.contains(share.payload.copy?.numbersTitle ?? ""))
+    #expect(numbers.lines.contains("412"))
+    #expect(numbers.lines.contains("Stories"))
+    #expect(numbers.lines.contains(share.payload.numbers?.topInterest ?? ""))
+    #expect(numbers.showsCoverPhoto)
+    var photoOff = ShareToggles()
+    photoOff.coverPhoto = false
+    let bare = try ShareScript.make(bundle: bundle, target: .numbers, format: .story, toggles: photoOff)
+    #expect(!bare.showsCoverPhoto)
+
+    let square = try ShareScript.make(bundle: bundle, target: .identity, format: .square, toggles: ShareToggles())
+    #expect(square.lines.contains(reveal.payload.copy?.name ?? ""))
+    #expect(square.stats.isEmpty)
+    #expect(!square.showsFooter)
+
+    for number in ShareTarget.journeyNumbers {
+        let card = try #require(bundle.card(number: number))
+        let script = try ShareScript.make(bundle: bundle, target: .journey(number), format: .story, toggles: ShareToggles())
+        let expected = number == 12 ? (card.payload.copy?.name ?? "") : card.headline
+        #expect(script.lines.contains(expected))
+    }
+    let reels = try ShareScript.make(bundle: bundle, target: .journey(5), format: .story, toggles: ShareToggles())
+    #expect(reels.lines.contains("Top 5 categories by share of your Reels watch time. Other categories: 8%.") == false)
+    #expect(reels.lines.contains(bundle.card(number: 5)?.payload.copy?.sent ?? ""))
+}
+
+@Test @MainActor func circleCardIsNotRenderable() throws {
+    let bundle = try mayaBundle()
+    #expect(throws: ShareError.notShareable) {
+        try ShareRenderer.png(bundle: bundle, target: .journey(8), format: .story)
+    }
+    #expect(throws: ShareError.formatUnavailable) {
+        try ShareRenderer.png(bundle: bundle, target: .journey(5), format: .post)
+    }
+}
+
+@Test @MainActor func shareExportsMatchTheFormats() throws {
+    let bundle = try mayaBundle()
+    let cases: [(ShareTarget, ShareFormat, Int, Int)] = [
+        (.identity, .story, 1080, 1920),
+        (.identity, .post, 1080, 1350),
+        (.identity, .square, 1080, 1080),
+        (.numbers, .story, 1080, 1920),
+        (.numbers, .post, 1080, 1350),
+        (.numbers, .square, 1080, 1080),
+    ]
+    for item in cases {
+        let data = try ShareRenderer.png(bundle: bundle, target: item.0, format: item.1)
+        let image = try #require(UIImage(data: data)?.cgImage)
+        #expect(image.width == item.2)
+        #expect(image.height == item.3)
+    }
+    for number in ShareTarget.journeyNumbers {
+        let data = try ShareRenderer.png(bundle: bundle, target: .journey(number), format: .story)
+        let image = try #require(UIImage(data: data)?.cgImage)
+        #expect(image.width == 1080)
+        #expect(image.height == 1920)
+    }
+}
+
+private func mayaBundle() throws -> RunBundle {
+    let url = try #require(Bundle(for: RunBundleProbe.self).url(forResource: "maya", withExtension: "json"))
+    return try JSONDecoder().decode(RunBundle.self, from: Data(contentsOf: url))
 }

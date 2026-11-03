@@ -154,6 +154,16 @@ enum WrappedSpace {
     static let badgeGap: CGFloat = 3
 }
 
+/// Export pixels from UIUX §8. Story keeps the top and bottom clear of key content.
+enum ShareSpace {
+    static let storyWidth: CGFloat = 1080
+    static let storyHeight: CGFloat = 1920
+    static let postHeight: CGFloat = 1350
+    static let square: CGFloat = 1080
+    static let storySafeTop: CGFloat = 250
+    static let storySafeBottom: CGFloat = 340
+}
+
 /// Motion from UIUX §6 and APPFLOW §2. The cube reuses the card-enter spring. Reduce Motion is the 150 ms crossfade.
 enum WrappedMotion {
     static let cardEnterResponse: Double = 0.45
@@ -348,6 +358,8 @@ enum CardSpace {
     static let reasonRule: CGFloat = 2
     static let identityInset: CGFloat = 24
     static let identityTop: CGFloat = 112
+    /// Bottom clearance on the identity and numbers artboards (`bottom: 100px`).
+    static let shareClearance: CGFloat = 100
     static let identityMark: CGFloat = 220
     static let identityMarkTop: CGFloat = 150
     static let identityCopyTop: CGFloat = 390
