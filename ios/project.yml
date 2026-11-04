@@ -81,6 +81,38 @@ targets:
         buildPhase: resources
       - path: ../design/photos/year-card.jpg
         buildPhase: resources
+      - path: ../design/photos/friend-dee.jpg
+        buildPhase: resources
+      - path: ../design/photos/friend-nico.jpg
+        buildPhase: resources
+      - path: ../design/photos/friend-sam.jpg
+        buildPhase: resources
+      - path: ../design/photos/friend-tori.jpg
+        buildPhase: resources
+      - path: ../design/photos/story-0314.jpg
+        buildPhase: resources
+      - path: ../design/photos/m-01.jpg
+        buildPhase: resources
+      - path: ../design/photos/m-02.jpg
+        buildPhase: resources
+      - path: ../design/photos/m-03.jpg
+        buildPhase: resources
+      - path: ../design/photos/m-04.jpg
+        buildPhase: resources
+      - path: ../design/photos/m-05.jpg
+        buildPhase: resources
+      - path: ../design/photos/m-06.jpg
+        buildPhase: resources
+      - path: ../design/photos/m-07.jpg
+        buildPhase: resources
+      - path: ../design/photos/m-08.jpg
+        buildPhase: resources
+      - path: ../design/photos/m-09.jpg
+        buildPhase: resources
+      - path: ../design/photos/m-10.jpg
+        buildPhase: resources
+      - path: ../design/photos/m-11.jpg
+        buildPhase: resources
     dependencies:
       - package: Supabase
         product: Supabase
